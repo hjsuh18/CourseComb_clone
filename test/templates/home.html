@@ -3,23 +3,38 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Boards</title>
+  <title> CourseComb </title>
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 </head>
 <body>
 
-  <div class = "container">
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+      CourseComb
+    </a>
+  </nav>
+
+  <div class = "container" style="padding-top:10px;">
     <div class = "row">
       <div class = "col-sm-3">
-        <form  action="/" id="searchform">
+       <!--  <form  action="/" id="searchform">
           <div id="userError"></div>
             <input type="text" name="searchinput">
             <input type="hidden" name="searchform" value="searchform">
             <input type="submit" name="submit" id="searchbutton" value="Search"/>
-        </form>
+        </form> -->
+
+        <div class="ui-widget">
+          <label for="courses"> </label>
+          <input id="courses">
+        </div>
         <div class = "aftersearch">
         </div>
+        <div class = "coursequeue">
+        </div>
+
       </div>
       <div class = "col-sm-3">
         2
@@ -29,19 +44,47 @@
       </div>
     </div>
   </div>
+
+
+  <style>
+    ul.ui-autocomplete {
+      font-size:12px;
+      list-style: none;
+      padding-left:0;
+      width: 100%;
+    }
+
+  </style>
   
   <script type="text/javascript">
     // console.log($("#searchform").serialize())
-    $('#searchbutton').click(function (e) {
-      e.preventDefault();
-      $.ajax({
-           type: "GET",
-           url: '/',
-           data: $("#searchform").serialize(),
-           success: function(data) {
-                var message = JSON.stringify(data["message"]);
-                $(".aftersearch").html(JSON.parse(message));
-           }
+    // $('#searchbutton').click(function (e) {
+    //   e.preventDefault();
+    //   $.ajax({
+    //        type: "GET",
+    //        url: '/',
+    //        data: $("#searchform").serialize(),
+    //        success: function(data) {
+    //             var message = JSON.stringify(data["message"]);
+    //             $(".aftersearch").html(JSON.parse(message));
+    //        }
+    //   });
+    // });
+
+    $(function() {
+      $("#courses").autocomplete({
+        source: "/api/get_courses/",
+        minLength: 2,
+        messages: {
+          noResults: '',
+          results: function() {}
+        },
+        appendTo: '.aftersearch',
+        select: function (e, ui) {
+            console.log(ui.item.label)
+            // $(".coursequeue").html($(this))
+            // alert("selected!");
+        },
       });
     });
   </script>

@@ -19,5 +19,6 @@ from courses import views
 
 urlpatterns = [
 	url(r'^$', views.home, name='home'),
+	url(r'^api/get_courses/', views.get_courses, name='get_courses'),
     url(r'^admin/', admin.site.urls),
 ]
