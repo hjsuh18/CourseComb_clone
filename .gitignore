@@ -1,0 +1,8 @@
+# ignore compiled files
+*.pyc
+
+# ignore env file for Heroku
+env
+
+# big stuff
+courses.pckl
