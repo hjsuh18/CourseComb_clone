@@ -5,4 +5,4 @@
 env
 
 # big stuff
-test/courses.pckl
+courses.pckl

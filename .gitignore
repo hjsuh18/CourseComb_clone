@@ -6,3 +6,6 @@ env
 
 # big stuff
 courses.pckl
+
+# random stuff
+.DS_Store
