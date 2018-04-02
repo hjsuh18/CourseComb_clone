@@ -18,9 +18,9 @@ class Course(models.Model):
     deptnum = models.TextField()
 
     # general information easily gained from scraping
-    rating = models.FloatField(default=0)
-    #evals = ArrayField(models.TextField())
-    evals_url = models.TextField()
+    # rating = models.FloatField(default=0)
+    evaluation = ArrayField(models.TextField(), default=['', ''])
+    # evals_url = models.TextField()
     description = models.TextField()
     #assgts = models.TextField()
     #grading = models.TextField()

@@ -112,13 +112,11 @@ def scrape_import_course(course, counter=ScrapeCounter()):
     # may change
     course_object, created = Course.objects.update_or_create(
         registrar_id=course['courseid'],
-
         defaults = {
-            "description": course['descrip'],
+            #"description": course['descrip'],
             #"professors": ', '.join([x['name'] for x in course['profs']]),
             "deptnum": '/'.join([x['dept'] + " " + x['number'] for x in course['listings']]),
-            "rating": float(course['evals'][1]),
-            "evals_url": course['evals'][0],
+            "evaluation": course['evals'],
             #"assgts": course['assgts'] or "",
 
             # "pages": num_pages,

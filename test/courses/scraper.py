@@ -158,7 +158,7 @@ def scrape_page(page, courseid):
   course['classes'] = get_course_classes(soup)
 
   # *** NEED TO CHANGE TO TAKE AVERAGE OF COURSE RATINGS **** 
-  course['evals'] = course_eval(TERM_CODE, courseid)
+  course['evaluation'] = course_eval(TERM_CODE, courseid)
   course['url'] = get_url(courseid)
   return course
 
