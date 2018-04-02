@@ -12,12 +12,12 @@ import pickle
 django.setup()
 
 
-# For new scraping
-# print "Scraping for this semester"
-# courses = scrape_all()
-# f = open('courses.pckl', 'wb')
-# pickle.dump(list(courses), f)
-# f.close()
+# * For new scraping *
+print "Scraping for this semester"
+courses = scrape_all()
+f = open('courses.pckl', 'wb')
+pickle.dump(list(courses), f)
+f.close()
 
 # For old scraping
 print "open previous scraping"

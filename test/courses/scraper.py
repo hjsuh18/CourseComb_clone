@@ -8,6 +8,8 @@ as the registrar makes format changes.
 
 Additional modifications made by ReCourse team to suit ReCourse's needs
 
+Further additional modification made by CourseComb team to suit CourseComb's needs
+
 If run as a python script, the module will dump information on all the courses available
 on the registrar website as a JSON format.
 
@@ -63,17 +65,9 @@ def clean(s):
   "Return a string with leading and trailing whitespace gone and all other whitespace condensed to a single space."
   return re.sub('\s+', ' ', s.strip())
 
+# Modified by CourseComb to not scrape for unneeded descrip, prereqs
 def get_course_details(soup):
   "Returns a dict of {courseid, area, title, descrip, prereqs}."
-
-#  print "DEBUG"
-#  s = soup('h2')
-#  print "s = "
-#  print s
-#  s1 = s[0].string
-#  print "s1 = "
-#  print s1
-#  print "END DEBUG"
 
   area = clean(soup('strong')[1].findAllNext(text=True)[1])  # balanced on a pinhead
   if re.match(r'^\((LA|SA|HA|EM|EC|QR|STN|STL)\)$', area):
@@ -82,43 +76,11 @@ def get_course_details(soup):
     area = ''
   pdf_audit = clean(soup('em')[0].findAllNext(text=True)[0])  # copied from area - jz
 
-  #match = re.match(r'\(([A-Z]+)\)', clean(soup('strong')[1].findNext(text=True)))
-  pretitle = soup.find(text="Prerequisites and Restrictions:")
-  descrdiv = soup.find('div', id='descr')
-
-  # Added by ReCourse
-  assgt_title = soup.find(text="Reading/Writing assignments:")
-  other_title = soup.find(text="Other information:")
-
-  #Added by ReCourse
-  other_req = soup.find(text="Other Requirements:")
-
-
-  # grading breakdown, comma separated for now - ReCourse
-  # for some reason, this title just doesn't match normally, re.compile needed
-  grading_title = soup.find(text=re.compile("Requirements/Grading:"))
-
-  if not grading_title is None:
-    grading_siblings = grading_title.parent.findNextSiblings(text=True)
-    # this part is quite fragile; a new lines separates grading from prereqs on
-    # the current course offerings pages, hence why this works for now
-    end = grading_siblings.index("\n")
-    grading_clean = [clean(s) for s in grading_siblings[:end]]
-  else:
-      grading_clean = []
-
   return {
     'courseid': COURSE_DETAILS_REGEX.search(soup.find('a', href=COURSE_DETAILS_REGEX)['href']).group('id'),
     'area': area, #bwk: this was wrong[1:-1],    # trim parens #  match.group(1) if match != None else ''
     'title': clean(soup('h2')[0].string),  # was [1]
-    ###'descrip': clean(descrdiv.contents[0] if descrdiv else ''),
-    'descrip': clean(flatten(descrdiv)),
-    'prereqs': clean(pretitle.parent.findNextSibling(text=True)) if pretitle != None else '',
     'pdfaudit': pdf_audit,
-    'assgts': clean(assgt_title.parent.findNextSibling(text=True)) if assgt_title != None else '',
-    'grading': ', '.join(grading_clean),
-    'otherinfo': clean(other_title.parent.findNextSibling(text=True)) if other_title != None else '',
-    'otherreq': clean(other_req.parent.findNextSibling(text=True)) if other_req != None else '',
   }
 
 def flatten(dd):
@@ -137,11 +99,6 @@ def get_course_listings(soup):
   "Return a list of {dept, number} dicts under which the course is listed."
   listings = soup('strong')[1].string
   return [{'dept': match.group('dept'), 'number': match.group('num')} for match in LISTING_REGEX.finditer(listings)]
-
-def get_course_profs(soup):
-  "Return a list of {uid, name} dicts for the professors teaching this course."
-  prof_links = soup('a', href=PROF_URL_REGEX)
-  return [{'uid': PROF_URL_REGEX.search(link['href']).group('id'), 'name': clean(link.string)} for link in prof_links]
 
 def get_single_class(row):
   "Helper function to turn table rows into class tuples."
@@ -189,14 +146,20 @@ def get_course_classes(soup):
   # return [get_single_class(row) for row in class_rows if row('td')[0].strong and row('td')[3].strong.string]
   return [get_single_class(row) for row in class_rows]
 
+def get_url(courseid):
+  return COURSE_URL.format(term=TERM_CODE, courseid=courseid)
+
 def scrape_page(page, courseid):
   "Returns a dict containing as much course info as possible from the HTML contained in page."
   soup = BeautifulSoup(page, convertEntities=BeautifulSoup.HTML_ENTITIES).find('div', id='timetable') # was contentcontainer
   course = get_course_details(soup)
   course['listings'] = get_course_listings(soup)
-  course['profs'] = get_course_profs(soup)
+  #course['profs'] = get_course_profs(soup)
   course['classes'] = get_course_classes(soup)
+
+  # *** NEED TO CHANGE TO TAKE AVERAGE OF COURSE RATINGS **** 
   course['evals'] = course_eval(TERM_CODE, courseid)
+  course['url'] = get_url(courseid)
   return course
 
 def scrape_id(courseid):
