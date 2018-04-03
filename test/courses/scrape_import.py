@@ -116,7 +116,7 @@ def scrape_import_course(course, counter=ScrapeCounter()):
             #"description": course['descrip'],
             #"professors": ', '.join([x['name'] for x in course['profs']]),
             "deptnum": '/'.join([x['dept'] + " " + x['number'] for x in course['listings']]),
-            "evaluation": course['evals'],
+            "evals": course['evaluation'],
             #"assgts": course['assgts'] or "",
 
             # "pages": num_pages,
