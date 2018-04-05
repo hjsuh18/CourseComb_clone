@@ -9,6 +9,11 @@ QUESTIONS:
 How do we update only parts of the database when periodically scraping for courses.
 (I think this already happens, if courseid same, just updates the changed fields)
 
+Conflicts between scripts in frontend: how do we avoid this?
+
+CDN vs Local
+
 Discussion:
 Should we keep the course data for previous semesters?
 
+Filter: A lot of people limit the number of departmentals to 2. Have a 'maximum number of courses in one department' filter.
