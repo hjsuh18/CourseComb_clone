@@ -3,10 +3,12 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from .models import Course
 from django.contrib.postgres.search import SearchVector
-import json
+import json, cgi
+from .cas import CASClient
+from django.urls import resolve
 
 
 def home(request):
@@ -43,3 +45,14 @@ def get_courses(request):
 	
 	mimetype = 'application/json'
 	return HttpResponse(data, mimetype)
+
+def login(request):
+	# return render(request, 'home.html')
+	C = CASClient()
+	auth_attempt = C.Authenticate(request.GET)
+	if "netid" in auth_attempt:  # Successfully authenticated.
+		return render(request, 'home.html')
+	elif "location" in auth_attempt:  # Redirect to CAS.
+		return HttpResponseRedirect(auth_attempt["location"])
+	else:  # This should never happen!
+		abort(500)
