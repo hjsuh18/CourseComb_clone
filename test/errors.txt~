@@ -1,7 +1,0 @@
-Track errors here:
-
-Scraping
-Error message: BadStatusLine: ''
-for courseid = 005602, term code = 1182
-According to Stack Overflow, there is no way to address error; can only catch the error
-https://stackoverflow.com/questions/8734617/python-django-badstatusline-error
