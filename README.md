@@ -19,3 +19,7 @@ To run `scraper_all`
 cd test
 python manage.py shell < courses/scrape_all.py
 ```
+
+Clear, scrape and update database (when new :
+cd test
+./rescrape.sh

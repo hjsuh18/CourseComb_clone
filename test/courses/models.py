@@ -18,16 +18,8 @@ class Course(models.Model):
     deptnum = models.TextField()
 
     # general information easily gained from scraping
-    # rating = models.FloatField(default=0)
     evals = ArrayField(models.TextField(), default=['', ''])
-    # evals_url = models.TextField()
     description = models.TextField()
-    #assgts = models.TextField()
-    #grading = models.TextField()
-    #prereqs = models.TextField()
-    #otherinfo = models.TextField()
-    #otherreq = models.TextField(default="")
-    #professors = models.TextField()
     area = models.CharField(max_length=3)
     url = models.TextField()
 
@@ -36,17 +28,6 @@ class Course(models.Model):
     pdfonly = models.BooleanField(default=False)
     auditable = models.BooleanField(default=True)
     pdfaudit = models.TextField()
-    #pages = models.IntegerField(default=9000)
-
-    # grading filters
-    #participation = models.BooleanField(default=True)
-    #papers = models.BooleanField(default=True)
-    # takehome = models.BooleanField(default=True)
-    # final = models.BooleanField(default=True)
-    # pset = models.BooleanField(default=True)
-    # midterm = models.BooleanField(default=True)
-    # presentation = models.BooleanField(default=True)
-    # quiz = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.deptnum + ": " + self.title

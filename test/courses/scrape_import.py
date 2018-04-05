@@ -39,100 +39,13 @@ def scrape_import_course(course, counter=ScrapeCounter()):
         counter.totalMeetingsCount += 1
         return meeting_object
 
-    # Grading filters
-    # participation = False
-    # papers = False
-    # takehome = False
-    # final = False
-    # midterm = False
-    # pset = False
-    # presentation = False
-    # quiz = False
-    # words = course['grading'].split()
-    # for word in words:
-    #     w = word.lower()
-    #     if "participat" in w:
-    #         participation = True
-    #     if "paper" in w:
-    #         papers = True
-    #     if "take" in w:
-    #         takehome = True
-    #     if "final" in w:
-    #         final = True
-    #     if "problem" in w:
-    #         pset = True
-    #     if "midterm" in w or "mid-term" in w or "mid" in w:
-    #         midterm = True
-    #     if "quiz" in w:
-    #         quiz = True
-    #     if "present" in w:
-    #         presentation = True
-    # if "in lieu of f" in course['grading'].lower():
-    #     final = False
-    # if "in lieu of m" in course['grading'].lower():
-    #     midterm = False
-
-    # max pages of reading filter
-    # NUMBER_REGEX = re.compile(r'\d+')
-    # num_pages = 9000
-    # words = course['assgts'].split()
-    # for index,word in enumerate(words):
-    #     num_pages_curr = 0
-    #     if word == "pages":
-    #         num_pages_curr = words[index - 1]
-    #         if len(num_pages_curr.split("-")) == 2:
-    #             num_pages_curr = num_pages_curr.split("-")[1]
-    #         else:
-    #             num_pages_curr = NUMBER_REGEX.search(words[index - 1])
-    #             if num_pages_curr is not None:
-    #                 num_pages_curr = num_pages_curr.group()
-    #             else:
-    #                 num_pages_curr = 0
-    #     if "pp." in word:
-    #         num_pages_curr = word[:-3]
-    #         if len(num_pages_curr.split("-")) == 2:
-    #             num_pages_curr = num_pages_curr.split("-")[1]
-    #         else:
-    #             num_pages_curr = NUMBER_REGEX.search(words[index - 1])
-    #             if num_pages_curr is not None:
-    #                 num_pages_curr = num_pages_curr.group()
-    #             else:
-    #                 num_pages_curr = 0
-    #     if num_pages_curr > num_pages:
-    #         num_pages = num_pages_curr
-    # try:
-    #     num_pages = int(num_pages)
-    # except:
-    # 	num_pages = 9000
-    # 	pass
-    # if num_pages < 20:
-    #     num_pages = 9000
-
     # only check registrar_id to see if create or update, since other things
     # may change
     course_object, created = Course.objects.update_or_create(
         registrar_id=course['courseid'],
         defaults = {
-            #"description": course['descrip'],
-            #"professors": ', '.join([x['name'] for x in course['profs']]),
             "deptnum": '/'.join([x['dept'] + " " + x['number'] for x in course['listings']]),
             "evals": course['evaluation'],
-            #"assgts": course['assgts'] or "",
-
-            # "pages": num_pages,
-            # "participation": participation,
-            # "papers": papers,
-            # "takehome": takehome,
-            # "final": final,
-            # "pset": pset,
-            # "midterm": midterm,
-            # "presentation": presentation, #added
-            # "quiz": quiz, #added
-
-            # "grading": course['grading'] or "",
-            # "prereqs": course['prereqs'] or "",
-            # "otherinfo": course['otherinfo'] or "",
-            # "otherreq": course['otherreq'] or "", #ADDED
             "area": course['area'] or "",
             "url": course['url'],
 
