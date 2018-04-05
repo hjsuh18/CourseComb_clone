@@ -7,3 +7,8 @@ https://stackoverflow.com/questions/8734617/python-django-badstatusline-error
 
 QUESTIONS:
 How do we update only parts of the database when periodically scraping for courses.
+(I think this already happens, if courseid same, just updates the changed fields)
+
+Discussion:
+Should we keep the course data for previous semesters?
+
