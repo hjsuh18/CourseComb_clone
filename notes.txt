@@ -1,10 +1,9 @@
-Track errors here:
-
+ERRORS
 Scraping
 Error message: BadStatusLine: ''
 for courseid = 005602, term code = 1182
 According to Stack Overflow, there is no way to address error; can only catch the error
 https://stackoverflow.com/questions/8734617/python-django-badstatusline-error
 
-Chrome shows this error when loading coursecomb.herokuapp.com
-Insecure Content Blocked -> load unsafe scripts
+QUESTIONS:
+How do we update only parts of the database when periodically scraping for courses.

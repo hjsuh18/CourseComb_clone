@@ -30,13 +30,6 @@ def __get_eval_soup(url):
     Be warned that a page existing is not a guarantee that the course
     existed in that term.
     """
-    # url_opts = {
-    #     'terminfo': term,
-    #     'courseinfo': course_id
-    # }
-
-    # url_opts_enc = urllib.urlencode(url_opts)
-    # request_url = BASE_URL + '?' + url_opts_enc
     page = urllib.urlopen(url)
     return BeautifulSoup(page, 'html5lib')
 
@@ -52,9 +45,6 @@ def __get_eval_stats(soup):
     eval_stats_str = soup.find(id='chart').input['value']
     eval_stats = json.loads(base64.b64decode(eval_stats_str))
 
-    # label_items = eval_stats['PlotArea']['XAxis']['Items']
-    # labels = [lbl['Text'] for lbl in label_items]
-
     # compute the average rating of course and return it
     value_items = eval_stats['PlotArea']['ListOfSeries'][0]['Items']
     values = [float(val['YValue']) for val in value_items]
@@ -62,17 +52,6 @@ def __get_eval_stats(soup):
     for x in values:
         sum_ratings = sum_ratings + x
     return "{:.2f}".format(sum_ratings / len(values))
-    # return dict(zip(labels, values))
-
-
-# def __get_eval_comments(soup):
-#     """
-#     Returns a list of comments on the course, as plain text.
-#     """
-#     # Comments table is the last table on the page.
-#     comments = soup('table')[-1].find_all('td')
-#     return [c.get_text().strip() for c in comments]
-
 
 def course_eval(term, course_id):
     """
@@ -86,11 +65,8 @@ def course_eval(term, course_id):
         return {},[]
 
     stats = __get_eval_stats(soup)
-    # comments = __get_eval_comments(soup)
 
     return url, stats
-    # , comments
-
 
 if __name__ == '__main__':
     """
