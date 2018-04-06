@@ -8,6 +8,7 @@ https://stackoverflow.com/questions/8734617/python-django-badstatusline-error
 QUESTIONS:
 How do we update only parts of the database when periodically scraping for courses.
 (I think this already happens, if courseid same, just updates the changed fields)
+heroku scheduler, chronjob, 
 
 Conflicts between scripts in frontend: how do we avoid this?
 
