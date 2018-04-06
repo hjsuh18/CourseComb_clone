@@ -25,7 +25,7 @@ SECRET_KEY = '!(n@y2&(k5anu%cm0mje3f7l-2a#4**4dx^*_kh(9n#x11t2)3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'testserver', '127.0.0.1']
 
 
 # Application definition
@@ -37,7 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cas_ng',
     'courses'
+]
+
+# Causes a Django warning, but necessary for django_cas_ng to work
+MIDDLEWARE_CLASSES = [
+    'django_cas_ng.middleware.CASMiddleware',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +58,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'django_cas_ng.backends.CASBackend',
+]
+
+CAS_SERVER_URL= 'https://fed.princeton.edu/cas/'
 
 ROOT_URLCONF = 'test.urls'
 

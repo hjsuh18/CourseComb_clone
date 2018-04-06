@@ -16,10 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from courses import views
+import django_cas_ng.views
 
 urlpatterns = [
 	url(r'^$', views.home, name='home'),
 	url(r'^api/get_courses/', views.get_courses, name='get_courses'),
     url(r'^login$', views.login, name='login'),
     url(r'^admin/', admin.site.urls),
+    url(r'accounts/login/$', django_cas_ng.views.login, name='cas_ng_login'),
+    url(r'accounts/logout/$', django_cas_ng.views.logout, name='cas_ng_logout',)
 ]
