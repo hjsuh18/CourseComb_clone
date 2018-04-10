@@ -77,6 +77,7 @@
               <input type="text" name="searchinput">
               <input type="hidden" name="searchform" value="searchform">
         </form>
+
 -->
          <div class="ui-widget">
             <label for="courses"> </label>
@@ -85,6 +86,9 @@
           <div class = "aftersearch">
           </div>
           <div class = "coursequeue">
+            {% for i in favorites%}
+            <li> {{ i }}  <button type="button" class="btn btn-danger btn-sm">x</button></li>
+            {% endfor %}
           </div>
       </div>
     </div>
@@ -204,7 +208,7 @@
     //        }
     //   });
     // });
-
+    var csrfmiddlewaretoken = '{{ csrf_token }}';
     $(function() {
       $("#courses").autocomplete({
         source: "/api/get_courses/",
@@ -215,11 +219,35 @@
         },
         appendTo: '.aftersearch',
         select: function (e, ui) {
-            console.log(ui.item.label)
+            // console.log(ui.item.value)
+            var class_select_data = {
+                addclass: 'addclass',
+                class: ui.item.label,
+                registrar_id: ui.item.value,
+                csrfmiddlewaretoken: csrfmiddlewaretoken
+            };
+            e.preventDefault();
+            $.ajax({
+                 type: "POST",
+                 url: '/',
+                 data: class_select_data,
+                 success: function(data) {
+                    console.log(data)
+                    if (data != {}) {
+                      var newclass = JSON.stringify(data["newclass"]);
+                      $(".aftersearch").append("<li>" + JSON.parse(newclass) + "</li>");
+                    }
+                 }
+            });
             // $(".coursequeue").html($(this))
             // alert("selected!");
         },
       });
+      // .data('ui-autocomplete')._renderItem = function(ul, item) {
+      //   return $()
+      //   .append('<a>' + item.label + '<br>' + item.value + '</a>')
+      //   .appendTo('.aftersearch');
+      // };
     });
   </script>
   <script src="{% static 'js/dist.js' %}"></script>
