@@ -77,6 +77,7 @@
               <input type="text" name="searchinput">
               <input type="hidden" name="searchform" value="searchform">
         </form>
+
 -->
         <div class="ui-widget">
             <label for="courses"> </label>
@@ -85,6 +86,9 @@
           <div class = "aftersearch">
           </div>
           <div class = "coursequeue">
+            {% for i in favorites%}
+            {{ i | safe}} 
+            {% endfor %}
           </div>
         </div>
     </div>
@@ -205,7 +209,27 @@
     //        }
     //   });
     // });
+
     // uses JQuery autocomplete widget
+    var csrfmiddlewaretoken = '{{ csrf_token }}';
+    $('.deleteclass').click(function (e) {
+      e.preventDefault();
+      var removeclass = "." + this.id;
+      var class_delete_data = {
+          deleteclass: 'deleteclass',
+          registrar_id: this.id,
+          csrfmiddlewaretoken: csrfmiddlewaretoken
+      };
+      $.ajax({
+           type: "POST",
+           url: '/',
+           data: class_delete_data,
+           success: function(data) {
+              $(removeclass).remove();
+           }
+      });
+    });
+
     $(function() {
       $("#courses").autocomplete({
         source: "/api/get_courses/",
@@ -216,11 +240,36 @@
         },
         appendTo: '.aftersearch',
         select: function (e, ui) {
-            console.log(ui.item.label)
+            // console.log(ui.item.value)
+            var class_select_data = {
+                addclass: 'addclass',
+                class: ui.item.label,
+                registrar_id: ui.item.value,
+                csrfmiddlewaretoken: csrfmiddlewaretoken
+            };
+            e.preventDefault();
+            $.ajax({
+                 type: "POST",
+                 url: '/',
+                 data: class_select_data,
+                 success: function(data) {
+                    if (data != {}) {
+                      var newclass = JSON.stringify(data["newclass"]);
+                      var newid = JSON.stringify(data["newid"]);
+                      $(".aftersearch").append("<li class = '" + newid + "'>" + JSON.parse(newclass) + 
+                        " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = '" + newid + "'> x </button> </li>");
+                    }
+                 }
+            });
             // $(".coursequeue").html($(this))
             // alert("selected!");
         },
       });
+      // .data('ui-autocomplete')._renderItem = function(ul, item) {
+      //   return $()
+      //   .append('<a>' + item.label + '<br>' + item.value + '</a>')
+      //   .appendTo('.aftersearch');
+      // };
     });
   </script>
 
