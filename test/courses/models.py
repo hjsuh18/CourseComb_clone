@@ -55,7 +55,7 @@ class Meeting(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique = True)
     faves = models.TextField()
-
+    
     def __unicode__(self):
         return "User: " + self.user.username + ", Favorites: " + self.faves
 
