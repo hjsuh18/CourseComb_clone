@@ -210,9 +210,9 @@
     // });
 
     var csrfmiddlewaretoken = '{{ csrf_token }}';
-    $('.deleteclass').click(function (e) {
+    $('body').on('click', '.deleteclass', function (e) {
       e.preventDefault();
-      var removeclass = "." + this.id;
+      var parent = $(this).parent();
       var class_delete_data = {
           deleteclass: 'deleteclass',
           registrar_id: this.id,
@@ -223,14 +223,11 @@
            url: '/',
            data: class_delete_data,
            success: function(data) {
-              $(removeclass).remove();
+              parent.remove();
            }
       });
     });
 
-
-
-    
     $(function() {
       $("#courses").autocomplete({
         source: "/api/get_courses/",
@@ -258,19 +255,12 @@
                       var newclass = JSON.stringify(data["newclass"]);
                       var newid = JSON.stringify(data["newid"]);
                       $(".aftersearch").append("<li class = '" + newid + "'>" + JSON.parse(newclass) + 
-                        " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = '" + newid + "'> x </button> </li>");
+                        " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + newid + "> x </button> </li>");
                     }
                  }
             });
-            // $(".coursequeue").html($(this))
-            // alert("selected!");
         },
       });
-      // .data('ui-autocomplete')._renderItem = function(ul, item) {
-      //   return $()
-      //   .append('<a>' + item.label + '<br>' + item.value + '</a>')
-      //   .appendTo('.aftersearch');
-      // };
     });
   </script>
   <script src="{% static 'js/dist.js' %}"></script>
