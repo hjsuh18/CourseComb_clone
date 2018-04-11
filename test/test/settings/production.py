@@ -37,7 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cas_ng',
     'courses'
+]
+
+# Causes a Django warning, but necessary for django_cas_ng to work
+MIDDLEWARE_CLASSES = [
+    'django_cas_ng.middleware.CASMiddleware',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +58,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'django_cas_ng.backends.CASBackend',
+]
+
+CAS_SERVER_URL= 'https://fed.princeton.edu/cas/'
 
 ROOT_URLCONF = 'test.urls'
 

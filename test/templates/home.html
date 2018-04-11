@@ -78,17 +78,18 @@
               <input type="hidden" name="searchform" value="searchform">
         </form>
 -->
-         <div class="ui-widget">
+        <div class="ui-widget">
             <label for="courses"> </label>
             <input id="courses">
-          </div>
+        </div>
           <div class = "aftersearch">
           </div>
           <div class = "coursequeue">
           </div>
-      </div>
+        </div>
     </div>
     
+    <!-- *******typo here*********-->
     <div class="filter-containe form-inline">
       <div class="col-sm-1">
         <button type="button" class="btn btn-primary align-top" data-toggle="modal" data-target="#filter-modal">
@@ -204,7 +205,7 @@
     //        }
     //   });
     // });
-
+    // uses JQuery autocomplete widget
     $(function() {
       $("#courses").autocomplete({
         source: "/api/get_courses/",
@@ -222,8 +223,8 @@
       });
     });
   </script>
-  <script src="{% static 'js/dist.js' %}"></script>
 
+  <script src="{% static 'js/dist.js' %}"></script>
 
   <!-- Bootstrap Javascript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
