@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.postgres.fields import ArrayField
+from time_compare import time_compare, day_convert, day_compare
 
 # Course model below adopted from ReCal's model, with modifications to fields
 # E.g. Instead of a Course_Listing model, we added department and number to
@@ -29,6 +30,19 @@ class Course(models.Model):
     auditable = models.BooleanField(default=True)
     pdfaudit = models.TextField()
 
+    def is_conflict(self, Course):
+        # need logic here to see if two courses conflict
+        self_meetings = self.meetings.filter(is_primary=True)
+        Course_meetings = Course.meetings.filter(is_primary=True)
+        for i in range(0, len(self_meetings)):
+            for j in range(0, len(Course_meetings)):
+                if not (self_meetings[i]).is_conflict(Course_meetings[j]):
+                    return False
+        return True
+
+    def __str__(self):
+        return self.deptnum
+
     def __unicode__(self):
         return self.deptnum + ": " + self.title
 
@@ -43,6 +57,20 @@ class Meeting(models.Model):
     section = models.CharField(max_length=4) # probably 3, but just in case
     is_primary = models.BooleanField(default=False) # whether meeting is primary
 
+    # made the assumption that class is held at same time on all days for a certain course
+    def is_conflict(self, Meeting):
+        day_overlap = day_compare(self.days, Meeting.days)
+        if not day_overlap:
+            return False
+        else:
+            # conflict = start_time_1 < end_time_2 && end_time_1 > start_time_2
+            x = time_compare(self.start_time, Meeting.end_time)
+            y = time_compare(Meeting.start_time, self.end_time)
+            if x == 1 and y == 1:
+                return True
+            else:
+                return False
+
     def __unicode__(self):
         if self.start_time != None:
             times = self.start_time.strftime("%I:%M %p")+ ' - ' + self.end_time.strftime("%I:%M %p")
@@ -55,6 +83,7 @@ class Meeting(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique = True)
     faves = models.TextField()
+    course_combo = ArrayField(ArrayField(models.TextField()), blank=True)
 
     def __unicode__(self):
         return "User: " + self.user.username + ", Favorites: " + self.faves

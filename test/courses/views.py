@@ -10,10 +10,30 @@ import json, cgi
 from .cas import CASClient
 from django.urls import resolve
 
+from combination import combine
+
 
 def home(request):
 	# return render(request, 'home.html')
 	curr_profile = request.user.profile
+
+	# elif 'searchresults' in request.POST:
+	ids = curr_profile.faves.split(',')
+	course_list = []
+	for i in ids:
+		if (i != ''):
+			course = Course.objects.filter(registrar_id=i)
+			course_list.append(course[0])
+	combo = combine(course_list, 2)
+	combination = []
+	for c in combo:
+		for i in range(0, len(c)):
+			c[i] = str(c[i])
+		combination.append(c)
+	
+	curr_profile.course_combo = combination
+	curr_profile.save()
+
 	if 'searchform' in request.GET:
 		searchinput = request.GET.get("searchinput", "")
 		results = Course.objects.annotate(
@@ -47,6 +67,7 @@ def home(request):
 		curr_profile.save()
 		responseobject = {}
 		return JsonResponse(responseobject)
+
 	else:
 		favorites = curr_profile.faves
 		favorites = favorites.split(",")
