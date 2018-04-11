@@ -10,23 +10,26 @@ import json, cgi
 from .cas import CASClient
 from django.urls import resolve
 
+from combination import combine
+
 
 def home(request):
 	# return render(request, 'home.html')
 	curr_profile = request.user.profile
-	if 'searchform' in request.GET:
-		searchinput = request.GET.get("searchinput", "")
-		results = Course.objects.annotate(
-			search=SearchVector('title', 'deptnum'),
-		).filter(search=searchinput)
-		for result in results:
-			print result.title
-		responseobject = {
-			'message': results.title
-		}
-		return JsonResponse(responseobject)
+
+	# if 'searchform' in request.GET:
+	# 	searchinput = request.GET.get("searchinput", "")
+	# 	results = Course.objects.annotate(
+	# 		search=SearchVector('title', 'deptnum'),
+	# 	).filter(search=searchinput)
+	# 	for result in results:
+	# 		print result.title
+	# 	responseobject = {
+	# 		'message': results.title
+	# 	}
+	# 	return JsonResponse(responseobject)
 	# add course to faves by registrar_id
-	elif 'addclass' in request.POST:
+	if 'addclass' in request.POST:
 		registrar_id = request.POST.get("registrar_id", "")
 		class_name = request.POST.get("class", "")
 		if registrar_id not in curr_profile.faves:
@@ -47,6 +50,7 @@ def home(request):
 		curr_profile.save()
 		responseobject = {}
 		return JsonResponse(responseobject)
+
 	else:
 		favorites = curr_profile.faves
 		favorites = favorites.split(",")
@@ -56,6 +60,26 @@ def home(request):
 				course = Course.objects.filter(registrar_id = i)
 				curr_faves.append("<li class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + i + "> x </button> </li>") 
 		return render(request, 'home.html', {"favorites": curr_faves})
+
+	# This should be triggered by pressing Search results button
+	# calculate combinations, display it and save it to database under user
+	# The courses in the search results are probably in reverse order
+	# elif 'searchresults' in request.POST:
+	# 	ids = curr_profile.faves.split(',')
+	# 	course_list = []
+	# 	for i in ids:
+	# 		if (i != ''):
+	# 			course = Course.objects.filter(registrar_id=i)
+	# 			course_list.append(course[0])
+	# 	combo = combine(course_list, 2)
+	# 	combination = []
+	# 	for c in combo:
+	# 		for i in range(0, len(c)):
+	# 			c[i] = str(c[i])
+	# 		combination.append(c)
+		
+	# 	curr_profile.course_combo = combination
+	# 	curr_profile.save()
 
 def get_courses(request):
 	if request.is_ajax():
