@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from .models import Course
+from .models import Course, Profile
 from django.contrib.postgres.search import SearchVector
 import json, cgi
 from .cas import CASClient
@@ -13,6 +13,7 @@ from django.urls import resolve
 
 def home(request):
 	# return render(request, 'home.html')
+	curr_profile = request.user.profile
 	if 'searchform' in request.GET:
 		searchinput = request.GET.get("searchinput", "")
 		results = Course.objects.annotate(
@@ -24,9 +25,27 @@ def home(request):
 			'message': results.title
 		}
 		return JsonResponse(responseobject)
+	# add course to faves by registrar_id
+	elif 'addclass' in request.POST:
+		registrar_id = request.POST.get("registrar_id", "")
+		class_name = request.POST.get("class", "")
+		if registrar_id not in curr_profile.faves:
+			new_faves = curr_profile.faves + "," + registrar_id
+			curr_profile.faves = new_faves
+			curr_profile.save()
+			responseobject = {'newclass': class_name}
+		else:
+			responseobject = {}
+		return JsonResponse(responseobject)
 	else:
-		# courses = Course.objects.all()
-		return render(request, 'home.html')
+		favorites = curr_profile.faves
+		favorites = favorites.split(",")
+		curr_faves = []
+		for i in favorites:
+			if (i != ''):
+				course = Course.objects.filter(registrar_id = i)
+				curr_faves.append(course[0].deptnum + ": " + course[0].title)
+		return render(request, 'home.html', {"favorites": curr_faves})
 
 def get_courses(request):
 	if request.is_ajax():
@@ -37,7 +56,11 @@ def get_courses(request):
 		results = []
 		for result in searchresults:
 			course_json = {}
-			course_json = result.deptnum + ": " + result.title
+			course_json = {
+				'label': result.deptnum + ": " + result.title,
+				'value': result.registrar_id
+			}
+			# course_json = result.deptnum + ": " + result.title
 			results.append(course_json)
 		data = json.dumps(results)
 	else:
@@ -45,6 +68,7 @@ def get_courses(request):
 	
 	mimetype = 'application/json'
 	return HttpResponse(data, mimetype)
+
 
 def login(request):
 	# return render(request, 'home.html')
