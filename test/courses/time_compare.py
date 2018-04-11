@@ -1,3 +1,4 @@
+# if x is before y, return 1, if the same, return 0, else return -1
 def time_compare(x, y):
     if x.hour < y.hour:
         return 1
@@ -28,7 +29,7 @@ def day_convert(day):
             day_array[4] = 1
     return day_array
 
-# return a list of days where x and y overlap
+# return True if days of x and y overlap, False otherwise
 def day_compare(x, y):
     day_1 = day_convert(x)
     day_2 = day_convert(y)
