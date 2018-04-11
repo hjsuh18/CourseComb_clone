@@ -1,4 +1,4 @@
-{% load static %}
+<!-- {% load static %} -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,8 +20,8 @@
 
 
   <!-- @ Matt do you remember where these are from -->
-  <script src="{% static 'moment/moment.js' %}"></script>
-  <script src="{% static 'js/calendar.js' %}"></script>
+  <script src="../static/moment/moment.js"></script>
+  <script src="../static/js/calendar.js"></script>
 
 </head>
 <body>
@@ -78,19 +78,17 @@
               <input type="hidden" name="searchform" value="searchform">
         </form>
 -->
-         <div class="ui-widget">
-            <label for="courses"> </label>
-            <input id="courses">
-          </div>
-          <div class = "aftersearch">
-          </div>
-          <div class = "coursequeue">
-          </div>
+        <div class="ui-widget">
+          <label for="courses"> </label>
+          <input id="courses">
+        </div>
+        <div class = "aftersearch"></div>
+        <div class = "coursequeue"></div>
       </div>
     </div>
     
-    <div class="filter-containe form-inline">
-      <div class="col-sm-1">
+    <div class="filter-container form-inline col-sm-1">
+      <div>
         <button type="button" class="btn btn-primary align-top" data-toggle="modal" data-target="#filter-modal">
             Filter
         </button>
@@ -161,10 +159,22 @@
     </div>
 
     <!-- Course Combination Result Column -->
-    <div id="search-results" class="col-sm-3"></div>
+    <div id="search-results" class="hidden col-sm-3">
+    	<div class="ui-widget">
+          <label for="results"> </label>
+          <input id="results">
+        </div>
+        <div class = "aftersearch"></div>
+        <div class = "coursequeue"></div>
+    </div>
 
     <!-- Show Calendar -->
     <div id="calendar" class="col-sm-6"></div>
+  </div>
+
+  <div class="show-results">
+  	<button class="btn" id="btn-res">Show Results!</button>
+  	<div id="res"> </div>
   </div>
 
   <style>
@@ -188,8 +198,68 @@
       width: 100%;
     }
 
+    .hidden {
+    	display: none;
+    }
+
+    .show-results .btn{
+    	position: absolute;
+    	top: 90%;
+    	left: 15%;
+    	background-color: #f1f1f1;
+    	color: black;
+    	font-size: 12px;
+    	border: none;
+    	cursor: pointer;
+    	border-radius: 5px;
+    	text-align: center;
+    }
+
+    .show-results .btn:hover {
+    	background-color: black;
+    	color:white;
+    }
+
   </style>
   
+  <script type="text/javascript">
+  	$(function() {
+  		$("#btn-res").on('click', function() {
+  			var item = document.getElementById("search-results");
+  			if (item.className = "hidden col-sm-3") {
+  				item.className = "unhidden col-sm-3";
+  			}
+  			var $results = $("#results");
+  			$.ajax({
+  				type: "GET",
+  				url: "/api/get_combinations/",
+  				success: function(results) {
+  					$.each(results, function(i, result) {
+  						$results.append("<li>" + result.dpt + " " + result.courseNum + "</li>");
+  					});
+  				}
+  			});
+  		});
+  	});
+
+    /*$(function() {
+      $("#courses").autocomplete({
+        source: "/api/get_courses/",
+        minLength: 2,
+        messages: {
+          noResults: "",
+          results: function() {}
+        },
+        appendTo: ".search-results",
+        select: function (e, ui) {
+            console.log(ui.item.label)
+            // $(".coursequeue").html($(this))
+            // alert("selected!");
+        },
+      });
+    });*/
+  </script>
+
   <script type="text/javascript">
     // console.log($("#searchform").serialize())
     // $('#searchbutton').click(function (e) {
@@ -210,10 +280,10 @@
         source: "/api/get_courses/",
         minLength: 2,
         messages: {
-          noResults: '',
+          noResults: "",
           results: function() {}
         },
-        appendTo: '.aftersearch',
+        appendTo: ".aftersearch",
         select: function (e, ui) {
             console.log(ui.item.label)
             // $(".coursequeue").html($(this))
@@ -222,7 +292,7 @@
       });
     });
   </script>
-  <script src="{% static 'js/dist.js' %}"></script>
+  <script src="../static/js/dist.js"></script>
 
 
   <!-- Bootstrap Javascript -->
