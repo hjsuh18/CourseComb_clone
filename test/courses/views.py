@@ -13,43 +13,7 @@ from django.urls import resolve
 from combination import combine
 
 def home(request):
-	# return render(request, 'home.html')
 	curr_profile = request.user.profile
-
-
-	ids = curr_profile.faves.split(',')
-	course_list = []
-	for i in ids:
-		if (i != ''):
-			course = Course.objects.filter(registrar_id=i)
-			course_list.append(course[0])
-	combo = combine(course_list, 2)
-
-	combination = []
-	if combo != None:
-		for c in combo:
-			comb_str = str(c[len(c) - 1])
-			for i in range(len(c) - 2, -1, -1):
-				comb_str = comb_str + ', ' + str(c[i])
-			combination.append(comb_str)
-
-	# save the course combinations to user
-	curr_profile.course_combo = combination
-	curr_profile.save()
-
-	# render the course combinations
-	display = []
-	for i in range (0, len(combination)):
-		display.append("<div class = '" + str(i) + "'>" + combination[i] + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(i) + "> x </button> </div>") 
-
-	return render(request, 'home.html', {"combinations": display})
-
-
-
-
-
-
-
 	# if 'searchform' in request.GET:
 	# 	searchinput = request.GET.get("searchinput", "")
 	# 	results = Course.objects.annotate(
@@ -85,17 +49,18 @@ def home(request):
 		responseobject = {}
 		return JsonResponse(responseobject)
 
+
 	# delete course combination in database
-	elif 'deletecomb' in request.POST:
-		# change this for course combination
-		registrar_id = request.POST.get("registrar_id", "")
-		favorites = curr_profile.faves
-		favorites = favorites.split(",")
-		curr_faves = [x for x in favorites if registrar_id not in x]
-		curr_profile.faves = ','.join(curr_faves)
-		curr_profile.save()
-		responseobject = {}
-		return JsonResponse(responseobject)	
+	# elif 'deletecomb' in request.POST:
+	# 	# change this for course combination
+	# 	registrar_id = request.POST.get("registrar_id", "")
+	# 	favorites = curr_profile.faves
+	# 	favorites = favorites.split(",")
+	# 	curr_faves = [x for x in favorites if registrar_id not in x]
+	# 	curr_profile.faves = ','.join(curr_faves)
+	# 	curr_profile.save()
+	# 	responseobject = {}
+	# 	return JsonResponse(responseobject)	
 
 	# This should be triggered by pressing Search results button
 	# calculate combinations, display it and save it to database under user
@@ -108,36 +73,41 @@ def home(request):
 				course = Course.objects.filter(registrar_id=i)
 				course_list.append(course[0])
 		combo = combine(course_list, 2)
-		if combo == None:
-			combination = []
-		else: 
+
+		combination = []
+		if combo != None:
 			for c in combo:
 				comb_str = str(c[len(c) - 1])
 				for i in range(len(c) - 2, -1, -1):
 					comb_str = comb_str + ', ' + str(c[i])
 				combination.append(comb_str)
-		print combination
 
 		# save the course combinations to user
 		curr_profile.course_combo = combination
 		curr_profile.save()
 
+		response = []
 		# render the course combinations
-		display = []
-		for i in range (0, len(combination))
-			display.append("<div class = '" + i + "'>" + combination[i] + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + i + "> x </button> </div>") 
-
-		return render(request, 'home.html', {"combinations": display})
+		for i in range (0, len(combination)):
+			temp = "<div class = '" + str(i) + "'>" + combination[i] + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + str(i) + "> x </button> </div>"
+			response.append(temp)
+		responseobject = {'courses_com': json.dumps(response)}
+		return JsonResponse(responseobject)
 
 	else:
 		favorites = curr_profile.faves
 		favorites = favorites.split(",")
+		combination = curr_profile.course_combo
 		curr_faves = []
+		curr_combs = []
 		for i in favorites:
 			if (i != ''):
 				course = Course.objects.filter(registrar_id = i)
 				curr_faves.append("<div class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + i + "> x </button> </div>") 
-		return render(request, 'home.html', {"favorites": curr_faves})
+		for i in range (0, len(combination)):
+			curr_combs.append("<div class = '" + str(i) + "'>" + combination[i] + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + str(i) + "> x </button> </div>")
+
+		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs})
 
 def get_courses(request):
 	if request.is_ajax():
