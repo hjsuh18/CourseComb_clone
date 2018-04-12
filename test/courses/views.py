@@ -54,7 +54,7 @@ def home(request):
 		for i in favorites:
 			if (i != ''):
 				course = Course.objects.filter(registrar_id = i)
-				curr_faves.append("<li class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + i + "> x </button> </li>") 
+				curr_faves.append("<div class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + i + "> x </button> </div>") 
 		return render(request, 'home.html', {"favorites": curr_faves})
 
 def get_courses(request):

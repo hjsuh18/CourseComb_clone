@@ -61,12 +61,14 @@
 
     <!-- FIRST COLUMN -->
     <div class = "col-sm-3">
+
          <div class="ui-widget">
             <label for="courses"> </label>
             <input id="courses">
           </div>
           <div class = "aftersearch">
           </div>
+
           <div class = "coursequeue">
             {% for i in favorites%}
             {{ i | safe}} 
@@ -174,8 +176,8 @@
                     if (data != {}) {
                       var newclass = JSON.stringify(data["newclass"]);
                       var newid = JSON.stringify(data["newid"]);
-                      $(".aftersearch").append("<li class = '" + newid + "'>" + JSON.parse(newclass) + 
-                        " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + newid + "> x </button> </li>");
+                      $(".aftersearch").append("<div class = '" + newid + "'>" + JSON.parse(newclass) + 
+                        " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + newid + "> x </button> </div>");
                     }
                  }
             });
