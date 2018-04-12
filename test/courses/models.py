@@ -83,7 +83,7 @@ class Meeting(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique = True)
     faves = models.TextField()
-    course_combo = ArrayField(ArrayField(models.TextField()), blank=True)
+    course_combo = ArrayField(models.TextField(), blank=True)
     
     def __unicode__(self):
         return "User: " + self.user.username + ", Favorites: " + self.faves
