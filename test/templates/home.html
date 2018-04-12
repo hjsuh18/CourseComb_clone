@@ -61,19 +61,18 @@
 
     <!-- FIRST COLUMN -->
     <div class = "col-sm-3">
+      <div class="ui-widget">
+        <label for="courses"> </label>
+        <input id="courses">
+      </div>
+      <div class = "aftersearch">
+      </div>
 
-         <div class="ui-widget">
-            <label for="courses"> </label>
-            <input id="courses">
-          </div>
-          <div class = "aftersearch">
-          </div>
-
-          <div class = "coursequeue">
-            {% for i in favorites%}
-            {{ i | safe}} 
-            {% endfor %}
-          </div>
+      <div class = "coursequeue">
+        {% for i in favorites%}
+        { i | safe}} 
+        {% endfor %}
+      </div>
     </div>
 
     <!-- SECOND COLUMN -->

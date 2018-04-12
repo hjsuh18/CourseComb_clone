@@ -12,7 +12,6 @@ from django.urls import resolve
 
 from combination import combine
 
-
 def home(request):
 	# return render(request, 'home.html')
 	curr_profile = request.user.profile
@@ -28,6 +27,7 @@ def home(request):
 	# 		'message': results.title
 	# 	}
 	# 	return JsonResponse(responseobject)
+
 	# add course to faves by registrar_id
 	if 'addclass' in request.POST:
 		registrar_id = request.POST.get("registrar_id", "")
