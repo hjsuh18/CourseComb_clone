@@ -50,7 +50,37 @@ def home(request):
 		curr_profile.save()
 		responseobject = {}
 		return JsonResponse(responseobject)
-
+	# This should be triggered by pressing Search results button
+	# calculate combinations, display it and save it to database under user
+	# The courses in the search results are probably in reverse order
+	elif 'searchresults' in request.POST:
+		ids = curr_profile.faves.split(',')
+		course_list = []
+		for i in ids:
+			if (i != ''):
+				course = Course.objects.filter(registrar_id=i)
+				course_list.append(course[0])
+		combo = combine(course_list, 2)
+		combination = []
+		for c in combo:
+			for i in range(0, len(c)):
+				c[i] = str(c[i])
+			combination.append(c)
+		curr_profile.course_combo = combination
+		curr_profile.save()
+		index = 0
+		response = []
+		for comb in combination:
+			temp = "<div class = '" + str(index) + "'> " 
+			classes = ""
+			for course in comb:
+				classes += ", " + course
+			classes = classes[2:]
+			temp += classes
+			temp += " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(index) + "> x </button> </div>"
+			response.append(temp)
+		responseobject = {'courses_com': json.dumps(response)}
+		return JsonResponse(responseobject)
 	else:
 		favorites = curr_profile.faves
 		favorites = favorites.split(",")
@@ -61,25 +91,7 @@ def home(request):
 				curr_faves.append("<div class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + i + "> x </button> </div>") 
 		return render(request, 'home.html', {"favorites": curr_faves})
 
-	# This should be triggered by pressing Search results button
-	# calculate combinations, display it and save it to database under user
-	# The courses in the search results are probably in reverse order
-	# elif 'searchresults' in request.POST:
-	# 	ids = curr_profile.faves.split(',')
-	# 	course_list = []
-	# 	for i in ids:
-	# 		if (i != ''):
-	# 			course = Course.objects.filter(registrar_id=i)
-	# 			course_list.append(course[0])
-	# 	combo = combine(course_list, 2)
-	# 	combination = []
-	# 	for c in combo:
-	# 		for i in range(0, len(c)):
-	# 			c[i] = str(c[i])
-	# 		combination.append(c)
-		
-	# 	curr_profile.course_combo = combination
-	# 	curr_profile.save()
+	
 
 def get_courses(request):
 	if request.is_ajax():

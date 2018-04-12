@@ -73,6 +73,8 @@
             {% for i in favorites%}
             {{ i | safe}} 
             {% endfor %}
+            <br>
+            <button class = "btn btn-success createschedule"> Create My Schedule! </button>
           </div>
     </div>
 
@@ -125,6 +127,22 @@
     //   });
     // });
     var csrfmiddlewaretoken = '{{ csrf_token }}';
+    $('.createschedule').click(function(e) {
+      e.preventDefault();
+      var createschedule_data = {
+          searchresults: 'searchresults',
+          csrfmiddlewaretoken: csrfmiddlewaretoken
+      };
+      $.ajax({
+           type: "POST",
+           url: '/',
+           data: createschedule_data,
+           success: function(data) {
+              var courses_com = JSON.parse(data["courses_com"]);
+              $("#search-results").append(courses_com);
+           }
+      });
+    });
     $('body').on('click', '.deleteclass', function (e) {
       e.preventDefault();
       var parent = $(this).parent();
