@@ -105,7 +105,7 @@ def home(request):
 				course = Course.objects.filter(registrar_id = i)
 				curr_faves.append("<div class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + i + "> x </button> </div>") 
 		for i in range (0, len(combination)):
-			curr_combs.append("<div class = '" + str(i) + "'>" + combination[i] + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + str(i) + "> x </button> </div>")
+			curr_combs.append("<div class = '" + str(i) + "'>" + combination[i] + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(i) + "> x </button> </div>")
 
 		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs})
 
