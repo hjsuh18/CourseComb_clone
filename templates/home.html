@@ -26,6 +26,9 @@
   <script>
     $(function() {
       $("#calendar").fullCalendar({
+        defaultView: 'basicWeek',
+        header: false,
+        weekends: false
       })
     });
   </script>
@@ -127,6 +130,9 @@
 
   
   <style>
+    .container {
+      padding-top: 10px;
+    }
     .navbar {
       background: #f4c242;
     }
