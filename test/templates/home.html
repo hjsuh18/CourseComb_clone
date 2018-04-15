@@ -175,11 +175,8 @@
 
     <!-- Course Combination Result Column -->
     <div id="search-results" class="hidden col-sm-3">
-    	<div class="ui-widget">
-          <label for="results"> </label>
-          <input id="results">
-        </div>
-        <div class = "aftersearch"></div>
+<!--  -->
+        <div class = "results"></div>
         <div class = "coursequeue"></div>
     </div>
 
@@ -239,6 +236,9 @@
   
   <script type="text/javascript">
   	$(function() {
+  		// models.py somewhere in profile will have field for combinations
+  		// views.py def function for getting combination results
+  		// do a call in urls.py
   		$("#btn-res").on('click', function() {
   			var item = document.getElementById("search-results");
   			if (item.className = "hidden col-sm-3") {
@@ -250,7 +250,7 @@
   				url: "/api/get_combinations/",
   				success: function(results) {
   					$.each(results, function(i, result) {
-  						$results.append("<li>" + result.dpt + " " + result.courseNum + "</li>");
+  						$results.append("<li>" + result + "</li>");
   					});
   				}
   			});
