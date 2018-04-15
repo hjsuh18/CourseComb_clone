@@ -63,13 +63,15 @@ class Meeting(models.Model):
         if not day_overlap:
             return False
         else:
-            # conflict = start_time_1 < end_time_2 && end_time_1 > start_time_2
-            x = time_compare(self.start_time, Meeting.end_time)
-            y = time_compare(Meeting.start_time, self.end_time)
-            if x == 1 and y == 1:
-                return True
-            else:
+            if self.start_time == None or Meeting.start_time == None:
                 return False
+            else:
+                x = time_compare(self.start_time, Meeting.end_time)
+                y = time_compare(Meeting.start_time, self.end_time)
+                if x == 1 and y == 1:
+                    return True
+                else:
+                    return False
 
     def __unicode__(self):
         if self.start_time != None:
@@ -83,10 +85,21 @@ class Meeting(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique = True)
     faves = models.TextField()
-    course_combo = ArrayField(models.TextField(), blank=True)
+    # course_combo = ArrayField(models.TextField(), blank=True)
     
     def __unicode__(self):
-        return "User: " + self.user.username + ", Favorites: " + self.faves
+        return "User: " + self.user.username + ", Favorites: " + self.faves + ", Course Combinations: " + course_combo
+
+# A certain user's course combination
+class Combination(models.Model):
+    user = models.ForeignKey(Profile, related_name='combinations')
+    comb_id = models.SmallIntegerField(default=-1)
+    course_combo = models.TextField(default=None)
+    filtered = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.course_combo
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

@@ -5,6 +5,10 @@ for courseid = 005602, term code = 1182
 According to Stack Overflow, there is no way to address error; can only catch the error
 https://stackoverflow.com/questions/8734617/python-django-badstatusline-error
 
+Cross listed courses search doesn't quite work e.g. ORF 363
+
+Multiple tabs: should there be a different way of saving/rendering pages?
+
 QUESTIONS:
 How do we update only parts of the database when periodically scraping for courses.
 (I think this already happens, if courseid same, just updates the changed fields)

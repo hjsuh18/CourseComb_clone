@@ -15,8 +15,8 @@ def exclude_conflicts(anchor, course_list):
 
 # append all elements in list l with prefix
 def append(prefix, l):
-	for x in l:
-		x = x.append(prefix)
+	for i in range (0, len(l)):
+		l[i] = l[i] + ', ' + str(prefix)
 	return l
 
 
@@ -29,7 +29,7 @@ def combine(courses, k):
 	# base case where combinations are length 1
 	if k == 1:
 		for i in range (0, len(courses)):
-			courses[i] = [courses[i]]
+			courses[i] = str(courses[i])
 		return courses
 
 	# recursion
