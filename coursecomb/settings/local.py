@@ -93,8 +93,8 @@ WSGI_APPLICATION = 'coursecomb.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'course_data',
-        'USER': 'hjsuh',
+        'NAME': 'testing',
+        'USER': 'tester',
         'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '',
