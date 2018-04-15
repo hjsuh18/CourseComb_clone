@@ -4,13 +4,14 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from .models import Course, Profile, Combination
+from .models import Course, Profile, Combination, Meeting
 from django.contrib.postgres.search import SearchVector
 import json, cgi
 from .cas import CASClient
 from django.urls import resolve
 
 from combination import combine
+from time_compare import day_convert
 
 # temporarily so that heroku problem can be identified
 def landing(request):
@@ -19,18 +20,6 @@ def landing(request):
 
 def home(request):
 	curr_profile = request.user.profile
-	# if 'searchform' in request.GET:
-	# 	searchinput = request.GET.get("searchinput", "")
-	# 	results = Course.objects.annotate(
-	# 		search=SearchVector('title', 'deptnum'),
-	# 	).filter(search=searchinput)
-	# 	for result in results:
-	# 		print result.title
-	# 	responseobject = {
-	# 		'message': results.title
-	# 	}
-	# 	return JsonResponse(responseobject)
-
 	# add course to faves by registrar_id
 	if 'addclass' in request.POST:
 		registrar_id = request.POST.get("registrar_id", "")
@@ -85,7 +74,7 @@ def home(request):
 		response = []
 		# render the course combinations
 		for i in range (0, len(combo)):
-			temp = "<div class = '" + str(i) + "'>" + combo[i] + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + str(i) + "> x </button> </div>"
+			temp = "<div class = 'coursecomb " + str(i) + "'>" + combo[i] + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(i) + "> x </button> </div>"
 			response.append(temp)
 		responseobject = {'courses_com': json.dumps(response)}
 		return JsonResponse(responseobject)
@@ -99,7 +88,22 @@ def home(request):
 		responseobject = {}
 		return JsonResponse(responseobject)	
 
-
+	# show schedule of selected combination
+	elif 'comb_click' in request.GET:
+		comb_id = request.GET.get("comb_id", "")
+		# comb = curr_profile.combinations.filter(comb_id = int(comb_id))
+		# comb = curr_profile.combinations.filter(id = 0)[0].course_combo.split(",")
+		comb = ['002065', '012661']
+		comb_schedule = []
+		for i in comb:
+			course = Course.objects.filter(registrar_id = i)[0]
+			meeting = Meeting.objects.filter(course = course, is_primary = True)[0]
+			days = day_convert(meeting.days)
+			newdays = [i+1 for i, j in enumerate(days) if j == 1]
+			course_schedule = {'title': course.deptnum + ": " + course.title, 'dow': newdays, 'start': meeting.start_time, 'end':meeting.end_time}
+			comb_schedule.append(course_schedule)
+		responseobject = {'schedule': json.dumps(comb_schedule, default=str)}
+		return JsonResponse(responseobject)	
 	else:
 		favorites = curr_profile.faves
 		favorites = favorites.split(",")
@@ -111,7 +115,7 @@ def home(request):
 				course = Course.objects.filter(registrar_id = i)
 				curr_faves.append("<div class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + i + "> x </button> </div>") 
 		for i in range (0, len(combination)):
-			curr_combs.append("<div class = '" + str(i) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(i) + "> x </button> </div>")
+			curr_combs.append("<div class = 'coursecomb " + str(i) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(i) + "> x </button> </div>")
 
 		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs})
 
