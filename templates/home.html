@@ -164,7 +164,7 @@
     var csrfmiddlewaretoken = '{{ csrf_token }}';
 
     // Click on a combination
-    $('.coursecomb').click(function(e) {
+    $('body').on('click', '.coursecomb', function (e) {
       e.preventDefault();
       comb_id = $(this).attr("class").split(" ")[1];
       var coursecomb_data = {
