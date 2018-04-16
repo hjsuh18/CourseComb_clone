@@ -26,9 +26,14 @@
   <script>
     $(function() {
       $("#calendar").fullCalendar({
-        defaultView: 'basicWeek',
+        defaultView: 'agendaWeek',
         header: false,
-        weekends: false
+        columnHeaderFormat: 'ddd',
+        minTime: '08:00:00',
+        maxTime: '23:00:00',
+        slotDuration: '01:00:00',
+        allDaySlot: false,
+        weekends: false,
       })
     });
   </script>
@@ -153,23 +158,35 @@
       padding-left:0;
       width: 100%;
     }
+    .coursecomb {
+      cursor: pointer;
+    }
   </style>
   
   <script type="text/javascript">
-    // console.log($("#searchform").serialize())
-    // $('#searchbutton').click(function (e) {
-    //   e.preventDefault();
-    //   $.ajax({
-    //        type: "GET",
-    //        url: '/',
-    //        data: $("#searchform").serialize(),
-    //        success: function(data) {
-    //             var message = JSON.stringify(data["message"]);
-    //             $(".aftersearch").html(JSON.parse(message));
-    //        }
-    //   });
-    // });
     var csrfmiddlewaretoken = '{{ csrf_token }}';
+
+    // Click on a combination
+    $('body').on('click', '.coursecomb', function (e) {
+      e.preventDefault();
+      comb_id = $(this).attr("class").split(" ")[1];
+      var coursecomb_data = {
+        comb_click:'comb_click',
+        comb_id: comb_id
+      };
+
+      $.ajax({
+           type: "GET",
+           url: '/',
+           data: coursecomb_data,
+           success: function(data) {
+              $("#calendar").fullCalendar('removeEventSources');
+              $("#calendar").fullCalendar('addEventSource', JSON.parse(data["schedule"]));
+           }
+      });
+    });
+
+    // Create Schedule
     $('.createschedule').click(function(e) {
       e.preventDefault();
       var createschedule_data = {
@@ -187,6 +204,8 @@
            }
       });
     });
+
+    // Delete a course
     $('body').on('click', '.deleteclass', function (e) {
       e.preventDefault();
       var parent = $(this).parent();
@@ -205,6 +224,7 @@
       });
     });
 
+    // Delete a combination
     $('body').on('click', '.deletecomb', function (e) {
       e.preventDefault();
       var parent = $(this).parent();
@@ -223,7 +243,7 @@
       });
     });
 
-
+    // Autocomplete
     $(function() {
       $("#courses").autocomplete({
         source: "/api/get_courses/",
