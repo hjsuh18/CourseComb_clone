@@ -95,6 +95,7 @@ class Combination(models.Model):
     user = models.ForeignKey(Profile, related_name='combinations')
     comb_id = models.SmallIntegerField(default=-1)
     course_combo = models.TextField(default=None)
+    registrar_combo = models.TextField(default=None, null=True)
     filtered = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
