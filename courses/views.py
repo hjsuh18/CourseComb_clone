@@ -109,8 +109,8 @@ def home(request):
 		comb = comb.registrar_combo.split(',')
 		comb_schedule = []
 		for i in comb:
-			course = Course.objects.filter(registrar_id = i)[0]
-			meeting = Meeting.objects.filter(course = course, is_primary = True)[0]
+			course = Course.objects.get(registrar_id = i)
+			meeting = Meeting.objects.get(course = course, is_primary = True)
 			days = day_convert(meeting.days)
 			newdays = [i+1 for i, j in enumerate(days) if j == 1]
 			course_schedule = {'title': course.deptnum + ": " + course.title, 'dow': newdays, 'start': meeting.start_time, 'end':meeting.end_time}
