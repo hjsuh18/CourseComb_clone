@@ -1,11 +1,23 @@
-# ignore compiled files
-*.pyc
+coursecomb/settings/local.py
 
-# ignore env file for Heroku
-env
+# ignore staticfiles, generate on own with python manage.py collectstatic
+staticfiles/
 
-# big stuff
-courses.pckl
+.py[cod]
 
-# random stuff
 .DS_Store
+bin/
+include/
+pip-selfcheck.json
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+
+# Environments
+.env
+env/
