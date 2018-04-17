@@ -31,9 +31,10 @@
         columnHeaderFormat: 'ddd',
         minTime: '08:00:00',
         maxTime: '23:00:00',
-        slotDuration: '01:00:00',
+        slotDuration: '00:30:00',
         allDaySlot: false,
         weekends: false,
+        contentHeight: 'auto'
       })
     });
   </script>
@@ -41,47 +42,45 @@
 </head>
 <body>
 
-  <!-- Need to figure out alignment left and right -->
   <!-- NAVBAR -->
-  <header class="navbar">
-    <div class = "navbar-container">
-      <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand ml-auto" href="#">CourseComb</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+  <div class="navbar-container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-faded">
+      <a class="navbar-brand" href="#">CourseComb</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="navbarNavDropdown" class="navbar-collapse collapse">
+        <ul class="navbar-nav mr-auto"></ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Help</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Feedback</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Welcome {{user.username}}!</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav">
-            <li class="nav-item-active">
-              <a class="nav-link" href="#">Help</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Feedback</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Hello Name!</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
-  </header>
-
-<div class = "container">
+<div class = "container-fluid">
   <div class = "row">
 
     <!-- FIRST COLUMN -->
-    <div class = "col-sm-3">
+    <div class = "col-sm-2" id="course-search">
 
         <div class="ui-widget">
           <label for="courses"> </label>
           <input id="courses">
         </div>
         <div class = "aftersearch">
+          
         </div>
         <div class = "coursequeue">
           {% for i in favorites%}
@@ -93,7 +92,7 @@
     </div>
 
     <!-- SECOND COLUMN -->
-    <div class = "col-sm-3" id="search-results">
+    <div class = "col-sm-2" id="search-results">
       <div class = "combqueue">
         {% for i in combinations%}
         {{ i | safe}}
@@ -102,31 +101,27 @@
     </div>
 
     <!-- THIRD COLUMN -->
-    <!-- <div class = "col-sm-6" id="calendar">
-    </div> -->
-    <div class = "col-sm-6">
-        <div id='calendar'> </div>
-
-
-
-   <div class="event-modal">
-      <header class="header">
-         <div class="content">
+    <div class = "col-sm-8 course-calendar">
+      <div id="calendar"> </div>
+      <div class="event-modal">
+        <header class="header">
+          <div class="content">
             <span class="event-date"></span>
             <h3 class="event-name"></h3>
-         </div>
+          </div>
 
-         <div class="header-bg"></div>
-      </header>
+          <div class="header-bg"></div>
+        </header>
 
-      <div class="body">
-         <div class="event-info"></div>
-         <div class="body-bg"></div>
+        <div class="body">
+          <div class="event-info"></div>
+          <div class="body-bg"></div>
+        </div>
+          <!-- <a href="#0" class="close">Close</a> -->
       </div>
-
-      <a href="#0" class="close">Close</a>
-   </div>
-</div>
+      <div id="selected-coursecomb" class="row">
+      </div>
+  </div>
 
   </div> 
   </div>
@@ -134,33 +129,75 @@
 
   
   <style>
-    .container {
+    .container-fluid {
       padding-top: 10px;
     }
+
     .navbar {
-      background: #f4c242;
+      background: #ffb84d;
     }
-    .course-search-container {
-      padding: 30px 0 0 15px;
+
+    #course-search {
+      position: relative;
     }
-    .calendar-col {
-      float:right;
+
+    .createschedule {
+      position: relative;
+      bottom: 0%;
     }
+
+    #calendar {
+      width: 100%;
+      display: inline-block;
+      height: 300;
+    }
+
     .ui-widget {
-      padding-top:10px;
+      position: relative;
     }
+
+    .aftersearch {
+      border-radius: 6px;
+    }
+
     ul.ui-autocomplete {
       height: 300px;
       overflow-y: scroll;
       overflow-x: hidden;
-      font-size:12px;
+      font-size: 12px;
       list-style: none;
       padding-left:0;
-      width: 100%;
     }
+
     .coursecomb {
       cursor: pointer;
     }
+
+    .course-results {
+      padding: 10px 5px 5px 10px;
+      font-size: 12px;
+    }
+
+    div#selected-coursecomb .btn-combcourses{
+      position: relative;
+      border: none;
+      background-color: #ffb84d;
+      color: black;
+      height: 50px;
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.5;
+      transition: 0.8s;
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: 6px;
+   }
+
+ /*  doesn't work with the click :(
+  .container .btn-combcourses:hover {
+    opacity: 1;
+  }
+*/
   </style>
   
   <script type="text/javascript">
@@ -184,6 +221,27 @@
               $("#calendar").fullCalendar('addEventSource', JSON.parse(data["schedule"]));
            }
       });
+
+      // create buttons
+      var selectedCourses = $(".coursecomb." + comb_id).text();
+      selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
+      selectedCourses = selectedCourses.split(",");
+      var len = selectedCourses.length;
+      $("div#selected-coursecomb").empty();
+      for (i = 0; i < len; i++) {
+        $("div#selected-coursecomb").append("<button class = 'col btn btn-combcourses " + i + "'>" + selectedCourses[i] + "</button>");
+      }
+    });
+   
+
+    $('div#selected-coursecomb').on('click', 'button.btn-combcourses', function() {
+      if ($(this).css("opacity") == "0.5") {
+        $(this).css("opacity", "1");
+        $(this).css("background-color", "#ffb84d");
+      } 
+      else {
+        $(this).css("opacity", "0.5");
+      }
     });
 
     // Create Schedule
@@ -220,6 +278,7 @@
            data: class_delete_data,
            success: function(data) {
               parent.remove();
+              /*remove events on calendar if same*/
            }
       });
     });
@@ -270,7 +329,7 @@
                     if (data != {}) {
                       var newclass = JSON.stringify(data["newclass"]);
                       var newid = JSON.stringify(data["newid"]);
-                      $(".aftersearch").append("<div class = '" + newid + "'>" + JSON.parse(newclass) + 
+                      $(".aftersearch").append("<div class = 'course-results " + newid + "'>" + JSON.parse(newclass) + 
                         " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + newid + "> x </button> </div>");
                     }
                  }

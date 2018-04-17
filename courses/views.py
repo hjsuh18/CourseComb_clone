@@ -118,6 +118,31 @@ def home(request):
 		responseobject = {'schedule': json.dumps(comb_schedule, default=str)}
 		return JsonResponse(responseobject)	
 
+# working on this part
+#
+#
+#
+#
+#
+
+	elif 'grab_title' in request.POST:
+		comb_id = request.POST.get("comb_id", "")
+		comb = curr.profile.combinations.get(comb_id = comb_id)
+		comb = comb.registrar_combo.split(",")
+		comb_schedule = []
+		for i in comb:
+			course = Course.objects.get(registrar_id = i)
+			course_schedule = {'title': course.deptnum + ": " + course.title}
+			comb_schedule.append(course_schedule)
+		responseobject = {'allClasses': json.dumps(comb_schedule, default=str)}
+		return JsonResponse(responseobject)
+
+#
+#
+#
+#
+#
+#
 	else:
 		favorites = curr_profile.faves
 		favorites = favorites.split(",")
