@@ -24,3 +24,4 @@ Discussion:
 Should we keep the course data for previous semesters?
 
 Filter: A lot of people limit the number of departmentals to 2. Have a 'maximum number of courses in one department' filter.
+

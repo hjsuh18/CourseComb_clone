@@ -102,6 +102,35 @@ def home(request):
 		responseobject = {'courses_com': json.dumps(response)}
 		return JsonResponse(responseobject)
 
+	# user presses update filter
+	elif 'filterresults' in request.POST:
+		responseobject = {}
+		return JsonResponse(responseobject)
+
+	# user clicks on the filter button on main page
+	elif 'click_filter' in request.POST:
+		response_course = []
+		departments = []
+		response_dept = []
+		queue = curr_profile.faves.split(',')
+		for i in range(0, len(queue)):
+			if queue[i] is '':
+				continue
+			# make form for must take courses
+			course = Course.objects.get(registrar_id=queue[i]).deptnum
+			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input' type='checkbox' id=" + course + "></label>"	
+			response_course.append(temp_course)
+
+			# make form for must take departmentals
+			dept = course.split(' ')[0]
+			if dept not in departments:
+				departments.append(dept)
+				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input' type='checkbox' id=" + dept + "></label>"
+				response_dept.append(temp_dept)
+						
+		responseobject = {'must_have_courses': json.dumps(response_course), 'must_have_departments': json.dumps(response_dept)}
+		return JsonResponse(responseobject)
+
 	# delete course combination in database
 	elif 'deletecomb' in request.POST:
 		comb_id = request.POST.get("comb_id", "")

@@ -42,12 +42,36 @@
     }
   });
 
-  $('#coursesearch').on('submit', function(e){
+  // Click the Filter button -> dynamically change the form
+  $('body').on('click', '.filter_button', function(e) {
     e.preventDefault();
-    var x = $("#coursenum option:selected").text();
+    var filter = {
+      click_filter: 'click_filter',
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+    $.ajax({
+     type: "POST",
+     url: '/',
+     data: filter,
+    success: function(data) {
+      var must_have_courses = JSON.parse(data["must_have_courses"]);
+      var must_have_departments = JSON.parse(data["must_have_departments"]);
+      $("#must-have-courses").empty();
+      $("#must-have-courses").append(must_have_courses);
+      $("#must-have-departments").empty();
+      $("#must-have-departments").append(must_have_departments);
+    }
+  });
+  });
+
+  // FOR ACTUAL FILTERING
+  $('#filter').on('submit', function(e){
+    console.log("HELLO");
+    e.preventDefault();
+    var x = $("#dist1");
     var createschedule_data = {
-      searchresults: 'searchresults',
-      course_number: x,
+      filterresults: 'filterresults',
+      distribution1: x,
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
     $.ajax({
@@ -62,13 +86,10 @@
   });
   });
 
-  // FILTER
   $('#coursesearch').on('submit', function(e){
     e.preventDefault();
-    var x = $("#coursenum option:selected").text();
     var createschedule_data = {
       searchresults: 'searchresults',
-      course_number: x,
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
     $.ajax({
