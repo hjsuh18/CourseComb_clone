@@ -68,10 +68,31 @@
   $('#filter').on('submit', function(e){
     console.log("HELLO");
     e.preventDefault();
-    var x = $("#dist1");
+
+    var distribution = ""
+    if ($('#ha').is(":checked"))
+      distribution + "ha,"
+    if ($('#sa').is(":checked"))
+      distribution + "sa,"
+    if ($('#stl').is(":checked"))
+      distribution + "stl,"
+    if ($('#stn').is(":checked"))
+      distribution + "stn,"
+    if ($('#ec').is(":checked"))
+      distribution + "ec,"
+    if ($('#em').is(":checked"))
+      distribution + "em,"
+    if ($('#la').is(":checked"))
+      distribution + "la,"
+    if ($('#qr').is(":checked"))
+      distribution + "qr,"
+
+    
+
+
     var createschedule_data = {
       filterresults: 'filterresults',
-      distribution1: x,
+      distribution: distribution,
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
     $.ajax({
