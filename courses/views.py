@@ -20,7 +20,7 @@ def landing(request):
 
 def home(request):
 	curr_profile = request.user.profile
-
+	print request.POST
 	# add course to faves by registrar_id
 	if 'addclass' in request.POST:
 		registrar_id = request.POST.get("registrar_id", "")
@@ -55,7 +55,11 @@ def home(request):
 			if (i != ''):
 				course = Course.objects.filter(registrar_id=i)
 				course_list.append(course[0])
+
+		# make the number of courses variable
 		registrar_combo = combine(course_list, 2)
+
+		# if registrar_combo is None, render a message saying no combinations
 
 		# make course_combo array
 		course_combo = []

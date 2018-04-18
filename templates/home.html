@@ -77,19 +77,39 @@
     <!-- FIRST COLUMN -->
     <div class = "col-sm-3">
 
-        <div class="ui-widget">
-          <label for="courses"> </label>
-          <input id="courses">
-        </div>
+      <div class="ui-widget">
+        <label for="courses">Search: </label>
+        <input id="courses">
+      </div>
+      <form id="number_of_courses" method="post">
+        {% csrf_token %}
+        <label for="number_of_courses">Number of Courses: </label>
+        <select class="form-control-in-line" id="course_num">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+        </select>
+        <!-- </div> -->
+
         <div class = "aftersearch">
         </div>
+
         <div class = "coursequeue">
           {% for i in favorites%}
           {{ i | safe}} 
           {% endfor %}
           <br>
-          <button class = "btn btn-success createschedule"> Create My Schedule! </button>
+          <!-- <input type="submit" class='btn btn-success' id="createschedule" value="Create My Schedule!"> -->
+
         </div>
+      </form>
+      <button type='button' class='btn btn-success' id="createschedule"> Create My Schedule! </button>
     </div>
 
     <!-- SECOND COLUMN -->
@@ -184,10 +204,11 @@
     });
 
     // Create Schedule
-    $('.createschedule').click(function(e) {
+    $('body').on('click', '.createschedule', function (e) {
       e.preventDefault();
       var createschedule_data = {
           searchresults: 'searchresults',
+          course_num: $('#course_num').val(),
           csrfmiddlewaretoken: csrfmiddlewaretoken
       };
       $.ajax({
