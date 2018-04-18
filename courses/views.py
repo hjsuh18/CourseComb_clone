@@ -56,8 +56,13 @@ def home(request):
 				course = Course.objects.filter(registrar_id=i)
 				course_list.append(course[0])
 
-		# make the number of courses variable
-		registrar_combo = combine(course_list, 2)
+		
+		course_num = int(request.POST.get("course_number", ""))
+		if course_num > len(course_list):
+			# need to show an error message
+			responseobject = {}
+			return JsonResponse(responseobject)
+		registrar_combo = combine(course_list, course_num)
 
 		# if registrar_combo is None, render a message saying no combinations
 

@@ -1,60 +1,62 @@
+<div class="filter-container form-inline">
+  <div class="col-sm-1">
+    <button type="button" class="btn btn-primary align-top" data-toggle="modal" data-target="#filter-modal">
+      Filter
+    </button>
+  </div>
 
+  <!-- Modal -->
+  <div class="modal fade" id="filter-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filter-options">Sort by:</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
 
-   
-    
-    <div class="filter-container form-inline">
-      <div class="col-sm-1">
-        <button type="button" class="btn btn-primary align-top" data-toggle="modal" data-target="#filter-modal">
-            Filter
-        </button>
-      </div>
+        <div class="modal-body">
+          <!-- For some reason this became vertically aligned boxes :( -->
+          <form id="filter" method="post">
+            <div id="distribution">
+              <label for="distribution">Must-have Distributions: </label>
 
-        <!-- Modal -->
-      <div class="modal fade" id="filter-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-
-        <div class="modal-dialog modal-dialog-centered" role="document">
-
-          <div class="modal-content">
-
-            <div class="modal-header">
-              <h5 class="modal-title" id="filter-options">Sort by:</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-
-            <div class="modal-body">
-
-                <!-- For some reason this became vertically aligned boxes :( -->
-                <!-- <div id="distribution"></div> -->
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="dist1" value="option1">
                 <label class="form-check-label" for="dist1">HA</label>
               </div>
+
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="dist2" value="option2">
                 <label class="form-check-label" for="dist2">SA</label>
               </div>
+
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="dist3" value="option3">
                 <label class="form-check-label" for="dist3">STL</label>
               </div>
+
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="dist4" value="option3">
                 <label class="form-check-label" for="dist4">STN</label>
               </div>
+
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="dist5" value="option3">
                 <label class="form-check-label" for="dist5">EC</label>
               </div>
+
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="dist6" value="option3">
                 <label class="form-check-label" for="dist6">EM</label>
               </div>
+
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="dist7" value="option3">
                 <label class="form-check-label" for="dist7">LA</label>
               </div>
+
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="dist8" value="option3">
                 <label class="form-check-label" for="dist8">QR</label>
@@ -62,14 +64,16 @@
 
             </div>
 
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Update</button>
+            <div id=
 
-            </div>
 
-          </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Update</button>
         </div>
       </div>
     </div>
-
+  </div>
+</div>

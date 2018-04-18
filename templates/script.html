@@ -1,0 +1,160 @@
+<script type="text/javascript">
+  var csrfmiddlewaretoken = '{{ csrf_token }}';
+
+  // Click on a combination
+  $('body').on('click', '.coursecomb', function (e) {
+    e.preventDefault();
+    comb_id = $(this).attr("class").split(" ")[1];
+    var coursecomb_data = {
+      comb_click:'comb_click',
+      comb_id: comb_id
+    };
+
+    $.ajax({
+     type: "GET",
+     url: '/',
+     data: coursecomb_data,
+     success: function(data) {
+      $("#calendar").fullCalendar('removeEventSources');
+      $("#calendar").fullCalendar('addEventSource', JSON.parse(data["schedule"]));
+    }
+  });
+
+    // create buttons
+    var selectedCourses = $(".coursecomb." + comb_id).text();
+    selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
+    selectedCourses = selectedCourses.split(",");
+    var len = selectedCourses.length;
+    $("div#selected-coursecomb").empty();
+    for (i = 0; i < len; i++) {
+      $("div#selected-coursecomb").append("<button class = 'col btn btn-combcourses " + i + "'>" + selectedCourses[i] + "</button>");
+    }
+  });
+
+
+  $('div#selected-coursecomb').on('click', 'button.btn-combcourses', function() {
+    if ($(this).css("opacity") == "0.5") {
+      $(this).css("opacity", "1");
+      $(this).css("background-color", "#ffb84d");
+    } 
+    else {
+      $(this).css("opacity", "0.5");
+    }
+  });
+
+  $('#coursesearch').on('submit', function(e){
+    e.preventDefault();
+    var x = $("#coursenum option:selected").text();
+    var createschedule_data = {
+      searchresults: 'searchresults',
+      course_number: x,
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+    $.ajax({
+     type: "POST",
+     url: '/',
+     data: createschedule_data,
+     success: function(data) {
+      var courses_com = JSON.parse(data["courses_com"]);
+      $("#search-results").empty();
+      $("#search-results").append(courses_com);
+    }
+  });
+  });
+
+  // FILTER
+  $('#coursesearch').on('submit', function(e){
+    e.preventDefault();
+    var x = $("#coursenum option:selected").text();
+    var createschedule_data = {
+      searchresults: 'searchresults',
+      course_number: x,
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+    $.ajax({
+     type: "POST",
+     url: '/',
+     data: createschedule_data,
+     success: function(data) {
+      var courses_com = JSON.parse(data["courses_com"]);
+      $("#search-results").empty();
+      $("#search-results").append(courses_com);
+    }
+  });
+  });
+
+  // Delete a course
+  $('body').on('click', '.deleteclass', function (e) {
+    e.preventDefault();
+    var parent = $(this).parent();
+    var class_delete_data = {
+      deleteclass: 'deleteclass',
+      registrar_id: this.id,
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+    $.ajax({
+     type: "POST",
+     url: '/',
+     data: class_delete_data,
+     success: function(data) {
+      parent.remove();
+      /*remove events on calendar if same*/
+    }
+  });
+  });
+
+  // Delete a combination
+  $('body').on('click', '.deletecomb', function (e) {
+    e.preventDefault();
+    var parent = $(this).parent();
+    var comb_delete_data = {
+      deletecomb: 'deletecomb',
+      comb_id: this.id,
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+    $.ajax({
+     type: "POST",
+     url: '/',
+     data: comb_delete_data,
+     success: function(data) {
+      parent.remove();
+    }
+  });
+  });
+
+  // Autocomplete
+  $(function() {
+    $("#courses").autocomplete({
+      source: "/api/get_courses/",
+      minLength: 2,
+      messages: {
+        noResults: '',
+        results: function() {}
+      },
+      appendTo: '.aftersearch',
+      select: function (e, ui) {
+          // console.log(ui.item.value)
+          var class_select_data = {
+            addclass: 'addclass',
+            class: ui.item.label,
+            registrar_id: ui.item.value,
+            csrfmiddlewaretoken: csrfmiddlewaretoken
+          };
+          e.preventDefault();
+          $.ajax({
+           type: "POST",
+           url: '/',
+           data: class_select_data,
+           success: function(data) {
+            if (data != {}) {
+              var newclass = JSON.stringify(data["newclass"]);
+              var newid = JSON.stringify(data["newid"]);
+              $(".aftersearch").append("<div class = 'course-results " + newid + "'>" + JSON.parse(newclass) + 
+                " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + newid + "> x </button> </div>");
+            }
+          }
+        });
+        },
+      });
+  });
+</script>

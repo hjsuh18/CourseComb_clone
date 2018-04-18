@@ -18,8 +18,8 @@
 
   <!-- Moment (for Calendar) -->
   <script src="{% static 'moment.js' %}"></script>
- 
- <!-- FullCalendar -->
+
+  <!-- FullCalendar -->
   <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/fullcalendar.css' %}"/> 
   <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
 
@@ -42,328 +42,55 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <div class="navbar-container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-faded">
-      <a class="navbar-brand" href="#">CourseComb</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div id="navbarNavDropdown" class="navbar-collapse collapse">
-        <ul class="navbar-nav mr-auto"></ul>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Help</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Feedback</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Welcome {{user.username}}!</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </div>
+  {% include 'navbar.html' %}
 
-<div class = "container-fluid">
-  <div class = "row">
+  <div class = "container-fluid">
+    <div class = "row">
 
-    <!-- FIRST COLUMN -->
-    <div class = "col-sm-2" id="course-search">
+      <!-- FIRST COLUMN -->
+      {% include 'course-search.html' %}
 
-      <div class="ui-widget">
-        <label for="courses">Search: </label>
-        <input id="courses">
-      </div>
-      <form id="number_of_courses" method="post">
-        {% csrf_token %}
-        <label for="number_of_courses">Number of Courses: </label>
-        <select class="form-control-in-line" id="course_num">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-          <option>6</option>
-          <option>7</option>
-          <option>8</option>
-          <option>9</option>
-        </select>
-        <!-- </div> -->
-
-        <div class = "aftersearch">
-          
-        </div>
-
-        <div class = "coursequeue">
-          {% for i in favorites%}
-          {{ i | safe}} 
+      <!-- SECOND COLUMN -->
+      <div class = "col-sm-2" id="search-results">
+        <div class = "combqueue">
+          {% for i in combinations%}
+          {{ i | safe}}
           {% endfor %}
-          <br>
-          <!-- <input type="submit" class='btn btn-success' id="createschedule" value="Create My Schedule!"> -->
-
         </div>
-      </form>
-      <button type='button' class='btn btn-success' id="createschedule"> Create My Schedule! </button>
-    </div>
-
-    <!-- SECOND COLUMN -->
-    <div class = "col-sm-2" id="search-results">
-      <div class = "combqueue">
-        {% for i in combinations%}
-        {{ i | safe}}
-        {% endfor %}
       </div>
-    </div>
 
-    <!-- THIRD COLUMN -->
-    <div class = "col-sm-8 course-calendar">
-      <div id="calendar"> </div>
-      <div class="event-modal">
-        <header class="header">
-          <div class="content">
-            <span class="event-date"></span>
-            <h3 class="event-name"></h3>
+      <!-- THIRD COLUMN -->
+      <div class = "col-sm-8 course-calendar">
+        <div id="calendar"> </div>
+        <div class="event-modal">
+          <header class="header">
+            <div class="content">
+              <span class="event-date"></span>
+              <h3 class="event-name"></h3>
+            </div>
+
+            <div class="header-bg"></div>
+          </header>
+
+          <div class="body">
+            <div class="event-info"></div>
+            <div class="body-bg"></div>
           </div>
-
-          <div class="header-bg"></div>
-        </header>
-
-        <div class="body">
-          <div class="event-info"></div>
-          <div class="body-bg"></div>
-        </div>
           <!-- <a href="#0" class="close">Close</a> -->
+        </div>
+        <div id="selected-coursecomb" class="row">
+        </div>
       </div>
-      <div id="selected-coursecomb" class="row">
-      </div>
+
+    </div> 
   </div>
 
-  </div> 
-  </div>
 
+  {% include 'style.html' %}
 
-  
-  <style>
-    .container-fluid {
-      padding-top: 10px;
-    }
-
-    .navbar {
-      background: #ffb84d;
-    }
-
-    #course-search {
-      position: relative;
-    }
-
-    .createschedule {
-      position: relative;
-      bottom: 0%;
-    }
-
-    #calendar {
-      width: 100%;
-      display: inline-block;
-      height: 300;
-    }
-
-    .ui-widget {
-      position: relative;
-    }
-
-    .aftersearch {
-      border-radius: 6px;
-    }
-
-    ul.ui-autocomplete {
-      height: 300px;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      font-size: 12px;
-      list-style: none;
-      padding-left:0;
-    }
-
-    .coursecomb {
-      cursor: pointer;
-    }
-
-    .course-results {
-      padding: 10px 5px 5px 10px;
-      font-size: 12px;
-    }
-
-    div#selected-coursecomb .btn-combcourses{
-      position: relative;
-      border: none;
-      background-color: #ffb84d;
-      color: black;
-      height: 50px;
-      text-align: center;
-      font-size: 12px;
-      opacity: 0.5;
-      transition: 0.8s;
-      text-decoration: none;
-      cursor: pointer;
-      border-radius: 6px;
-   }
-
- /*  doesn't work with the click :(
-  .container .btn-combcourses:hover {
-    opacity: 1;
-  }
-*/
-  </style>
-  
-  <script type="text/javascript">
-    var csrfmiddlewaretoken = '{{ csrf_token }}';
-
-    // Click on a combination
-    $('body').on('click', '.coursecomb', function (e) {
-      e.preventDefault();
-      comb_id = $(this).attr("class").split(" ")[1];
-      var coursecomb_data = {
-        comb_click:'comb_click',
-        comb_id: comb_id
-      };
-
-      $.ajax({
-           type: "GET",
-           url: '/',
-           data: coursecomb_data,
-           success: function(data) {
-              $("#calendar").fullCalendar('removeEventSources');
-              $("#calendar").fullCalendar('addEventSource', JSON.parse(data["schedule"]));
-           }
-      });
-
-      // create buttons
-      var selectedCourses = $(".coursecomb." + comb_id).text();
-      selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
-      selectedCourses = selectedCourses.split(",");
-      var len = selectedCourses.length;
-      $("div#selected-coursecomb").empty();
-      for (i = 0; i < len; i++) {
-        $("div#selected-coursecomb").append("<button class = 'col btn btn-combcourses " + i + "'>" + selectedCourses[i] + "</button>");
-      }
-    });
-   
-
-    $('div#selected-coursecomb').on('click', 'button.btn-combcourses', function() {
-      if ($(this).css("opacity") == "0.5") {
-        $(this).css("opacity", "1");
-        $(this).css("background-color", "#ffb84d");
-      } 
-      else {
-        $(this).css("opacity", "0.5");
-      }
-    });
-
-    // Create Schedule
-    $('body').on('click', '.createschedule', function (e) {
-      e.preventDefault();
-      var createschedule_data = {
-          searchresults: 'searchresults',
-          course_num: $('#course_num').val(),
-          csrfmiddlewaretoken: csrfmiddlewaretoken
-      };
-      $.ajax({
-           type: "POST",
-           url: '/',
-           data: createschedule_data,
-           success: function(data) {
-              var courses_com = JSON.parse(data["courses_com"]);
-              $("#search-results").empty();
-              $("#search-results").append(courses_com);
-           }
-      });
-    });
-
-    // Delete a course
-    $('body').on('click', '.deleteclass', function (e) {
-      e.preventDefault();
-      var parent = $(this).parent();
-      var class_delete_data = {
-          deleteclass: 'deleteclass',
-          registrar_id: this.id,
-          csrfmiddlewaretoken: csrfmiddlewaretoken
-      };
-      $.ajax({
-           type: "POST",
-           url: '/',
-           data: class_delete_data,
-           success: function(data) {
-              parent.remove();
-              /*remove events on calendar if same*/
-           }
-      });
-    });
-
-    // Delete a combination
-    $('body').on('click', '.deletecomb', function (e) {
-      e.preventDefault();
-      var parent = $(this).parent();
-      var comb_delete_data = {
-          deletecomb: 'deletecomb',
-          comb_id: this.id,
-          csrfmiddlewaretoken: csrfmiddlewaretoken
-      };
-      $.ajax({
-           type: "POST",
-           url: '/',
-           data: comb_delete_data,
-           success: function(data) {
-              parent.remove();
-           }
-      });
-    });
-
-    // Autocomplete
-    $(function() {
-      $("#courses").autocomplete({
-        source: "/api/get_courses/",
-        minLength: 2,
-        messages: {
-          noResults: '',
-          results: function() {}
-        },
-        appendTo: '.aftersearch',
-        select: function (e, ui) {
-            // console.log(ui.item.value)
-            var class_select_data = {
-                addclass: 'addclass',
-                class: ui.item.label,
-                registrar_id: ui.item.value,
-                csrfmiddlewaretoken: csrfmiddlewaretoken
-            };
-            e.preventDefault();
-            $.ajax({
-                 type: "POST",
-                 url: '/',
-                 data: class_select_data,
-                 success: function(data) {
-                    if (data != {}) {
-                      var newclass = JSON.stringify(data["newclass"]);
-                      var newid = JSON.stringify(data["newid"]);
-                      $(".aftersearch").append("<div class = 'course-results " + newid + "'>" + JSON.parse(newclass) + 
-                        " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + newid + "> x </button> </div>");
-                    }
-                 }
-            });
-        },
-      });
-    });
-  </script>
-
-
+  {% include 'script.html' %}
 
   <!-- Bootstrap Javascript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
 </body>
 </html>
