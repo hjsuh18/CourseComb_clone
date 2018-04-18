@@ -121,7 +121,7 @@ def home(request):
 			comb_schedule.append(course_schedule)
 		responseobject = {'schedule': json.dumps(comb_schedule, default=str)}
 		return JsonResponse(responseobject)	
-
+		
 	else:
 		favorites = curr_profile.faves
 		favorites = favorites.split(",")

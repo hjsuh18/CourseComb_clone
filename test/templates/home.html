@@ -1,0 +1,341 @@
+<!-- {% load static %} -->
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta charset="utf-8">
+  <title> CourseComb </title>
+
+  <!-- Bootstrap stylesheet CDN Version 4-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <!-- Guessing this is for autocomplete @Ada can you verify -->
+  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+  <!-- Full Calendar CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.print.css"></script>
+
+
+  <!-- @ Matt do you remember where these are from -->
+  <script src="../static/moment/moment.js"></script>
+  <script src="../static/js/calendar.js"></script>
+
+</head>
+<body>
+
+  <!-- Need to figure out alignment left and right -->
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class = "navbar-container">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand ml-auto" href="#">CourseComb</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav">
+            <li class="nav-item-active">
+              <a class="nav-link" href="#">Help</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Feedback</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Hello Name!</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+ <!--  Made a new navbar -->
+  <!-- <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+      CourseComb
+    </a>
+  </nav> -->
+
+  <div class="course-search-container form-inline">
+
+    <!-- Course Search Bar -->
+    <div class="row col-sm-2">
+      <div>
+        <!--
+        <form action="/" id="searchform">
+          <div class="form-group align-top"">
+            <input type="search" class="form-control form-control-sm col-9" placeholder="Search Course Here">
+          </div>
+              <div id="userError"></div>
+              <input type="text" name="searchinput">
+              <input type="hidden" name="searchform" value="searchform">
+        </form>
+
+-->
+<<<<<<< HEAD
+        <div class="ui-widget">
+          <label for="courses"> </label>
+          <input id="courses">
+        </div>
+        <div class = "aftersearch"></div>
+        <div class = "coursequeue"></div>
+=======
+         <div class="ui-widget">
+            <label for="courses"> </label>
+            <input id="courses">
+          </div>
+          <div class = "aftersearch">
+          </div>
+          <div class = "coursequeue">
+            {% for i in favorites%}
+            <li> {{ i }}  <button type="button" class="btn btn-danger btn-sm">x</button></li>
+            {% endfor %}
+          </div>
+>>>>>>> 421bb2320e0b26fa4502f30268511a63a02300b3
+      </div>
+    </div>
+    
+    <div class="filter-container form-inline col-sm-1">
+      <div>
+        <button type="button" class="btn btn-primary align-top" data-toggle="modal" data-target="#filter-modal">
+            Filter
+        </button>
+      </div>
+
+        <!-- Modal -->
+      <div class="modal fade" id="filter-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title" id="filter-options">Sort by:</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+
+                <!-- For some reason this became vertically aligned boxes :( -->
+                <!-- <div id="distribution"></div> -->
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="dist1" value="option1">
+                <label class="form-check-label" for="dist1">HA</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="dist2" value="option2">
+                <label class="form-check-label" for="dist2">SA</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="dist3" value="option3">
+                <label class="form-check-label" for="dist3">STL</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="dist4" value="option3">
+                <label class="form-check-label" for="dist4">STN</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="dist5" value="option3">
+                <label class="form-check-label" for="dist5">EC</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="dist6" value="option3">
+                <label class="form-check-label" for="dist6">EM</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="dist7" value="option3">
+                <label class="form-check-label" for="dist7">LA</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="dist8" value="option3">
+                <label class="form-check-label" for="dist8">QR</label>
+              </div>
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Update</button>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Combination Result Column -->
+    <div id="search-results" class="hidden col-sm-3">
+    	<div class="ui-widget">
+          <label for="results"> </label>
+          <input id="results">
+        </div>
+        <div class = "aftersearch"></div>
+        <div class = "coursequeue"></div>
+    </div>
+
+    <!-- Show Calendar -->
+    <div id="calendar" class="col-sm-6"></div>
+  </div>
+
+  <div class="show-results">
+  	<button class="btn" id="btn-res">Show Results!</button>
+  	<div id="res"> </div>
+  </div>
+
+  <style>
+
+    .navbar {
+      background: #f4c242;
+    }
+
+    .course-search-container {
+      padding: 30px 0 0 15px;
+    }
+
+    .calendar-col {
+      float:right;
+    }
+
+    ul.ui-autocomplete {
+      font-size:12px;
+      list-style: none;
+      padding-left:0;
+      width: 100%;
+    }
+
+    .hidden {
+    	display: none;
+    }
+
+    .show-results .btn{
+    	position: absolute;
+    	top: 90%;
+    	left: 15%;
+    	background-color: #f1f1f1;
+    	color: black;
+    	font-size: 12px;
+    	border: none;
+    	cursor: pointer;
+    	border-radius: 5px;
+    	text-align: center;
+    }
+
+    .show-results .btn:hover {
+    	background-color: black;
+    	color:white;
+    }
+
+  </style>
+  
+  <script type="text/javascript">
+  	$(function() {
+  		$("#btn-res").on('click', function() {
+  			var item = document.getElementById("search-results");
+  			if (item.className = "hidden col-sm-3") {
+  				item.className = "unhidden col-sm-3";
+  			}
+  			var $results = $("#results");
+  			$.ajax({
+  				type: "GET",
+  				url: "/api/get_combinations/",
+  				success: function(results) {
+  					$.each(results, function(i, result) {
+  						$results.append("<li>" + result.dpt + " " + result.courseNum + "</li>");
+  					});
+  				}
+  			});
+  		});
+  	});
+
+    /*$(function() {
+      $("#courses").autocomplete({
+        source: "/api/get_courses/",
+        minLength: 2,
+        messages: {
+          noResults: "",
+          results: function() {}
+        },
+        appendTo: ".search-results",
+        select: function (e, ui) {
+            console.log(ui.item.label)
+            // $(".coursequeue").html($(this))
+            // alert("selected!");
+        },
+      });
+    });*/
+  </script>
+
+  <script type="text/javascript">
+    // console.log($("#searchform").serialize())
+    // $('#searchbutton').click(function (e) {
+    //   e.preventDefault();
+    //   $.ajax({
+    //        type: "GET",
+    //        url: '/',
+    //        data: $("#searchform").serialize(),
+    //        success: function(data) {
+    //             var message = JSON.stringify(data["message"]);
+    //             $(".aftersearch").html(JSON.parse(message));
+    //        }
+    //   });
+    // });
+    var csrfmiddlewaretoken = '{{ csrf_token }}';
+    $(function() {
+      $("#courses").autocomplete({
+        source: "/api/get_courses/",
+        minLength: 2,
+        messages: {
+          noResults: "",
+          results: function() {}
+        },
+        appendTo: ".aftersearch",
+        select: function (e, ui) {
+            // console.log(ui.item.value)
+            var class_select_data = {
+                addclass: 'addclass',
+                class: ui.item.label,
+                registrar_id: ui.item.value,
+                csrfmiddlewaretoken: csrfmiddlewaretoken
+            };
+            e.preventDefault();
+            $.ajax({
+                 type: "POST",
+                 url: '/',
+                 data: class_select_data,
+                 success: function(data) {
+                    console.log(data)
+                    if (data != {}) {
+                      var newclass = JSON.stringify(data["newclass"]);
+                      $(".aftersearch").append("<li>" + JSON.parse(newclass) + "</li>");
+                    }
+                 }
+            });
+            // $(".coursequeue").html($(this))
+            // alert("selected!");
+        },
+      });
+      // .data('ui-autocomplete')._renderItem = function(ul, item) {
+      //   return $()
+      //   .append('<a>' + item.label + '<br>' + item.value + '</a>')
+      //   .appendTo('.aftersearch');
+      // };
+    });
+  </script>
+  <script src="../static/js/dist.js"></script>
+
+
+  <!-- Bootstrap Javascript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>
