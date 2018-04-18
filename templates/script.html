@@ -66,33 +66,55 @@
 
   // FOR ACTUAL FILTERING
   $('#filter').on('submit', function(e){
-    console.log("HELLO");
     e.preventDefault();
 
-    var distribution = ""
+    // distribution filter
+    var distribution = [];
     if ($('#ha').is(":checked"))
-      distribution + "ha,"
+      distribution.push("ha");
     if ($('#sa').is(":checked"))
-      distribution + "sa,"
+      distribution.push("sa");
     if ($('#stl').is(":checked"))
-      distribution + "stl,"
+      distribution.push("stl");
     if ($('#stn').is(":checked"))
-      distribution + "stn,"
+      distribution.push("stn");
     if ($('#ec').is(":checked"))
-      distribution + "ec,"
+      distribution.push("ec");
     if ($('#em').is(":checked"))
-      distribution + "em,"
+      distribution.push("em");
     if ($('#la').is(":checked"))
-      distribution + "la,"
+      distribution.push("la");
     if ($('#qr').is(":checked"))
-      distribution + "qr,"
+      distribution.push("qr");
 
-    
+    // max departmentals filter
+    var max_dept = $("#max_dept option:selected").text();
 
+    var time = [];
+    if ($('#no-friday-class').is(":checked"))
+      time.push("no-friday-class");
+    if ($('#no-evening-class').is(":checked"))
+      time.push("no-evening-class");
+    if ($('#ten_am').is(":checked"))
+      time.push("ten_am");
+
+    var full = false;
+    if ($('#full').is(":checked")){
+      console.log("Full is checked");
+      full = true;
+    }
+
+    var pdf = false;
+    if ($('#pdf').is(":checked"))
+      pdf = true;
 
     var createschedule_data = {
       filterresults: 'filterresults',
       distribution: distribution,
+      max_dept: max_dept,
+      time: time,
+      full: full,
+      pdf: pdf,
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
     $.ajax({
@@ -107,10 +129,13 @@
   });
   });
 
+  // search courses
   $('#coursesearch').on('submit', function(e){
     e.preventDefault();
+    var x = $("#coursenum option:selected").text();
     var createschedule_data = {
       searchresults: 'searchresults',
+      course_number: x,
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
     $.ajax({
