@@ -13,6 +13,8 @@ from django.urls import resolve
 from combination import combine
 from time_compare import day_convert
 
+from .course_filter import filter_course
+
 # temporarily so that heroku problem can be identified
 def landing(request):
 	return render(request, 'landing.html')
@@ -104,7 +106,15 @@ def home(request):
 
 	# user presses update filter
 	elif 'filterresults' in request.POST:
-		responseobject = {}
+		filter_course(curr_profile, dict(request.POST))
+
+		combination = curr_profile.combinations.all()
+		response = []
+		for i in range (0, len(combination)):
+			if combination[i].deleted == True or combination[i].filtered == True:
+				continue
+			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
+		responseobject = {'courses_com': json.dumps(response)}
 		return JsonResponse(responseobject)
 
 	# user clicks on the filter button on main page
