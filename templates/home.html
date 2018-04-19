@@ -29,8 +29,8 @@
         defaultView: 'agendaWeek',
         header: false,
         columnHeaderFormat: 'ddd',
-        minTime: '08:00:00',
-        maxTime: '23:00:00',
+        minTime: '08:30:00',
+        maxTime: '23:30:00',
         slotDuration: '00:30:00',
         allDaySlot: false,
         weekends: false,
@@ -77,10 +77,9 @@
 
         <div class="ui-widget">
           <label for="courses"> </label>
-          <input id="courses">
+          <input id="courses" placeholder="Search course here...">
         </div>
         <div class = "aftersearch">
-          
         </div>
         <div class = "coursequeue">
           {% for i in favorites%}
@@ -102,25 +101,25 @@
 
     <!-- THIRD COLUMN -->
     <div class = "col-sm-8 course-calendar">
-      <div id="calendar"> </div>
-      <div class="event-modal">
-        <header class="header">
-          <div class="content">
-            <span class="event-date"></span>
-            <h3 class="event-name"></h3>
+        <div id="calendar"> </div>
+        <div class="event-modal">
+          <header class="header">
+            <div class="content">
+              <span class="event-date"></span>
+              <h3 class="event-name"></h3>
+            </div>
+
+            <div class="header-bg"></div>
+          </header>
+
+          <div class="body">
+            <div class="event-info"></div>
+            <div class="body-bg"></div>
           </div>
-
-          <div class="header-bg"></div>
-        </header>
-
-        <div class="body">
-          <div class="event-info"></div>
-          <div class="body-bg"></div>
+            <!-- <a href="#0" class="close">Close</a> -->
         </div>
-          <!-- <a href="#0" class="close">Close</a> -->
-      </div>
-      <div id="selected-coursecomb" class="row">
-      </div>
+        <div id="selected-coursecomb" class="row">
+        </div>
   </div>
 
   </div> 
@@ -129,16 +128,30 @@
 
   
   <style>
-    .container-fluid {
-      padding-top: 10px;
+
+    body {
+      margin: 0;
+      text-align: center;
     }
 
     .navbar {
       background: #ffb84d;
     }
 
+    .container-fluid {
+      padding-top: 10px;
+    }
+
     #course-search {
       position: relative;
+      border: 1px solid transparent;
+      font: 12px Arial;
+    }
+
+    .ui-widget input {
+      width: 195px;
+      border: 1px solid #ffb84d;
+      border-radius: 4px;
     }
 
     .createschedule {
@@ -150,6 +163,8 @@
       width: 100%;
       display: inline-block;
       height: 300;
+      margin: 0;
+      padding: 0;
     }
 
     .ui-widget {
@@ -158,24 +173,49 @@
 
     .aftersearch {
       border-radius: 6px;
+      border: 1px solid #ffb84d;
+      font: 12px Arial;
     }
 
+    .aftersearch .course-results:hover {
+      background-color: #ffb84d;
+    }
+
+/* highlights all not separate */
+/*    .coursequeue {
+      border-radius: 6px;
+      border: 1px solid #ffb84d;
+      font: 12px Arial;
+    }*/
+
     ul.ui-autocomplete {
-      height: 300px;
+      height: 280px;
       overflow-y: scroll;
       overflow-x: hidden;
-      font-size: 12px;
+      font: 12px Arial;
       list-style: none;
-      padding-left:0;
+      padding-left: 0;
     }
+
+/*    #search-results .combqueue {
+      border: 1px solid #ffb84d;
+      border-radius: 6px;
+      font: 12px Arial;
+      background-color: #ffffff;
+    }*/
 
     .coursecomb {
       cursor: pointer;
+      border: 1px solid #ffb84d;
+      border-radius: 6px;
+      font: 12px Arial;
+      background-color: #ffb84d;
+      opacity: 0.5;
     }
 
     .course-results {
       padding: 10px 5px 5px 10px;
-      font-size: 12px;
+      font: 12px Arial;
     }
 
     div#selected-coursecomb .btn-combcourses{
@@ -231,13 +271,20 @@
       for (i = 0; i < len; i++) {
         $("div#selected-coursecomb").append("<button class = 'col btn btn-combcourses " + i + "'>" + selectedCourses[i] + "</button>");
       }
+
+      // Fade/Solid to mark as clicked/unclicked
+      if ($(this).css("opacity") == "0.5") {
+        $(this).css("opacity", "1");
+      } 
+      else {
+        $(this).css("opacity", "0.5");
+      }
     });
    
-
+    // Fade/Solid to mark as clicked/unclicked
     $('div#selected-coursecomb').on('click', 'button.btn-combcourses', function() {
       if ($(this).css("opacity") == "0.5") {
         $(this).css("opacity", "1");
-        $(this).css("background-color", "#ffb84d");
       } 
       else {
         $(this).css("opacity", "0.5");
