@@ -1,14 +1,32 @@
-  <style>
-  .container-fluid {
-    padding-top: 10px;
+<style>
+  body {
+    margin: 0;
+    text-align: center;
   }
 
   .navbar {
     background: #ffb84d;
   }
 
+  .container-fluid {
+    padding-top: 10px;
+  }
+
   #course-search {
     position: relative;
+    border: 1px solid transparent;
+    font: 12px Arial;
+  }
+
+  .ui-widget {
+    position: relative;
+  }
+
+  .ui-widget input {
+    width: 195px;
+    border: 1px solid #ffb84d;
+    border-radius: 4px;
+    font: 12px Arial;
   }
 
   .createschedule {
@@ -21,26 +39,40 @@
     display: inline-block;
     height: 300;
   }
-
-  .ui-widget {
-    position: relative;
-  }
-
+  
   .aftersearch {
     border-radius: 6px;
+    border: 1px solid #ffb84d;
+    font: 12px Arial;
   }
 
+  .aftersearch .course-results:hover {
+    background-color: #ffb84d;
+  }
+
+/* highlights all not separate */
+/*    .coursequeue {
+      border-radius: 6px;
+      border: 1px solid #ffb84d;
+      font: 12px Arial;
+    }*/
+
   ul.ui-autocomplete {
-    height: 300px;
+    height: 280px;
     overflow-y: scroll;
     overflow-x: hidden;
-    font-size: 12px;
+    font: 12px Arial;
     list-style: none;
-    padding-left:0;
+    padding-left: 0;
   }
 
   .coursecomb {
     cursor: pointer;
+    border: 1px solid #ffb84d;
+    border-radius: 6px;
+    font: 12px Arial;
+    background-color: #ffb84d;
+    opacity: 0.5;
   }
 
   .course-results {
@@ -48,20 +80,33 @@
     font-size: 12px;
   }
 
-  div#selected-coursecomb .btn-combcourses{
+  div#selected-coursecomb {
     position: relative;
-    border: none;
+    margin: auto;
+  }
+
+  .course-checkbox {
+    display: none;
+  }
+
+  #precept-button {
+    border: 1px solid;
     background-color: #ffb84d;
     color: black;
-    height: 50px;
-    text-align: center;
     font-size: 12px;
     opacity: 0.5;
     transition: 0.8s;
-    text-decoration: none;
     cursor: pointer;
     border-radius: 6px;
+    opacity: 0.5;
+    text-align: center;
+    vertical-align: middle;
   }
+
+  .course-checkbox:checked + #precept-button {
+    opacity: 1;
+  }
+
 
  /*  doesn't work with the click :(
   .container .btn-combcourses:hover {
