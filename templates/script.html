@@ -29,25 +29,34 @@
     var len = selectedCourses.length;
     $("div#selected-coursecomb").empty();
     for (i = 0; i < len; i++) {
-      $("div#selected-coursecomb").append("<button class = 'col btn btn-combcourses' id = '" + selectedCourses[i].trim() + "'>" + selectedCourses[i].trim() + "</button>");
+      $("div#selected-coursecomb").append("<input class = 'course-checkbox' type = 'checkbox' id = '" + selectedCourses[i].trim() + "'>" + selectedCourses[i].trim());
+      // $("div#selected-coursecomb").append("<button class = 'col btn btn-combcourses' id = '" + selectedCourses[i].trim() + "'>" + selectedCourses[i].trim() + "</button>");
     }
   });
 
-
-  $('div#selected-coursecomb').on('click', 'button.btn-combcourses', function() {
-  
+  $('div#selected-coursecomb').on('click', 'input[type=checkbox]', function() {
     $("#calendar").fullCalendar('removeEventSources');
     $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data["schedule"]));
-    $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[this.id]));
-
-    if ($(this).css("opacity") == "0.5") {
-      $(this).css("opacity", "1");
-      $(this).css("background-color", "#ffb84d");
-    } 
-    else {
-      $(this).css("opacity", "0.5");
-    }
+    $('.course-checkbox:checked').each(function () {
+        $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[this.id]));
+    });
   });
+
+
+  // $('div#selected-coursecomb').on('click', 'button.btn-combcourses', function() {
+  
+  //   $("#calendar").fullCalendar('removeEventSources');
+  //   $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data["schedule"]));
+  //   $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[this.id]));
+
+  //   if ($(this).css("opacity") == "0.5") {
+  //     $(this).css("opacity", "1");
+  //     $(this).css("background-color", "#ffb84d");
+  //   } 
+  //   else {
+  //     $(this).css("opacity", "0.5");
+  //   }
+  // });
 
   // Click the Filter button -> dynamically change the form
   $('body').on('click', '.filter_button', function(e) {
