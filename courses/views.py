@@ -127,14 +127,14 @@ def home(request):
 				continue
 			# make form for must take courses
 			course = Course.objects.get(registrar_id=queue[i]).deptnum
-			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input' type='checkbox' id=" + course + "></label>"	
+			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"	
 			response_course.append(temp_course)
 
 			# make form for must take departmentals
 			dept = course.split(' ')[0]
 			if dept not in departments:
 				departments.append(dept)
-				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input' type='checkbox' id=" + dept + "></label>"
+				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
 				response_dept.append(temp_dept)
 						
 		responseobject = {'must_have_courses': json.dumps(response_course), 'must_have_departments': json.dumps(response_dept)}

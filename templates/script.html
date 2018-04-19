@@ -75,6 +75,18 @@
   $('#filter').on('submit', function(e){
     e.preventDefault();
 
+    // Must have courses
+    var allCourses = [];
+    $('.class-check:checked').each(function () {
+        allCourses.push($(this).val());
+    });
+    
+    // Must have departments
+    var allDeps = [];
+    $('.dep-check:checked').each(function () {
+        allDeps.push($(this).val());
+    });
+
     // distribution filter
     var distribution = [];
     if ($('#ha').is(":checked"))
@@ -117,6 +129,8 @@
 
     var createschedule_data = {
       filterresults: 'filterresults',
+      courses: allCourses,
+      depts: allDeps,
       distribution: distribution,
       max_dept: max_dept,
       time: time,
@@ -124,6 +138,7 @@
       pdf: pdf,
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
+
     $.ajax({
      type: "POST",
      url: '/',

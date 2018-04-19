@@ -1,6 +1,10 @@
 from django import forms
 
 class Filter(forms.Form):
+
+	# courses = forms.ModelMultipleChoiceField(queryset=Profile.faves.all(),
+	#                                        widget=forms.CheckboxSelectMultiple,
+	#                                        required=False)
 	# distributions
 	ha = forms.BooleanField(label="HA", required=False)
 	sa = forms.BooleanField(label="SA", required=False)
