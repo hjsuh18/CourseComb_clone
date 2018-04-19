@@ -1,5 +1,6 @@
 <script type="text/javascript">
   var csrfmiddlewaretoken = '{{ csrf_token }}';
+  var schedule_data;
 
   // Click on a combination
   $('body').on('click', '.coursecomb', function (e) {
@@ -17,6 +18,7 @@
      success: function(data) {
       $("#calendar").fullCalendar('removeEventSources');
       $("#calendar").fullCalendar('addEventSource', JSON.parse(data["schedule"]));
+      schedule_data = data;
     }
   });
 
@@ -27,12 +29,17 @@
     var len = selectedCourses.length;
     $("div#selected-coursecomb").empty();
     for (i = 0; i < len; i++) {
-      $("div#selected-coursecomb").append("<button class = 'col btn btn-combcourses " + i + "'>" + selectedCourses[i] + "</button>");
+      $("div#selected-coursecomb").append("<button class = 'col btn btn-combcourses' id = '" + selectedCourses[i].trim() + "'>" + selectedCourses[i].trim() + "</button>");
     }
   });
 
 
   $('div#selected-coursecomb').on('click', 'button.btn-combcourses', function() {
+  
+    $("#calendar").fullCalendar('removeEventSources');
+    $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data["schedule"]));
+    $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[this.id]));
+
     if ($(this).css("opacity") == "0.5") {
       $(this).css("opacity", "1");
       $(this).css("background-color", "#ffb84d");

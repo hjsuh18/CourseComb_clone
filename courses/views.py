@@ -22,7 +22,6 @@ def landing(request):
 
 def home(request):
 	curr_profile = request.user.profile
-	print request.POST
 	# add course to faves by registrar_id
 	if 'addclass' in request.POST:
 		registrar_id = request.POST.get("registrar_id", "")
@@ -156,14 +155,29 @@ def home(request):
 		comb = curr_profile.combinations.get(comb_id=comb_id)
 		comb = comb.registrar_combo.split(',')
 		comb_schedule = []
-		for i in comb:
-			course = Course.objects.get(registrar_id = i)
-			meeting = Meeting.objects.filter(course = course, is_primary = True)[0]
-			days = day_convert(meeting.days)
-			newdays = [i+1 for i, j in enumerate(days) if j == 1]
-			course_schedule = {'title': course.deptnum + ": " + course.title, 'dow': newdays, 'start': meeting.start_time, 'end':meeting.end_time}
-			comb_schedule.append(course_schedule)
-		responseobject = {'schedule': json.dumps(comb_schedule, default=str)}
+		responseobject = {}
+		for registrar_id in comb:
+			course = Course.objects.get(registrar_id = registrar_id)
+			# get primary meeting
+			meeting = Meeting.objects.filter(course = course, is_primary = True)
+			for m in meeting:
+				days = day_convert(m.days)
+				newdays = [i+1 for i, j in enumerate(days) if j == 1]
+				course_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time}
+				comb_schedule.append(course_schedule)
+			
+			# get non-primary meetings
+			meetings = Meeting.objects.filter(course = course, is_primary = False)
+			course_classes_schedule = []
+			for m in meetings:
+				if m.start_time != None:
+					days = day_convert(m.days)
+					newdays = [i+1 for i, j in enumerate(days) if j == 1]
+					class_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time}
+					course_classes_schedule.append(class_schedule)
+			responseobject[course.deptnum] = json.dumps(course_classes_schedule, default=str)
+
+		responseobject['schedule'] = json.dumps(comb_schedule, default=str)
 		return JsonResponse(responseobject)	
 		
 	else:
