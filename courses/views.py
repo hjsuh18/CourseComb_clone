@@ -13,6 +13,8 @@ from django.urls import resolve
 from combination import combine
 from time_compare import day_convert
 
+from .course_filter import filter_course
+
 # temporarily so that heroku problem can be identified
 def landing(request):
 	return render(request, 'landing.html')
@@ -20,7 +22,6 @@ def landing(request):
 
 def home(request):
 	curr_profile = request.user.profile
-
 	# add course to faves by registrar_id
 	if 'addclass' in request.POST:
 		registrar_id = request.POST.get("registrar_id", "")
@@ -55,7 +56,16 @@ def home(request):
 			if (i != ''):
 				course = Course.objects.filter(registrar_id=i)
 				course_list.append(course[0])
-		registrar_combo = combine(course_list, 2)
+
+		
+		course_num = int(request.POST.get("course_number", ""))
+		if course_num > len(course_list):
+			# need to show an error message
+			responseobject = {}
+			return JsonResponse(responseobject)
+		registrar_combo = combine(course_list, course_num)
+
+		# if registrar_combo is None, render a message saying no combinations
 
 		# make course_combo array
 		course_combo = []
@@ -93,6 +103,43 @@ def home(request):
 		responseobject = {'courses_com': json.dumps(response)}
 		return JsonResponse(responseobject)
 
+	# user presses update filter
+	elif 'filterresults' in request.POST:
+		filter_course(curr_profile, dict(request.POST))
+
+		combination = curr_profile.combinations.all()
+		response = []
+		for i in range (0, len(combination)):
+			if combination[i].deleted == True or combination[i].filtered == True:
+				continue
+			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
+		responseobject = {'courses_com': json.dumps(response)}
+		return JsonResponse(responseobject)
+
+	# user clicks on the filter button on main page
+	elif 'click_filter' in request.POST:
+		response_course = []
+		departments = []
+		response_dept = []
+		queue = curr_profile.faves.split(',')
+		for i in range(0, len(queue)):
+			if queue[i] is '':
+				continue
+			# make form for must take courses
+			course = Course.objects.get(registrar_id=queue[i]).deptnum
+			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"	
+			response_course.append(temp_course)
+
+			# make form for must take departmentals
+			dept = course.split(' ')[0]
+			if dept not in departments:
+				departments.append(dept)
+				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
+				response_dept.append(temp_dept)
+						
+		responseobject = {'must_have_courses': json.dumps(response_course), 'must_have_departments': json.dumps(response_dept)}
+		return JsonResponse(responseobject)
+
 	# delete course combination in database
 	elif 'deletecomb' in request.POST:
 		comb_id = request.POST.get("comb_id", "")
@@ -108,14 +155,29 @@ def home(request):
 		comb = curr_profile.combinations.get(comb_id=comb_id)
 		comb = comb.registrar_combo.split(',')
 		comb_schedule = []
-		for i in comb:
-			course = Course.objects.get(registrar_id = i)
-			meeting = Meeting.objects.filter(course = course, is_primary = True)[0]
-			days = day_convert(meeting.days)
-			newdays = [i+1 for i, j in enumerate(days) if j == 1]
-			course_schedule = {'title': course.deptnum + ": " + course.title, 'dow': newdays, 'start': meeting.start_time, 'end':meeting.end_time}
-			comb_schedule.append(course_schedule)
-		responseobject = {'schedule': json.dumps(comb_schedule, default=str)}
+		responseobject = {}
+		for registrar_id in comb:
+			course = Course.objects.get(registrar_id = registrar_id)
+			# get primary meeting
+			meeting = Meeting.objects.filter(course = course, is_primary = True)
+			for m in meeting:
+				days = day_convert(m.days)
+				newdays = [i+1 for i, j in enumerate(days) if j == 1]
+				course_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time}
+				comb_schedule.append(course_schedule)
+			
+			# get non-primary meetings
+			meetings = Meeting.objects.filter(course = course, is_primary = False)
+			course_classes_schedule = []
+			for m in meetings:
+				if m.start_time != None:
+					days = day_convert(m.days)
+					newdays = [i+1 for i, j in enumerate(days) if j == 1]
+					class_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time}
+					course_classes_schedule.append(class_schedule)
+			responseobject[course.deptnum] = json.dumps(course_classes_schedule, default=str)
+
+		responseobject['schedule'] = json.dumps(comb_schedule, default=str)
 		return JsonResponse(responseobject)	
 		
 	else:

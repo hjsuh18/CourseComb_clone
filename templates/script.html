@@ -1,0 +1,258 @@
+<script type="text/javascript">
+  var csrfmiddlewaretoken = '{{ csrf_token }}';
+  var schedule_data;
+
+  // Click on a combination
+  $('body').on('click', '.coursecomb', function (e) {
+    e.preventDefault();
+    comb_id = $(this).attr("class").split(" ")[1];
+    var coursecomb_data = {
+      comb_click:'comb_click',
+      comb_id: comb_id
+    };
+
+    $.ajax({
+     type: "GET",
+     url: '/',
+     data: coursecomb_data,
+     success: function(data) {
+      $("#calendar").fullCalendar('removeEventSources');
+      $("#calendar").fullCalendar('addEventSource', JSON.parse(data["schedule"]));
+      schedule_data = data;
+    }
+  });
+
+    // create buttons
+    var selectedCourses = $(".coursecomb." + comb_id).text();
+    selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
+    selectedCourses = selectedCourses.split(",");
+    var len = selectedCourses.length;
+    $("div#selected-coursecomb").empty();
+    for (i = 0; i < len; i++) {
+      $("div#selected-coursecomb").append("<input class = 'course-checkbox' type = 'checkbox' id = '" + selectedCourses[i].trim() + "'>" + selectedCourses[i].trim());
+      // $("div#selected-coursecomb").append("<button class = 'col btn btn-combcourses' id = '" + selectedCourses[i].trim() + "'>" + selectedCourses[i].trim() + "</button>");
+    }
+  });
+
+  $('div#selected-coursecomb').on('click', 'input[type=checkbox]', function() {
+    $("#calendar").fullCalendar('removeEventSources');
+    $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data["schedule"]));
+    $('.course-checkbox:checked').each(function () {
+        $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[this.id]));
+    });
+  });
+
+
+  // $('div#selected-coursecomb').on('click', 'button.btn-combcourses', function() {
+  
+  //   $("#calendar").fullCalendar('removeEventSources');
+  //   $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data["schedule"]));
+  //   $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[this.id]));
+
+  //   if ($(this).css("opacity") == "0.5") {
+  //     $(this).css("opacity", "1");
+  //     $(this).css("background-color", "#ffb84d");
+  //   } 
+  //   else {
+  //     $(this).css("opacity", "0.5");
+  //   }
+  // });
+
+  // Click the Filter button -> dynamically change the form
+  $('body').on('click', '.filter_button', function(e) {
+    e.preventDefault();
+    var filter = {
+      click_filter: 'click_filter',
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+    $.ajax({
+     type: "POST",
+     url: '/',
+     data: filter,
+    success: function(data) {
+      var must_have_courses = JSON.parse(data["must_have_courses"]);
+      var must_have_departments = JSON.parse(data["must_have_departments"]);
+      $("#must-have-courses").empty();
+      $("#must-have-courses").append(must_have_courses);
+      $("#must-have-departments").empty();
+      $("#must-have-departments").append(must_have_departments);
+    }
+  });
+  });
+
+  // FOR ACTUAL FILTERING
+  $('#filter').on('submit', function(e){
+    e.preventDefault();
+
+    // Must have courses
+    var allCourses = [];
+    $('.class-check:checked').each(function () {
+        allCourses.push($(this).val());
+    });
+    
+    // Must have departments
+    var allDeps = [];
+    $('.dep-check:checked').each(function () {
+        allDeps.push($(this).val());
+    });
+
+    // distribution filter
+    var distribution = [];
+    if ($('#ha').is(":checked"))
+      distribution.push("HA");
+    if ($('#sa').is(":checked"))
+      distribution.push("SA");
+    if ($('#stl').is(":checked"))
+      distribution.push("STL");
+    if ($('#stn').is(":checked"))
+      distribution.push("STN");
+    if ($('#ec').is(":checked"))
+      distribution.push("EC");
+    if ($('#em').is(":checked"))
+      distribution.push("EM");
+    if ($('#la').is(":checked"))
+      distribution.push("LA");
+    if ($('#qr').is(":checked"))
+      distribution.push("QR");
+
+    // max departmentals filter
+    var max_dept = $("#max_dept option:selected").text();
+
+    var time = [];
+    if ($('#no-friday-class').is(":checked"))
+      time.push("no-friday-class");
+    if ($('#no-evening-class').is(":checked"))
+      time.push("no-evening-class");
+    if ($('#ten_am').is(":checked"))
+      time.push("ten_am");
+
+    var full = false;
+    if ($('#full').is(":checked")){
+      console.log("Full is checked");
+      full = true;
+    }
+
+    var pdf = false;
+    if ($('#pdf').is(":checked"))
+      pdf = true;
+
+    var createschedule_data = {
+      filterresults: 'filterresults',
+      courses: allCourses,
+      depts: allDeps,
+      distribution: distribution,
+      max_dept: max_dept,
+      time: time,
+      full: full,
+      pdf: pdf,
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+
+    $.ajax({
+     type: "POST",
+     url: '/',
+     data: createschedule_data,
+     success: function(data) {
+      var courses_com = JSON.parse(data["courses_com"]);
+      $("#search-results").empty();
+      $("#search-results").append(courses_com);
+    }
+  });
+  });
+
+  // search courses
+  $('#coursesearch').on('submit', function(e){
+    e.preventDefault();
+    var x = $("#coursenum option:selected").text();
+    var createschedule_data = {
+      searchresults: 'searchresults',
+      course_number: x,
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+    $.ajax({
+     type: "POST",
+     url: '/',
+     data: createschedule_data,
+     success: function(data) {
+      var courses_com = JSON.parse(data["courses_com"]);
+      $("#search-results").empty();
+      $("#search-results").append(courses_com);
+    }
+  });
+  });
+
+  // Delete a course
+  $('body').on('click', '.deleteclass', function (e) {
+    e.preventDefault();
+    var parent = $(this).parent();
+    var class_delete_data = {
+      deleteclass: 'deleteclass',
+      registrar_id: this.id,
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+    $.ajax({
+     type: "POST",
+     url: '/',
+     data: class_delete_data,
+     success: function(data) {
+      parent.remove();
+      /*remove events on calendar if same*/
+    }
+  });
+  });
+
+  // Delete a combination
+  $('body').on('click', '.deletecomb', function (e) {
+    e.preventDefault();
+    var parent = $(this).parent();
+    var comb_delete_data = {
+      deletecomb: 'deletecomb',
+      comb_id: this.id,
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+    $.ajax({
+     type: "POST",
+     url: '/',
+     data: comb_delete_data,
+     success: function(data) {
+      parent.remove();
+    }
+  });
+  });
+
+  // Autocomplete
+  $(function() {
+    $("#courses").autocomplete({
+      source: "/api/get_courses/",
+      minLength: 2,
+      messages: {
+        noResults: '',
+        results: function() {}
+      },
+      appendTo: '.aftersearch',
+      select: function (e, ui) {
+          // console.log(ui.item.value)
+          var class_select_data = {
+            addclass: 'addclass',
+            class: ui.item.label,
+            registrar_id: ui.item.value,
+            csrfmiddlewaretoken: csrfmiddlewaretoken
+          };
+          e.preventDefault();
+          $.ajax({
+           type: "POST",
+           url: '/',
+           data: class_select_data,
+           success: function(data) {
+            if (data != {}) {
+              var newclass = JSON.stringify(data["newclass"]);
+              var newid = JSON.stringify(data["newid"]);
+              $(".aftersearch").append("<div class = 'course-results " + newid + "'>" + JSON.parse(newclass) + 
+                " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + newid + "> x </button> </div>");
+            }
+          }
+        });
+        },
+      });
+  });
+</script>

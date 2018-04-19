@@ -18,8 +18,8 @@
 
   <!-- Moment (for Calendar) -->
   <script src="{% static 'moment.js' %}"></script>
- 
- <!-- FullCalendar -->
+
+  <!-- FullCalendar -->
   <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/fullcalendar.css' %}"/> 
   <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
 
@@ -42,39 +42,15 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <div class="navbar-container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-faded">
-      <a class="navbar-brand" href="#">CourseComb</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div id="navbarNavDropdown" class="navbar-collapse collapse">
-        <ul class="navbar-nav mr-auto"></ul>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Help</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Feedback</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Welcome {{user.username}}!</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </div>
+  {% include 'navbar.html' %}
 
-<div class = "container-fluid">
-  <div class = "row">
+  <div class = "container-fluid">
+    <div class = "row">
 
-    <!-- FIRST COLUMN -->
-    <div class = "col-sm-2" id="course-search">
+      <!-- FIRST COLUMN -->
+      {% include 'course-search.html' %}
 
+<<<<<<< HEAD
         <div class="ui-widget">
           <label for="courses"> </label>
           <input id="courses" placeholder="Search course here...">
@@ -84,23 +60,24 @@
         <div class = "coursequeue">
           {% for i in favorites%}
           {{ i | safe}} 
+=======
+      <!-- SECOND COLUMN -->
+      <div class = "col-sm-2" id="search-results">
+        <div class = "combqueue">
+          {% for i in combinations%}
+          {{ i | safe}}
+>>>>>>> cba0b90c7deccdcf033e3cd84e30b628a8fce66a
           {% endfor %}
-          <br>
-          <button class = "btn btn-success createschedule"> Create My Schedule! </button>
         </div>
-    </div>
-
-    <!-- SECOND COLUMN -->
-    <div class = "col-sm-2" id="search-results">
-      <div class = "combqueue">
-        {% for i in combinations%}
-        {{ i | safe}}
-        {% endfor %}
       </div>
-    </div>
 
+<<<<<<< HEAD
     <!-- THIRD COLUMN -->
     <div class = "col-sm-8 course-calendar">
+=======
+      <!-- THIRD COLUMN -->
+      <div class = "col-sm-8 course-calendar">
+>>>>>>> cba0b90c7deccdcf033e3cd84e30b628a8fce66a
         <div id="calendar"> </div>
         <div class="event-modal">
           <header class="header">
@@ -116,16 +93,26 @@
             <div class="event-info"></div>
             <div class="body-bg"></div>
           </div>
+<<<<<<< HEAD
             <!-- <a href="#0" class="close">Close</a> -->
         </div>
         <div id="selected-coursecomb" class="row">
         </div>
   </div>
+=======
+          <!-- <a href="#0" class="close">Close</a> -->
+        </div>
+        <div id="selected-coursecomb" class="row">
+          
+        </div>
+      </div>
+>>>>>>> cba0b90c7deccdcf033e3cd84e30b628a8fce66a
 
-  </div> 
+    </div> 
   </div>
 
 
+<<<<<<< HEAD
   
   <style>
 
@@ -386,10 +373,13 @@
     });
   </script>
 
+=======
+  {% include 'style.html' %}
+>>>>>>> cba0b90c7deccdcf033e3cd84e30b628a8fce66a
 
+  {% include 'script.html' %}
 
   <!-- Bootstrap Javascript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
 </body>
 </html>
