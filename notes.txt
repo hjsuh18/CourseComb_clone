@@ -27,6 +27,8 @@ Filter: A lot of people limit the number of departmentals to 2. Have a 'maximum 
 
 Search doesn't take into account the filters
 
+Autocomplete doesn't work for some courses: e.g. FIN 501
+
 HJ:
 Filters complete
 Stretch goal: Scraping periodically, keeping track of class enrollment
