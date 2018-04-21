@@ -14,27 +14,43 @@ def filter_course(profile, filters):
 	# reset everything to unfiltered state
 	combination.update(filtered=False)
 
-	# needed distributions
+	must_courses = filters.get("courses[]")
+	must_dept = filters.get("depts[]")
 	distribution = filters.get("distribution[]")
-	# d keeps track of which courses are in which distribution area e.g. {'HA':'HIS 314,'}
+	
+	# dist keeps track of which courses are in which distribution area e.g. {'HA':'HIS 314,'}
 	d = dict()
-	for x in queue:
-		if x == '':
-			continue
-		else:
-			x_area = Course.objects.get(registrar_id=x).area
-			if x_area in distribution:
-				if x_area in d:
-					d[x_area].append(x)
-				else:
-					d[x_area] = [x]
+	if distribution != None:
+		for x in queue:
+			if x == '':
+				continue
+			else:
+				x_area = Course.objects.get(registrar_id=x).area
+				if x_area in distribution:
+					if x_area in d:
+						d[x_area].append(x)
+					else:
+						d[x_area] = [x]
 
-	# dictionary is empty meaning that none of the courses are in required distribution
-	if not d:
-		combination.update(filtered=True)
+		# dictionary is empty meaning that none of the courses are in required distribution
+		if not d:
+			combination.update(filtered=True)
 
-	# go through each combination, and see if it contains a course in each of required distirbution
+	# go through each combination
 	for i in range (0, len(combination)):
+		# filter if does not contain must have courses
+		if must_courses != None:
+			for c in must_courses:
+				if c not in combination[i].registrar_combo:
+					combination[i].filtered = True
+					combination[i].save()
+		if must_dept != None:
+			for dept in must_dept:
+				if dept not in combination[i].course_combo:
+					combination[i].filtered = True
+					combination[i].save()
+
+		# filter if does not contain course in each of required distirbution
 		for key in d:
 			contains_dist = False
 			for course in d[key]:
@@ -42,9 +58,9 @@ def filter_course(profile, filters):
 					contains_dist = True
 					break
 			if not contains_dist:
+				print 'this is weird'
 				combination[i].filtered = True
 				combination[i].save()
-				print "hello"
 
 	max_dept = filters.get("max_dept")	
 	time = filters.get("time[]")

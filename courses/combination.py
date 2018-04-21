@@ -1,4 +1,5 @@
 from .models import Course, Meeting
+from django.contrib.postgres.search import SearchVector
 
 
 # 1. need to work in the logic for finding conflicts between classes. This may lead to the exclusion part not working, so be careful
@@ -8,15 +9,17 @@ from .models import Course, Meeting
 def exclude_conflicts(anchor, course_list):
 	length = len(course_list)
 	for i in range(length - 1, -1, -1):
-		if anchor.is_conflict(course_list[i]):
-			course_list.pop(i)
+		course_meetings = course_list[i].meetings.filter(is_primary=True)
+		for j in range(0, len(course_meetings)):
+			if anchor.is_conflict(course_meetings[j]):
+				course_list.pop(i)
+				break
 	return course_list
-
 
 # append all elements in list l with prefix
 def append(prefix, l):
 	for i in range (0, len(l)):
-		l[i] = l[i] + ',' + prefix.registrar_id
+		l[i] = prefix.registrar_id + ',' + l[i]
 	return l
 
 
@@ -36,10 +39,21 @@ def combine(courses, k):
 	combinations = []
 	for i in range (0, len(courses) - k + 1):
 		anchor = courses[i]
+		anchor_meetings = courses[i].meetings.filter(is_primary=True)
 		# courses[i+1:len(courses)] needs to be filtered to exclude conflicts
-		x = exclude_conflicts(anchor, courses[i + 1:len(courses)])
-		subset = combine(x, k - 1)
-		if subset == None:
-			continue
-		combinations.extend(append(anchor, subset))
+		for m in anchor_meetings:
+			x = exclude_conflicts(m, courses[i + 1:len(courses)])
+			subset = combine(x, k - 1)
+			if subset == None:
+				continue
+			combinations.extend(append(anchor, subset))
+
+	# deal with courses with multiple primary meeting times
+	seen = set()
+	for i in range(len(combinations)-1, -1, -1):
+		if combinations[i] not in seen:
+			seen.add(combinations[i])
+		else:
+			combinations.pop(i)
+			
 	return combinations

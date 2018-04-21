@@ -54,9 +54,8 @@ def home(request):
 		course_list = []
 		for i in ids:
 			if (i != ''):
-				course = Course.objects.filter(registrar_id=i)
-				course_list.append(course[0])
-
+				course = Course.objects.get(registrar_id=i)
+				course_list.append(course)
 		
 		course_num = int(request.POST.get("course_number", ""))
 		if course_num > len(course_list):
@@ -150,6 +149,7 @@ def home(request):
 		return JsonResponse(responseobject)	
 
 	# show schedule of selected combination
+	# LOOKS LIKE THE PLACE TO IMPLEMENT TIME FILTERS/RESOLVE DISPLAY OF TIME CONFLICTS
 	elif 'comb_click' in request.GET:
 		comb_id = request.GET.get("comb_id", "")
 		comb = curr_profile.combinations.get(comb_id=comb_id)
