@@ -29,5 +29,4 @@ Search doesn't take into account the filters
 
 HJ:
 Filters complete
-Multiple Courses
 Stretch goal: Scraping periodically, keeping track of class enrollment
