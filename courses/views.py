@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from .models import Course, Profile, Combination, Meeting
+from .models import Course, Profile, Combination, Meeting, Filter
 from django.contrib.postgres.search import SearchVector
 import json, cgi
 from .cas import CASClient
@@ -104,8 +104,20 @@ def home(request):
 
 	# user presses update filter
 	elif 'filterresults' in request.POST:
-		filter_course(curr_profile, dict(request.POST))
+		# update filter fields
+		d = dict(request.POST)
+		f = Filter.objects.update(
+			user = curr_profile,
+			must_courses = d.get("courses[]"),
+			must_dept = d.get("depts[]"),
+			distribution = d.get("distribution[]"),
+			max_dept = int(d.get("max_dept")[0]),
+			time = d.get("time[]"),
+			full = (d.get("full")[0] == 'true'),
+			pdf = (d.get("pdf")[0] == 'true'),
+			)
 
+		filter_course(curr_profile)
 		combination = curr_profile.combinations.all()
 		response = []
 		for i in range (0, len(combination)):

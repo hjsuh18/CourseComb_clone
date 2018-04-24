@@ -6,7 +6,7 @@ from django.urls import resolve
 
 from time_compare import day_convert
 
-def filter_course(profile, filters):
+def filter_course(profile):
 	queue = profile.faves
 	queue = queue.split(',')
 	combination = profile.combinations.all()
@@ -14,10 +14,15 @@ def filter_course(profile, filters):
 	# reset everything to unfiltered state
 	combination.update(filtered=False)
 
-	must_courses = filters.get("courses[]")
-	must_dept = filters.get("depts[]")
-	distribution = filters.get("distribution[]")
-	
+	filters = profile.filter
+	must_courses = filters.must_courses
+	must_dept = filters.must_dept
+	distribution = filters.distribution
+	max_dept = filters.max_dept
+	time = filters.time
+	full = filters.full
+	pdf = filters.pdf
+
 	# dist keeps track of which courses are in which distribution area e.g. {'HA':'HIS 314,'}
 	d = dict()
 	if distribution != None:
@@ -58,14 +63,10 @@ def filter_course(profile, filters):
 					contains_dist = True
 					break
 			if not contains_dist:
-				print 'this is weird'
 				combination[i].filtered = True
 				combination[i].save()
 
-	max_dept = filters.get("max_dept")	
-	time = filters.get("time[]")
-	full = filters.get("full")
-	pdf = filters.get("pdf")
+	
 
 	print 'distribution: ', distribution
 	print 'max_dept: ', max_dept

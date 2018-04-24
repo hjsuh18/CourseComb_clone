@@ -29,6 +29,8 @@ Search doesn't take into account the filters
 
 Autocomplete doesn't work for some courses: e.g. FIN 501
 
+Must-have courses and must have departments reset after update filter: probably because I empty it in script.html
+
 HJ:
 Filters complete
 Stretch goal: Scraping periodically, keeping track of class enrollment

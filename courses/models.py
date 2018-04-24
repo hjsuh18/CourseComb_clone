@@ -89,6 +89,18 @@ class Profile(models.Model):
     def __unicode__(self):
         return "User: " + self.user.username + ", Favorites: " + self.faves
 
+# Saves latest filter for a particular user
+class Filter(models.Model):
+    user = models.OneToOneField(Profile, related_name='filter')
+    must_courses = ArrayField(models.TextField(), null=True)
+    must_dept = ArrayField(models.TextField(), null=True)
+    distribution = ArrayField(models.TextField(), null=True)
+    max_dept = models.SmallIntegerField(default=-1)
+    time = ArrayField(models.TextField(), null=True)
+    full = models.BooleanField(default=False)
+    pdf = models.BooleanField(default=False)
+
+
 # A certain user's course combination
 class Combination(models.Model):
     user = models.ForeignKey(Profile, related_name='combinations')
