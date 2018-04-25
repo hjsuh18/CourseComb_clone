@@ -98,7 +98,9 @@ class Filter(models.Model):
     must_dept = ArrayField(models.TextField(), null=True)
     distribution = ArrayField(models.TextField(), null=True)
     max_dept = models.SmallIntegerField(default=-1)
-    time = ArrayField(models.TextField(), null=True)
+    no_friday_class = models.BooleanField(default=False)
+    no_evening_class = models.BooleanField(default=False)
+    ten_am = models.BooleanField(default=False)
     full = models.BooleanField(default=False)
     pdf = models.BooleanField(default=False)
 

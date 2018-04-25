@@ -30,3 +30,6 @@ Have Maximum # of courses in one department able to be black, because rn the def
 There are grad courses between 4:30 and 7:30 e.g. FIN 501
 
 TBA classes?
+
+Clean Code:
+Make it so that time filter is not an array of strings, but just separate boolean fileds

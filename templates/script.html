@@ -130,17 +130,23 @@
     // max departmentals filter
     var max_dept = $("#max_dept option:selected").text();
 
-    var time = [];
-    if ($('#no-friday-class').is(":checked"))
-      time.push("no-friday-class");
-    if ($('#no-evening-class').is(":checked"))
-      time.push("no-evening-class");
-    if ($('#ten_am').is(":checked"))
-      time.push("ten_am");
+    var no_friday_class = false;
+    if ($('#no-friday-class').is(":checked")){
+      no_friday_class = true;
+    }
+
+    var no_evening_class = false;
+    if ($('#no-evening-class').is(":checked")){
+      no_evening_class = true;
+    }
+
+    var ten_am = false;
+    if ($('#ten-am').is(":checked")){
+      ten_am = true;
+    }
 
     var full = false;
     if ($('#full').is(":checked")){
-      console.log("Full is checked");
       full = true;
     }
 
@@ -154,7 +160,9 @@
       depts: allDeps,
       distribution: distribution,
       max_dept: max_dept,
-      time: time,
+      no_friday_class: no_friday_class,
+      no_evening_class: no_evening_class,
+      ten_am: ten_am,
       full: full,
       pdf: pdf,
       csrfmiddlewaretoken: csrfmiddlewaretoken

@@ -20,7 +20,9 @@ def filter_course(profile):
 	must_dept = filters.must_dept
 	distribution = filters.distribution
 	max_dept = filters.max_dept
-	time = filters.time
+	no_friday_class = filters.no_friday_class
+	no_evening_class = filters.no_evening_class
+	ten_am = filters.ten_am
 	full = filters.full
 	pdf = filters.pdf
 
@@ -44,11 +46,7 @@ def filter_course(profile):
 
 
 	time_avoid_course =[]
-	if time != None:
-		no_friday_class = False
-		no_evening_class = False
-		ten_am = False
-
+	if not no_friday_class or not no_evening_class or not ten_am:
 		for x in queue:
 			not_avoid = False
 
@@ -64,19 +62,19 @@ def filter_course(profile):
 					not_avoid_nec = True
 					not_avoid_ta = True
 
-					if 'no-friday-class' in time:
+					if no_friday_class:
 						not_avoid_nfc = False
 						if 'F' not in m.days:
 							not_avoid_nfc = True
 
 					evening = datetime.time(19, 00)
-					if 'no-evening-class' in time:
+					if no_evening_class:
 						not_avoid_nec = False
 						if time_compare(evening, m.end_time) == -1:
 							not_avoid_nec = True
 
 					ten = datetime.time(9, 59)
-					if 'ten_am' in time:
+					if ten_am:
 						not_avoid_ta = False
 						if time_compare(ten, m.start_time) == 1:
 							not_avoid_ta = True
@@ -95,19 +93,19 @@ def filter_course(profile):
 					not_avoid_nec = True
 					not_avoid_ta = True
 
-					if 'no-friday-class' in time:
+					if no_friday_class:
 						not_avoid_nfc = False
 						if 'F' not in m.days:
 							not_avoid_nfc = True
 
 					evening = datetime.time(19, 00)
-					if 'no-evening-class' in time:
+					if no_evening_class:
 						not_avoid_nec = False
 						if time_compare(evening, m.end_time) == -1:
 							not_avoid_nec = True
 
 					ten = datetime.time(9, 59)
-					if 'ten_am' in time:
+					if ten_am:
 						not_avoid_ta = False
 						if time_compare(ten, m.start_time) == 1:
 							not_avoid_ta = True

@@ -6,12 +6,12 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from .models import Course, Profile, Combination, Meeting, Filter
 from django.contrib.postgres.search import SearchVector
-import json, cgi
+import json, cgi, datetime
 from .cas import CASClient
 from django.urls import resolve
 
 from combination import combine
-from time_compare import day_convert
+from time_compare import day_convert, time_compare
 
 from .course_filter import filter_course
 
@@ -125,7 +125,9 @@ def home(request):
 			must_dept = d.get("depts[]"),
 			distribution = d.get("distribution[]"),
 			max_dept = int(d.get("max_dept")[0]),
-			time = d.get("time[]"),
+			no_friday_class = (d.get("no_friday_class")[0] == 'true'),
+			no_evening_class = (d.get("no_evening_class")[0] == 'true'),
+			ten_am = (d.get("ten_am")[0] == 'true'),
 			full = (d.get("full")[0] == 'true'),
 			pdf = (d.get("pdf")[0] == 'true'),
 			)
@@ -176,16 +178,46 @@ def home(request):
 	# show schedule of selected combination
 	# LOOKS LIKE THE PLACE TO IMPLEMENT TIME FILTERS/RESOLVE DISPLAY OF TIME CONFLICTS
 	elif 'comb_click' in request.GET:
+		full_filter = curr_profile.filter.full
+		no_friday_class = curr_profile.filter.no_friday_class
+		no_evening_class = curr_profile.filter.no_evening_class
+		ten_am = curr_profile.filter.ten_am
+
 		comb_id = request.GET.get("comb_id", "")
 		comb = curr_profile.combinations.get(comb_id=comb_id)
 		comb = comb.registrar_combo.split(',')
 		comb_schedule = []
 		responseobject = {}
+
+		single_meeting_course = []
+		for registrar_id in comb:
+			meetings = Course.objects.get(registrar_id = registrar_id).meetings.filter(is_primary=True)
+			if len(meetings) == 1:
+				single_meeting_course.append(meetings[0])
+
 		for registrar_id in comb:
 			course = Course.objects.get(registrar_id = registrar_id)
 			# get primary meeting
-			meeting = Meeting.objects.filter(course = course, is_primary = True)
+			meeting = list(Meeting.objects.filter(course = course, is_primary = True))
+
+			# if multiple meeting course, get rid of conflicts
+			length = len(meeting)
+			if length > 1:
+				for i in range(length-1, -1, -1):
+					for x in single_meeting_course:
+						if meeting[i].is_conflict(x):
+							meeting.pop(i)
+							break
+
 			for m in meeting:
+				if full_filter and m.enroll > m.limit:
+					continue
+				if no_friday_class and 'F' in m.days:
+					continue
+				if no_evening_class and time_compare(datetime.time(19,00), m.end_time) == 1:
+					continue
+				if ten_am and time_compare(datetime.time(9,59), m.start_time) == -1:
+					continue
 				days = day_convert(m.days)
 				newdays = [i+1 for i, j in enumerate(days) if j == 1]
 				course_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time}
@@ -196,6 +228,14 @@ def home(request):
 			course_classes_schedule = []
 			for m in meetings:
 				if m.start_time != None:
+					if full_filter and m.enroll > m.limit:
+						continue
+					if no_friday_class and 'F' in m.days:
+						continue
+					if no_evening_class and time_compare(datetime.time(19,00), m.end_time) == 1:
+						continue
+					if ten_am and time_compare(datetime.time(9,59), m.start_time) == -1:
+						continue
 					days = day_convert(m.days)
 					newdays = [i+1 for i, j in enumerate(days) if j == 1]
 					class_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time}
