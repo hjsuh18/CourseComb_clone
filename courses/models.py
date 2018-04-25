@@ -56,6 +56,8 @@ class Meeting(models.Model):
     days = models.CharField(max_length=10)
     section = models.CharField(max_length=4) # probably 3, but just in case
     is_primary = models.BooleanField(default=False) # whether meeting is primary
+    enroll = models.SmallIntegerField(default=0)
+    limit = models.SmallIntegerField(default=0)
 
     # made the assumption that class is held at same time on all days for a certain course
     def is_conflict(self, Meeting):

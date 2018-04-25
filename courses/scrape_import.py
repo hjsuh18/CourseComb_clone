@@ -25,13 +25,16 @@ def scrape_import_course(course, counter=ScrapeCounter()):
         # creates Meeting object and a relationship with the calling Course obj
         start = None if meeting['starttime'] == 'TBA' else datetime.datetime.strptime(meeting['starttime'], "%I:%M:%S %p").time()
         end = None if meeting['endtime'] == 'TBA' else datetime.datetime.strptime(meeting['endtime'], "%I:%M:%S %p").time()
+
         meeting_object, created = Meeting.objects.get_or_create(
             course=course_object,
             start_time= start,
             end_time= end,
             days=meeting['days'],
             section=meeting['section'],
-            is_primary=letter in meeting['section']
+            is_primary=letter in meeting['section'],
+            enroll=meeting['enroll'],
+            limit=meeting['limit']
         )
         meeting_object.save()
         if created:

@@ -25,7 +25,7 @@ def filter_course(profile):
 	pdf = filters.pdf
 
 	# dist keeps track of which courses are in which distribution area e.g. {'HA':'HIS 314,'}
-	d = dict()
+	dist = dict()
 	if distribution != None:
 		for x in queue:
 			if x == '':
@@ -33,13 +33,13 @@ def filter_course(profile):
 			else:
 				x_area = Course.objects.get(registrar_id=x).area
 				if x_area in distribution:
-					if x_area in d:
-						d[x_area].append(x)
+					if x_area in dist:
+						dist[x_area].append(x)
 					else:
-						d[x_area] = [x]
+						dist[x_area] = [x]
 
 		# dictionary is empty meaning that none of the courses are in required distribution
-		if not d:
+		if not dist:
 			combination.update(filtered=True)
 
 
@@ -118,6 +118,20 @@ def filter_course(profile):
 				if not not_avoid:
 					time_avoid_course.append(x)
 
+	departments = dict()
+	if max_dept != None:
+		for x in queue:
+			if x == '':
+				continue
+			deptnum = Course.objects.get(registrar_id=x).deptnum
+			deptnum = deptnum.split('/')
+			for a in deptnum:
+				a = a.split(' ')
+				if departments.get(a[0]) == None:
+					departments[a[0]] = [x]
+				else:
+					departments[a[0]].append(x)
+
 	# find pdf only classes in queue
 	pdf_only_courses = []
 	if pdf:
@@ -128,6 +142,22 @@ def filter_course(profile):
 			c = Course.objects.get(registrar_id=x)
 			if c.pdfonly:
 				pdf_only_courses.append(x)
+
+	# full classes
+	full_classes = []
+	if full:
+		for x in queue:
+			if x == '':
+				continue
+			c = Course.objects.get(registrar_id=x)
+			primary_meetings = c.meetings.filter(is_primary = True)
+			class_full = True
+			for m in primary_meetings:
+				if m.enroll < m.limit:
+					class_full = False
+					break
+			if class_full:
+				full_classes.append(x)
 
 	# go through each combination
 	for i in range (0, len(combination)):
@@ -146,9 +176,9 @@ def filter_course(profile):
 					combination[i].save()
 
 		# filter if does not contain course in each of required distirbution
-		for key in d:
+		for key in dist:
 			contains_dist = False
-			for course in d[key]:
+			for course in dist[key]:
 				if course in combination[i].registrar_combo:
 					contains_dist = True
 					break
@@ -171,10 +201,18 @@ def filter_course(profile):
 			combination[i].filtered = True
 			combination[i].save()
 
+		for c in full_classes:
+			if c in combination[i].registrar_combo:
+				combination[i].filtered = True
+				combination[i].save()
 
-
-	
-
-	print 'max_dept: ', max_dept
-	print 'full: ', full
-	print 'pdf: ', pdf
+		print departments
+		for d in departments:
+			if len(departments[d]) > max_dept:
+				cnt = 0
+				for x in departments[d]:
+					if x in combination[i].registrar_combo:
+						cnt = cnt + 1
+				if cnt > max_dept:
+					combination[i].filtered = True
+					combination[i].save()
