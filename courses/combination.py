@@ -1,11 +1,7 @@
 from .models import Course, Meeting
 from django.contrib.postgres.search import SearchVector
 
-
-# 1. need to work in the logic for finding conflicts between classes. This may lead to the exclusion part not working, so be careful
-# 2. once enough testing is done, transfer this code/translate to django and work into code
-
-# for a certain course anchor, remove all courses in course_list that conflict with anchor
+# for a certain course meeting anchor, remove all courses in course_list that conflict with anchor
 def exclude_conflicts(anchor, course_list):
 	length = len(course_list)
 	for i in range(length - 1, -1, -1):

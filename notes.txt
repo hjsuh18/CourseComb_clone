@@ -1,9 +1,4 @@
 ERRORS
-Scraping
-Error message: BadStatusLine: ''
-for courseid = 005602, term code = 1182
-According to Stack Overflow, there is no way to address error; can only catch the error
-https://stackoverflow.com/questions/8734617/python-django-badstatusline-error
 
 Cross listed courses search doesn't quite work e.g. ORF 363
 
@@ -16,21 +11,20 @@ How do we update only parts of the database when periodically scraping for cours
 (I think this already happens, if courseid same, just updates the changed fields)
 heroku scheduler, chronjob, 
 
-Conflicts between scripts in frontend: how do we avoid this?
-
-CDN vs Local
-
 Discussion:
 Should we keep the course data for previous semesters?
 
-Filter: A lot of people limit the number of departmentals to 2. Have a 'maximum number of courses in one department' filter.
-
-Search doesn't take into account the filters
+Search doesn't take into account the filters 
 
 Autocomplete doesn't work for some courses: e.g. FIN 501
+Seems like this is a cross-listed courses problem
 
 Must-have courses and must have departments reset after update filter: probably because I empty it in script.html
 
 HJ:
 Filters complete
 Stretch goal: Scraping periodically, keeping track of class enrollment
+
+When you refresh page, the filters get reset, but the saved filters in profile do not get reset
+Have Maximum # of courses in one department able to be black, because rn the default is 1 and this is annoying
+There are grad courses between 4:30 and 7:30 e.g. FIN 501

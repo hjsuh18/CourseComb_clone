@@ -70,11 +70,19 @@ def home(request):
 		course_combo = []
 		for i in range(0, len(registrar_combo)):
 			ids = registrar_combo[i].split(',')
-			s = Course.objects.get(registrar_id=ids[0]).deptnum
-			for j in range(1, len(ids)):
+			# s = Course.objects.get(registrar_id=ids[0]).deptnum
+			s = ''
+			for j in range(0, len(ids)):
 				if (ids[j] != ''):
 					course = Course.objects.get(registrar_id=ids[j]).deptnum
-					s = s + ', ' + course
+					# in combination, only show first deptnum of cross-listed courses
+					if '/' in course:
+						course = course.split('/')
+						course = course[0]
+					if j == 0:
+						s = course
+					else:
+						s = s + ', ' + course
 			course_combo.append(s)
 
 		# create course combination object for each combination and link to user
@@ -94,12 +102,17 @@ def home(request):
 			c.save()
 			# possibly need to keep a count of the total number of combination created
 
+		# apply the filters currently stored to profile
+		filter_course(curr_profile)
+
+		combination = curr_profile.combinations.all()
 		response = []
-		# render the course combinations
-		for i in range (0, len(course_combo)):
-			temp = "<div class = 'coursecomb " + str(i) + "'>" + course_combo[i] + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(i) + "> x </button> </div>"
-			response.append(temp)
+		for i in range (0, len(combination)):
+			if combination[i].deleted == True or combination[i].filtered == True:
+				continue
+			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
 		responseobject = {'courses_com': json.dumps(response)}
+
 		return JsonResponse(responseobject)
 
 	# user presses update filter
