@@ -107,7 +107,7 @@ def home(request):
 			# possibly need to keep a count of the total number of combination created
 
 		# apply the filters currently stored to profile
-		filter_course(curr_profile)
+		#filter_course(curr_profile)
 
 		combination = curr_profile.combinations.all()
 		response = []
