@@ -204,7 +204,6 @@ def filter_course(profile):
 				combination[i].filtered = True
 				combination[i].save()
 
-		print departments
 		for d in departments:
 			if len(departments[d]) > max_dept:
 				cnt = 0

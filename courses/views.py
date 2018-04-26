@@ -111,17 +111,12 @@ def home(request):
 
 		combination = curr_profile.combinations.all()
 		response = []
-<<<<<<< HEAD
+
 		for i in range (0, len(combination)):
 			if combination[i].deleted == True or combination[i].filtered == True:
 				continue
 			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
-=======
-		# render the course combinations
-		for i in range (0, len(course_combo)):
-			temp = "<div class = 'coursecomb " + str(i) + "'>" + course_combo[i] + " <button type = 'button' class = 'btn btn-xs deletecomb' id = " + str(i) + "> x </button> </div>"
-			response.append(temp)
->>>>>>> temporary
+
 		responseobject = {'courses_com': json.dumps(response)}
 
 		return JsonResponse(responseobject)
@@ -130,18 +125,20 @@ def home(request):
 	elif 'filterresults' in request.POST:
 		# update filter fields
 		d = dict(request.POST)
-		f = Filter.objects.update(
+		f = Filter.objects.update_or_create(
 			user = curr_profile,
-			must_courses = d.get("courses[]"),
-			must_dept = d.get("depts[]"),
-			distribution = d.get("distribution[]"),
-			max_dept = int(d.get("max_dept")[0]),
-			no_friday_class = (d.get("no_friday_class")[0] == 'true'),
-			no_evening_class = (d.get("no_evening_class")[0] == 'true'),
-			ten_am = (d.get("ten_am")[0] == 'true'),
-			full = (d.get("full")[0] == 'true'),
-			pdf = (d.get("pdf")[0] == 'true'),
-			)
+			defaults={
+				'must_courses': d.get("courses[]"),
+				'must_dept': d.get("depts[]"),
+				'distribution': d.get("distribution[]"),
+				'max_dept': int(d.get("max_dept")[0]),
+				'no_friday_class': (d.get("no_friday_class")[0] == 'true'),
+				'no_evening_class': (d.get("no_evening_class")[0] == 'true'),
+				'ten_am': (d.get("ten_am")[0] == 'true'),
+				'full': (d.get("full")[0] == 'true'),
+				'pdf': (d.get("pdf")[0] == 'true'),
+			}
+		)
 
 		filter_course(curr_profile)
 		combination = curr_profile.combinations.all()
@@ -187,7 +184,6 @@ def home(request):
 		return JsonResponse(responseobject)	
 
 	# show schedule of selected combination
-	# LOOKS LIKE THE PLACE TO IMPLEMENT TIME FILTERS/RESOLVE DISPLAY OF TIME CONFLICTS
 	elif 'comb_click' in request.GET:
 		full_filter = curr_profile.filter.full
 		no_friday_class = curr_profile.filter.no_friday_class
