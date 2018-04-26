@@ -5,6 +5,18 @@
   var schedule_data;
 
   // helper function
+  function contains(str1, str2) {
+    var i = 0;
+    while (i < str1.length && i < str2.length) {
+      if (str1.charAt(i) != str2.charAt(i)) {
+        return false;
+      }
+      i++;
+    }
+    return true;
+  }
+
+  // helper function
   var isEqual = function (value, other) {
 
     // Get the value type
@@ -93,6 +105,8 @@
 
         var classes = JSON.parse(schedule_data["schedule"]);
         var j = 0;
+        console.log(selectedCourses);
+        console.log(classes);
         for (i = 0; i < selectedCourses.length; i++) {
           var course = selectedCourses[i].trim();
           $("div#selected-coursecomb").append(
@@ -104,8 +118,9 @@
           while (j < classes.length) {
             var temp = classes[j].title.trim();
             j++;
-            if (course == temp.substring(0, temp.length-4)) {
+            if (contains(course, temp.substring(0, temp.length-4))) {
               $(".col." + i).css("background-color", classes[j-1].color);
+              console.log(classes[j-1].color);
               break;
             }
           }

@@ -104,7 +104,6 @@ class Filter(models.Model):
     full = models.BooleanField(default=False)
     pdf = models.BooleanField(default=False)
 
-
 # A certain user's course combination
 class Combination(models.Model):
     user = models.ForeignKey(Profile, related_name='combinations')

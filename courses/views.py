@@ -99,7 +99,6 @@ def home(request):
 				comb_id = i,
 				course_combo = course_combo[i],
 				registrar_combo = registrar_combo[i],
-				# should initial filtering take place here?
 				filtered = False,
 				deleted = False
 				)
@@ -107,7 +106,10 @@ def home(request):
 			# possibly need to keep a count of the total number of combination created
 
 		# apply the filters currently stored to profile
-		filter_course(curr_profile)
+		if hasattr(curr_profile, 'filter'):
+			filter_course(curr_profile)
+		else:
+			f = Filter.objects.create(user = curr_profile)
 
 		combination = curr_profile.combinations.all()
 		response = []
@@ -116,11 +118,6 @@ def home(request):
 			if combination[i].deleted == True or combination[i].filtered == True:
 				continue
 			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
-
-		# render the course combinations
-		for i in range (0, len(course_combo)):
-			temp = "<div class = 'coursecomb " + str(i) + "'>" + course_combo[i] + " <button type = 'button' class = 'btn btn-xs deletecomb' id = " + str(i) + "> x </button> </div>"
-			response.append(temp)
 
 		responseobject = {'courses_com': json.dumps(response)}
 
@@ -132,7 +129,7 @@ def home(request):
 		d = dict(request.POST)
 		f = Filter.objects.update_or_create(
 			user = curr_profile,
-			defaults = {
+			defaults={
 				'must_courses': d.get("courses[]"),
 				'must_dept': d.get("depts[]"),
 				'distribution': d.get("distribution[]"),
@@ -146,6 +143,7 @@ def home(request):
 			)
 
 		filter_course(curr_profile)
+
 		combination = curr_profile.combinations.all()
 		response = []
 		for i in range (0, len(combination)):
@@ -189,7 +187,6 @@ def home(request):
 		return JsonResponse(responseobject)	
 
 	# show schedule of selected combination
-	# LOOKS LIKE THE PLACE TO IMPLEMENT TIME FILTERS/RESOLVE DISPLAY OF TIME CONFLICTS
 	elif 'comb_click' in request.GET:
 		full_filter = curr_profile.filter.full
 		no_friday_class = curr_profile.filter.no_friday_class
