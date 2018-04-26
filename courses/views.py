@@ -26,7 +26,6 @@ def landing(request):
 
 def home(request):
 	curr_profile = request.user.profile
-	curr_profile.delete()
 	# add course to faves by registrar_id
 	if 'addclass' in request.POST:
 		registrar_id = request.POST.get("registrar_id", "")
