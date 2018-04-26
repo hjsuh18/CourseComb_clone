@@ -29,14 +29,16 @@
         defaultView: 'agendaWeek',
         header: false,
         columnHeaderFormat: 'ddd',
-        minTime: '08:00:00',
-        maxTime: '22:30:00',
+        minTime: '08:0:00',
+        maxTime: '23:00:00',
         slotDuration: '00:30:00',
         allDaySlot: false,
         weekends: false,
         contentHeight: 'auto',
-        eventOverlap: false
-
+        eventOverlap: false,
+        aspectRatio: 1,
+        timeFromat: 'H:mm'
+        /*editable: true*/
       })
     });
   </script>
@@ -53,7 +55,10 @@
       {% include 'course-search.html' %}
 
       <!-- SECOND COLUMN -->
-      <div class = "col-sm-2" id="search-results">
+      <div class = "col-xs-4 col-md-2" id="search-results">
+        <label for="course-combinations-list">
+          Possible Schedules:
+        </label>
         <div class = "combqueue">
           {% for i in combinations%}
           {{ i | safe}}
@@ -62,7 +67,10 @@
       </div>
 
       <!-- THIRD COLUMN -->
-      <div class = "col-sm-8 course-calendar">
+      <div class = "col-xs-8 col-md-8 hidden" id = "calendar-container">
+        <label for="schedule-calendar">
+          Selected Schedule
+        </label>
         <div id="calendar"> </div>
 <!--         <div class="event-modal">
           <header class="header">
@@ -81,13 +89,11 @@
           <a href="#0" class="close">Close</a>
         </div> -->
         <div id="selected-coursecomb" class="row">
-          
         </div>
       </div>
 
     </div> 
   </div>
-
 
   {% include 'style.html' %}
 

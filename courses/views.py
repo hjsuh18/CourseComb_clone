@@ -15,6 +15,10 @@ from time_compare import day_convert
 
 from .course_filter import filter_course
 
+# colorsssssss
+lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "##CD853F", "#B0C4DE"];
+darkpalette  = ["#001f3f"];
+
 # temporarily so that heroku problem can be identified
 def landing(request):
 	return render(request, 'landing.html')
@@ -98,7 +102,7 @@ def home(request):
 		response = []
 		# render the course combinations
 		for i in range (0, len(course_combo)):
-			temp = "<div class = 'coursecomb " + str(i) + "'>" + course_combo[i] + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(i) + "> x </button> </div>"
+			temp = "<div class = 'coursecomb " + str(i) + "'>" + course_combo[i] + " <button type = 'button' class = 'btn btn-xs deletecomb' id = " + str(i) + "> x </button> </div>"
 			response.append(temp)
 		responseobject = {'courses_com': json.dumps(response)}
 		return JsonResponse(responseobject)
@@ -112,7 +116,7 @@ def home(request):
 		for i in range (0, len(combination)):
 			if combination[i].deleted == True or combination[i].filtered == True:
 				continue
-			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
+			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
 		responseobject = {'courses_com': json.dumps(response)}
 		return JsonResponse(responseobject)
 
@@ -163,7 +167,7 @@ def home(request):
 			for m in meeting:
 				days = day_convert(m.days)
 				newdays = [i+1 for i, j in enumerate(days) if j == 1]
-				course_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time}
+				course_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10]}
 				comb_schedule.append(course_schedule)
 			
 			# get non-primary meetings
@@ -173,7 +177,7 @@ def home(request):
 				if m.start_time != None:
 					days = day_convert(m.days)
 					newdays = [i+1 for i, j in enumerate(days) if j == 1]
-					class_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time}
+					class_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10]}
 					course_classes_schedule.append(class_schedule)
 			responseobject[course.deptnum] = json.dumps(course_classes_schedule, default=str)
 
@@ -190,11 +194,11 @@ def home(request):
 		for i in favorites:
 			if (i != ''):
 				course = Course.objects.filter(registrar_id = i)
-				curr_faves.append("<div class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-danger btn-xs deleteclass' id = " + i + "> x </button> </div>") 
+				curr_faves.append("<div class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-xs deleteclass' id = " + i + "> x </button> </div>") 
 		for i in range (0, len(combination)):
 			if combination[i].deleted == True or combination[i].filtered == True:
 				continue
-			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
+			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
 
 		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs})
 
