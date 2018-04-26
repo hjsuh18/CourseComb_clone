@@ -26,6 +26,7 @@ def landing(request):
 
 def home(request):
 	curr_profile = request.user.profile
+	curr_profile.delete()
 	# add course to faves by registrar_id
 	if 'addclass' in request.POST:
 		registrar_id = request.POST.get("registrar_id", "")
@@ -99,7 +100,6 @@ def home(request):
 				comb_id = i,
 				course_combo = course_combo[i],
 				registrar_combo = registrar_combo[i],
-				# should initial filtering take place here?
 				filtered = False,
 				deleted = False
 				)
@@ -107,7 +107,10 @@ def home(request):
 			# possibly need to keep a count of the total number of combination created
 
 		# apply the filters currently stored to profile
-		#filter_course(curr_profile)
+		if hasattr(curr_profile, 'filter'):
+			filter_course(curr_profile)
+		else:
+			f = Filter.objects.create(user = curr_profile)
 
 		combination = curr_profile.combinations.all()
 		response = []
@@ -139,6 +142,18 @@ def home(request):
 				'pdf': (d.get("pdf")[0] == 'true'),
 			}
 		)
+		# f = Filter.objects.update(
+		# 	user = curr_profile,
+		# 	must_courses = d.get("courses[]"),
+		# 	must_dept = d.get("depts[]"),
+		# 	distribution = d.get("distribution[]"),
+		# 	max_dept = int(d.get("max_dept")[0]),
+		# 	no_friday_class = (d.get("no_friday_class")[0] == 'true'),
+		# 	no_evening_class = (d.get("no_evening_class")[0] == 'true'),
+		# 	ten_am = (d.get("ten_am")[0] == 'true'),
+		# 	full = (d.get("full")[0] == 'true'),
+		# 	pdf = (d.get("pdf")[0] == 'true')
+		# )
 
 		filter_course(curr_profile)
 		combination = curr_profile.combinations.all()
