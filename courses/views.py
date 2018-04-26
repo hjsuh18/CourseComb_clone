@@ -140,21 +140,10 @@ def home(request):
 				'full': (d.get("full")[0] == 'true'),
 				'pdf': (d.get("pdf")[0] == 'true'),
 			}
-		)
-		# f = Filter.objects.update(
-		# 	user = curr_profile,
-		# 	must_courses = d.get("courses[]"),
-		# 	must_dept = d.get("depts[]"),
-		# 	distribution = d.get("distribution[]"),
-		# 	max_dept = int(d.get("max_dept")[0]),
-		# 	no_friday_class = (d.get("no_friday_class")[0] == 'true'),
-		# 	no_evening_class = (d.get("no_evening_class")[0] == 'true'),
-		# 	ten_am = (d.get("ten_am")[0] == 'true'),
-		# 	full = (d.get("full")[0] == 'true'),
-		# 	pdf = (d.get("pdf")[0] == 'true')
-		# )
+			)
 
 		filter_course(curr_profile)
+
 		combination = curr_profile.combinations.all()
 		response = []
 		for i in range (0, len(combination)):
@@ -259,7 +248,8 @@ def home(request):
 						continue
 					days = day_convert(m.days)
 					newdays = [i+1 for i, j in enumerate(days) if j == 1]
-					class_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10]}
+					class_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10], 'className':
+					'precept_render', 'id': course.deptnum + "-" + m.section}
 					course_classes_schedule.append(class_schedule)
 			responseobject[course.deptnum] = json.dumps(course_classes_schedule, default=str)
 
