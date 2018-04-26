@@ -12,6 +12,7 @@
       comb_click:'comb_click',
       comb_id: comb_id
     };
+    var classes;
 
     $.ajax({
       type: "GET",
@@ -21,23 +22,54 @@
         $("#calendar").fullCalendar('removeEventSources');
         $("#calendar").fullCalendar('addEventSource', JSON.parse(data["schedule"]));
         schedule_data = data;
+        
+        var selectedCourses = $(".coursecomb." + comb_id).text();
+        selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
+        selectedCourses = selectedCourses.split(",");
+        $("div#selected-coursecomb").empty();
+
+        var classes = JSON.parse(schedule_data["schedule"]);
+        var j = 0;
+        console.log(selectedCourses);
+        console.log(classes);
+        for (i = 0; i < selectedCourses.length; i++) {
+          var course = selectedCourses[i].trim();
+          $("div#selected-coursecomb").append(
+            $("<div/>", {"class": "col"}).append(
+              $("<input class = 'course-checkbox' type = 'checkbox' name = '" + course + "' id = '" + course + "'/>" + "<label class = 'col " + i + "' id = 'precept-button' for = '" +
+              course + "'>" + course + "</label>")
+            )
+          );
+          while (j < classes.length) {
+            var temp = classes[j].title.trim();
+            j++;
+            if (course == temp.substring(0, temp.length-4)) {
+              $(".col." + i).css("background-color", classes[j-1].color);
+              console.log(classes[j-1].color);
+              break;
+            }
+          }
+        }
       }
     });
 
     // create buttons
-    var selectedCourses = $(".coursecomb." + comb_id).text();
+/*    var selectedCourses = $(".coursecomb." + comb_id).text();
     selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
     selectedCourses = selectedCourses.split(",");
     var len = selectedCourses.length;
     $("div#selected-coursecomb").empty();
+
+    console.log(classes);
     for (i = 0; i < len; i++) {
       $("div#selected-coursecomb").append(
         $("<div/>", {"class": "col"}).append(
-          $("<input class = 'course-checkbox' type = 'checkbox' name = '" + selectedCourses[i].trim() + "' id = '" + selectedCourses[i].trim() + "'/>" + "<label class = 'col' id = 'precept-button' for = '" +
+          $("<input class = 'course-checkbox' type = 'checkbox' name = '" + selectedCourses[i].trim() + "' id = '" + selectedCourses[i].trim() + "'/>" + "<label class = 'col" + classes[i].title + "' id = 'precept-button' for = '" +
               selectedCourses[i].trim() + "'>" + selectedCourses[i].trim() + "</label>")
         )
       );
-    }
+      $("." + classes[i].title).css("background-color", classes[i].color);
+    }*/
     // second column highlighting
     if ($(this).css("opacity") == "1") {
       $(this).css("opacity", "0.5");
@@ -243,30 +275,31 @@
       },
       appendTo: '.aftersearch',
       select: function (e, ui) {
-          // console.log(ui.item.value)
-          var class_select_data = {
-            addclass: 'addclass',
-            class: ui.item.label,
-            registrar_id: ui.item.value,
-            csrfmiddlewaretoken: csrfmiddlewaretoken
-          };
-          e.preventDefault();
-          $.ajax({
-            type: "POST",
-            url: '/',
-            data: class_select_data,
-            success: function(data) {
-            if (data != {}) {
-              var newclass = JSON.stringify(data["newclass"]);
-              var newid = JSON.stringify(data["newid"]);
-              $(".aftersearch").append(
-                $("<div class = 'course-results " + newid + "''>" + JSON.parse(newclass) + "</div>").append(
-                  $("<button type = 'button' class = 'btn btn-xs deleteclass' id = " + newid + "> x </button>")
-                )
+        // console.log(ui.item.value)
+        var class_select_data = {
+          addclass: 'addclass',
+          class: ui.item.label,
+          registrar_id: ui.item.value,
+          csrfmiddlewaretoken: csrfmiddlewaretoken
+        };
+        e.preventDefault();
+        $.ajax({
+          type: "POST",
+          url: '/',
+          data: class_select_data,
+          success: function(data) {
+          if (data != {}) {
+            var newclass = JSON.stringify(data["newclass"]);
+            var newid = JSON.stringify(data["newid"]);
+            $(".aftersearch").append(
+              $("<div class = 'course-results " + newid + "''>" + JSON.parse(newclass) + "</div>").append(
+                $("<button type = 'button' class = 'btn btn-xs deleteclass' id = " + newid + "> x </button>")
               )
-            }
-            }
-          });
+            )
+            $(".course-results" + newid).css("background-color", lightpalette[newid%10]);
+          }
+          }
+        });
       }
     });
   });
