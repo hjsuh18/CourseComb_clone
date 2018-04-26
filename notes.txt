@@ -22,7 +22,6 @@ Seems like this is a cross-listed courses problem
 Must-have courses and must have departments reset after update filter: probably because I empty it in script.html
 
 HJ:
-Filters complete
 Stretch goal: Scraping periodically, keeping track of class enrollment
 
 When you refresh page, the filters get reset, but the saved filters in profile do not get reset
