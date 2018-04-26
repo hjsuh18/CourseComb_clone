@@ -8,7 +8,9 @@ from time_compare import time_compare
 
 
 def filter_course(profile):
+	print 'what?'
 	queue = profile.faves
+	print 'ffilter is the problem'
 	queue = queue.split(',')
 	combination = profile.combinations.all()
 
