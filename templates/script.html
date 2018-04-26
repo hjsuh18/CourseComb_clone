@@ -30,8 +30,6 @@
 
         var classes = JSON.parse(schedule_data["schedule"]);
         var j = 0;
-        console.log(selectedCourses);
-        console.log(classes);
         for (i = 0; i < selectedCourses.length; i++) {
           var course = selectedCourses[i].trim();
           $("div#selected-coursecomb").append(
@@ -45,31 +43,13 @@
             j++;
             if (course == temp.substring(0, temp.length-4)) {
               $(".col." + i).css("background-color", classes[j-1].color);
-              console.log(classes[j-1].color);
               break;
             }
           }
         }
       }
     });
-
-    // create buttons
-/*    var selectedCourses = $(".coursecomb." + comb_id).text();
-    selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
-    selectedCourses = selectedCourses.split(",");
-    var len = selectedCourses.length;
-    $("div#selected-coursecomb").empty();
-
-    console.log(classes);
-    for (i = 0; i < len; i++) {
-      $("div#selected-coursecomb").append(
-        $("<div/>", {"class": "col"}).append(
-          $("<input class = 'course-checkbox' type = 'checkbox' name = '" + selectedCourses[i].trim() + "' id = '" + selectedCourses[i].trim() + "'/>" + "<label class = 'col" + classes[i].title + "' id = 'precept-button' for = '" +
-              selectedCourses[i].trim() + "'>" + selectedCourses[i].trim() + "</label>")
-        )
-      );
-      $("." + classes[i].title).css("background-color", classes[i].color);
-    }*/
+    
     // second column highlighting
     if ($(this).css("opacity") == "1") {
       $(this).css("opacity", "0.5");
