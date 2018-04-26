@@ -9,7 +9,8 @@
   }
 
   .container-fluid {
-    padding-top: 10px;
+    margin: 10px;
+    overflow: hidden;
   }
 
   #course-search {
@@ -23,25 +24,14 @@
   }
 
   .ui-widget input {
-    width: 195px;
+    width: 100%;
+    height: 25px;
     border: 1px solid #ffb84d;
     border-radius: 4px;
-    font: 12px Arial;
-  }
-
-  .createschedule {
-    position: relative;
-    bottom: 0%;
-  }
-
-  #calendar {
-    width: 100%;
-    display: inline-block;
-    height: 300;
+    font: 15px Arial;
   }
   
   .aftersearch {
-    border-radius: 6px;
     border: 1px solid #ffb84d;
     font: 12px Arial;
   }
@@ -50,20 +40,34 @@
     background-color: #ffb84d;
   }
 
-/* highlights all not separate */
-/*    .coursequeue {
-      border-radius: 6px;
-      border: 1px solid #ffb84d;
-      font: 12px Arial;
-    }*/
+  .coursequeue {
+    font: 12px Arial;
+  }
+
+  .createschedule {
+    position: relative;
+  }
 
   ul.ui-autocomplete {
+    position: relative;
+    display: inline-block;
     height: 280px;
     overflow-y: scroll;
     overflow-x: hidden;
     font: 12px Arial;
     list-style: none;
     padding-left: 0;
+  }
+
+  #search-results {
+    font: 14px Arial;
+  }
+
+  .combqueue {
+    max-height: 700px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 10px 10px 0;
   }
 
   .coursecomb {
@@ -73,16 +77,19 @@
     font: 12px Arial;
     background-color: #ffb84d;
     opacity: 0.5;
-  }
-
-  .course-results {
-    padding: 10px 5px 5px 10px;
-    font-size: 12px;
+    max-height: 700px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 10px 10px 0;
   }
 
   div#selected-coursecomb {
     position: relative;
-    margin: auto;
+    margin-bottom: 0;
+  }
+
+  div#calendar-container {
+    font: 14px Arial;
   }
 
   .course-checkbox {
@@ -90,7 +97,6 @@
   }
 
   #precept-button {
-    border: 1px solid;
     background-color: #ffb84d;
     color: black;
     font-size: 12px;
@@ -101,17 +107,47 @@
     opacity: 0.5;
     text-align: center;
     vertical-align: middle;
+    margin: 0;
+    padding: 5px;
   }
 
   .course-checkbox:checked + #precept-button {
     opacity: 1;
   }
 
-
- /*  doesn't work with the click :(
-  .container .btn-combcourses:hover {
-    opacity: 1;
+  .deleteclass {
+    float: right;
+    margin-top: 0;
+    margin-right: -10px;
+    cursor: pointer;
+    color: #fff;
+    border: 1px solid blue;
+    border-radius: 30px;
+    font: 10px Arial;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0;
+    padding: 5px 5px;
   }
-  */
+
+  .deletecomb {
+    float: right;
+    margin-top: 0;
+    margin-right: -10px;
+    cursor: pointer;
+    color: #fff;
+    border: 1px solid blue;
+    border-radius: 30px;
+    font: 10px Arial;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0;
+    padding: 5px 5px;
+  }
+
+  .fc-agendaDay-view .fc-today { 
+    background: white !important; 
+  }
+
 </style>
 
