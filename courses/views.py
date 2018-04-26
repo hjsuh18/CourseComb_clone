@@ -111,17 +111,17 @@ def home(request):
 
 		combination = curr_profile.combinations.all()
 		response = []
-<<<<<<< HEAD
+
 		for i in range (0, len(combination)):
 			if combination[i].deleted == True or combination[i].filtered == True:
 				continue
 			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
-=======
+
 		# render the course combinations
 		for i in range (0, len(course_combo)):
 			temp = "<div class = 'coursecomb " + str(i) + "'>" + course_combo[i] + " <button type = 'button' class = 'btn btn-xs deletecomb' id = " + str(i) + "> x </button> </div>"
 			response.append(temp)
->>>>>>> temporary
+
 		responseobject = {'courses_com': json.dumps(response)}
 
 		return JsonResponse(responseobject)
@@ -130,7 +130,7 @@ def home(request):
 	elif 'filterresults' in request.POST:
 		# update filter fields
 		d = dict(request.POST)
-		f = Filter.objects.update(
+		f = Filter.objects.update_or_create(
 			user = curr_profile,
 			must_courses = d.get("courses[]"),
 			must_dept = d.get("depts[]"),
@@ -189,6 +189,7 @@ def home(request):
 	# show schedule of selected combination
 	# LOOKS LIKE THE PLACE TO IMPLEMENT TIME FILTERS/RESOLVE DISPLAY OF TIME CONFLICTS
 	elif 'comb_click' in request.GET:
+		print curr_profile.filter
 		full_filter = curr_profile.filter.full
 		no_friday_class = curr_profile.filter.no_friday_class
 		no_evening_class = curr_profile.filter.no_evening_class
