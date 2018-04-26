@@ -1,5 +1,7 @@
-# if x is before y, return 1, if the same, return 0, else return -1
+# if x is before y, return 1, if the same, return 0, if x is after y return -1
 def time_compare(x, y):
+    if x == None or y == None:
+        return 0
     if x.hour < y.hour:
         return 1
     elif x.hour > y.hour:
