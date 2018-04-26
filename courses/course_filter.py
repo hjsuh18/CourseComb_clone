@@ -70,13 +70,13 @@ def filter_course(profile):
 					evening = datetime.time(19, 00)
 					if no_evening_class:
 						not_avoid_nec = False
-						if time_compare(evening, m.end_time) == -1:
+						if time_compare(evening, m.end_time) != 1:
 							not_avoid_nec = True
 
 					ten = datetime.time(9, 59)
 					if ten_am:
 						not_avoid_ta = False
-						if time_compare(ten, m.start_time) == 1:
+						if time_compare(ten, m.start_time) != -1:
 							not_avoid_ta = True
 
 					if not_avoid_nfc and not_avoid_nec and not_avoid_ta:
@@ -101,13 +101,13 @@ def filter_course(profile):
 					evening = datetime.time(19, 00)
 					if no_evening_class:
 						not_avoid_nec = False
-						if time_compare(evening, m.end_time) == -1:
+						if time_compare(evening, m.end_time) != 1:
 							not_avoid_nec = True
 
 					ten = datetime.time(9, 59)
 					if ten_am:
 						not_avoid_ta = False
-						if time_compare(ten, m.start_time) == 1:
+						if time_compare(ten, m.start_time) != -1:
 							not_avoid_ta = True
 							
 					if not_avoid_nfc and not_avoid_nec and not_avoid_ta:
