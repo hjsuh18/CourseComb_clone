@@ -155,6 +155,9 @@
   $('#filter').on('submit', function(e){
     e.preventDefault();
 
+    // number of courses
+    var x = $("#coursenum option:selected").text();
+
     // Must have courses
     var allCourses = [];
     $('.class-check:checked').each(function () {
@@ -214,7 +217,8 @@
       pdf = true;
 
     var createschedule_data = {
-      filterresults: 'filterresults',
+      searchresults: 'searchresults',
+      number_of_courses: x,
       courses: allCourses,
       depts: allDeps,
       distribution: distribution,
@@ -235,32 +239,11 @@
       var courses_com = JSON.parse(data["courses_com"]);
       $("#search-results").empty();
       $("#search-results").append(courses_com);
+    },
+    error: function(xhr, textStatus, errorThrown) {
+      alert("some error");
     }
   });
-  });
-
-  // search courses
-  $('#coursesearch').on('submit', function(e){
-    e.preventDefault();
-    var x = $("#coursenum option:selected").text();
-    var createschedule_data = {
-      searchresults: 'searchresults',
-      course_number: x,
-      csrfmiddlewaretoken: csrfmiddlewaretoken
-    };
-    $.ajax({
-      type: "POST",
-      url: '/',
-      data: createschedule_data,
-      success: function(data) {
-        var courses_com = JSON.parse(data["courses_com"]);
-        $("#search-results").empty();
-        $("#search-results").append(courses_com);
-      },
-      error: function(xhr, textStatus, errorThrown) {
-        alert("some error");
-      }
-    });
   });
 
   // Delete a course
@@ -279,26 +262,6 @@
      success: function(data) {
       parent.remove();
       /*remove events on calendar if same*/
-    }
-  });
-  });
-
-  // Delete a combination
-  $('body').on('click', '.deletecomb', function (e) {
-    e.preventDefault();
-    var parent = $(this).parent();
-    var comb_delete_data = {
-      deletecomb: 'deletecomb',
-      comb_id: this.id,
-      csrfmiddlewaretoken: csrfmiddlewaretoken
-    };
-    $.ajax({
-     type: "POST",
-     url: '/',
-     data: comb_delete_data,
-     success: function(data) {
-      parent.remove();
-
     }
   });
   });

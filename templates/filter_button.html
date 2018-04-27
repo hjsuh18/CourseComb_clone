@@ -1,7 +1,7 @@
 <div class="filter-container form-inline d-inline">
   <div class="filter">
     <button type='button' class="btn btn-primary align-top filter_button" data-toggle="modal" data-target="#filter-modal">
-      Filter
+      Create My Schedule!
     </button>
   </div>
 
@@ -20,6 +20,21 @@
 
           <!-- FILTER FORM -->
           <form id="filter" method="post">
+            {% csrf_token %}
+
+            <label for="number_of_courses">Number of Courses: </label>
+            <select class="form-control-in-line" id="coursenum">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+            </select>
+
             <label class="form-check-label" for="must-have-courses">Must have Courses: </label>
             <div id="must-have-courses">
             </div>
@@ -116,7 +131,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary update_filter">Update</button>
+            <button type="submit" class="btn btn-primary update_filter">Show Combinations</button>
           </div>
         </form>
       </div>

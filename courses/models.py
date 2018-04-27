@@ -94,6 +94,8 @@ class Profile(models.Model):
 # Saves latest filter for a particular user
 class Filter(models.Model):
     user = models.OneToOneField(Profile, related_name='filter')
+    # SET THE DEFAULT AS 4 COURSES
+    number_of_courses = models.SmallIntegerField(default=0)
     must_courses = ArrayField(models.TextField(), null=True)
     must_dept = ArrayField(models.TextField(), null=True)
     distribution = ArrayField(models.TextField(), null=True)
@@ -111,7 +113,6 @@ class Combination(models.Model):
     course_combo = models.TextField(default=None, null=True)
     registrar_combo = models.TextField(default=None, null=True)
     filtered = models.BooleanField(default=False)
-    deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.course_combo

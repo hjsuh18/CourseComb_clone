@@ -23,7 +23,6 @@ darkpalette  = ["#001f3f"];
 def landing(request):
 	return render(request, 'landing.html')
 
-
 def home(request):
 	curr_profile = request.user.profile
 	# add course to faves by registrar_id
@@ -54,6 +53,24 @@ def home(request):
 	# calculate combinations, display it and save it to database under user
 	# The courses in the search results are probably in reverse order
 	elif 'searchresults' in request.POST:
+		# update filter fields
+		d = dict(request.POST)
+		f = Filter.objects.update_or_create(
+			user = curr_profile,
+			defaults={
+				'number_of_courses': int(d.get("number_of_courses")[0]),
+				'must_courses': d.get("courses[]"),
+				'must_dept': d.get("depts[]"),
+				'distribution': d.get("distribution[]"),
+				'max_dept': int(d.get("max_dept")[0]),
+				'no_friday_class': (d.get("no_friday_class")[0] == 'true'),
+				'no_evening_class': (d.get("no_evening_class")[0] == 'true'),
+				'ten_am': (d.get("ten_am")[0] == 'true'),
+				'full': (d.get("full")[0] == 'true'),
+				'pdf': (d.get("pdf")[0] == 'true'),
+			}
+			)
+
 		ids = curr_profile.faves.split(',')
 		course_list = []
 		for i in ids:
@@ -61,7 +78,8 @@ def home(request):
 				course = Course.objects.get(registrar_id=i)
 				course_list.append(course)
 		
-		course_num = int(request.POST.get("course_number", ""))
+		course_num = curr_profile.filter.number_of_courses
+		print 'course_num: ', course_num
 		if course_num > len(course_list):
 			# need to show an error message
 			responseobject = {}
@@ -100,57 +118,29 @@ def home(request):
 				course_combo = course_combo[i],
 				registrar_combo = registrar_combo[i],
 				filtered = False,
-				deleted = False
 				)
 			c.save()
 			# possibly need to keep a count of the total number of combination created
 
 		# apply the filters currently stored to profile
-		if hasattr(curr_profile, 'filter'):
-			filter_course(curr_profile)
-		else:
-			f = Filter.objects.create(user = curr_profile)
+		# if hasattr(curr_profile, 'filter'):
+		# 	filter_course(curr_profile)
+		# else:
+		# 	f = Filter.objects.create(user = curr_profile)
 
-		combination = curr_profile.combinations.all()
-		response = []
-
-		for i in range (0, len(combination)):
-			if combination[i].deleted == True or combination[i].filtered == True:
-				continue
-			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
-
-		responseobject = {'courses_com': json.dumps(response)}
-
-		return JsonResponse(responseobject)
-
-	# user presses update filter
-	elif 'filterresults' in request.POST:
-		# update filter fields
-		d = dict(request.POST)
-		f = Filter.objects.update_or_create(
-			user = curr_profile,
-			defaults={
-				'must_courses': d.get("courses[]"),
-				'must_dept': d.get("depts[]"),
-				'distribution': d.get("distribution[]"),
-				'max_dept': int(d.get("max_dept")[0]),
-				'no_friday_class': (d.get("no_friday_class")[0] == 'true'),
-				'no_evening_class': (d.get("no_evening_class")[0] == 'true'),
-				'ten_am': (d.get("ten_am")[0] == 'true'),
-				'full': (d.get("full")[0] == 'true'),
-				'pdf': (d.get("pdf")[0] == 'true'),
-			}
-			)
 
 		filter_course(curr_profile)
 
 		combination = curr_profile.combinations.all()
 		response = []
+
 		for i in range (0, len(combination)):
-			if combination[i].deleted == True or combination[i].filtered == True:
+			if combination[i].filtered == True:
 				continue
-			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
+			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-danger btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
+
 		responseobject = {'courses_com': json.dumps(response)}
+
 		return JsonResponse(responseobject)
 
 	# user clicks on the filter button on main page
@@ -176,15 +166,6 @@ def home(request):
 						
 		responseobject = {'must_have_courses': json.dumps(response_course), 'must_have_departments': json.dumps(response_dept)}
 		return JsonResponse(responseobject)
-
-	# delete course combination in database
-	elif 'deletecomb' in request.POST:
-		comb_id = request.POST.get("comb_id", "")
-		c = curr_profile.combinations.get(comb_id=comb_id)
-		c.deleted = True
-		c.save()
-		responseobject = {}
-		return JsonResponse(responseobject)	
 
 	# show schedule of selected combination
 	elif 'comb_click' in request.GET:
@@ -268,7 +249,7 @@ def home(request):
 				course = Course.objects.filter(registrar_id = i)
 				curr_faves.append("<div class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-xs deleteclass' id = " + i + "> x </button> </div>") 
 		for i in range (0, len(combination)):
-			if combination[i].deleted == True or combination[i].filtered == True:
+			if combination[i].filtered == True:
 				continue
 			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
 
