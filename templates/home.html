@@ -60,7 +60,7 @@
         weekends: false,
         contentHeight: 'auto',
         eventOverlap: false,
-        aspectRatio: 1,
+        aspectRatio: .5,
         timeFromat: 'H:mm'
         /*editable: true*/
       })
@@ -81,7 +81,7 @@
       <!-- SECOND COLUMN -->
       <div class = "col-xs-4 col-md-2" id="search-results">
         <label for="course-combinations-list">
-          Possible Schedules:
+          <b>Possible Schedules:</b>
         </label>
         <div class = "combqueue">
           {% for i in combinations%}
@@ -93,7 +93,7 @@
       <!-- THIRD COLUMN -->
       <div class = "col-xs-8 col-md-8 hidden" id = "calendar-container">
         <label for="schedule-calendar">
-          Selected Schedule
+          <b>Selected Schedule</b>
         </label>
         <div id="calendar"> </div>
 <!--         <div class="event-modal">
