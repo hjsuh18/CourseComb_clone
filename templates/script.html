@@ -163,18 +163,34 @@
   // precept checks
   $('div#selected-coursecomb').on('click', 'input[type=checkbox]', function() {
     all_sources = $("#calendar").fullCalendar('getEventSources');
+    // console.log(schedule_data);
     title = this.id;
-
     course_display = false;
     var course_remove;
+    var precept_remove;
     for (i = 0; i < all_sources.length; i++) { 
+
       if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title]))) {
         course_display = true;
         course_remove = all_sources[i]["rawEventDefs"];
       } 
+      
+      if (all_sources[i]["rawEventDefs"][0]["className"]) {
+        if (all_sources[i]["rawEventDefs"][0]["className"].indexOf("selected_precept") != -1) {
+          if (all_sources[i]["rawEventDefs"][0]["id"].split("-")[0] == title) {
+            precept_remove = all_sources[i]["rawEventDefs"];
+          }
+        }
+      }
+      // if (all_sources[i]["rawEventDefs"][0]["id"].split("-")[0] == title) {
+      //   console.log("true");
+      // }
     }
     if (course_display == false) {
       $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[title]));
+      if (precept_remove) {
+        $("#calendar").fullCalendar('removeEventSource', precept_remove);
+      }
     }
     else {
       $("#calendar").fullCalendar('removeEventSource', course_remove);

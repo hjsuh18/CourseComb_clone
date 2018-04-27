@@ -207,6 +207,7 @@ def home(request):
 
 		for registrar_id in comb:
 			course = Course.objects.get(registrar_id = registrar_id)
+			course_title = course.deptnum.split("/")[0]
 			# get primary meeting
 			meeting = list(Meeting.objects.filter(course = course, is_primary = True))
 
@@ -230,7 +231,8 @@ def home(request):
 					continue
 				days = day_convert(m.days)
 				newdays = [i+1 for i, j in enumerate(days) if j == 1]
-				course_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10]}
+				
+				course_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10]}
 				comb_schedule.append(course_schedule)
 			
 			# get non-primary meetings
@@ -248,10 +250,10 @@ def home(request):
 						continue
 					days = day_convert(m.days)
 					newdays = [i+1 for i, j in enumerate(days) if j == 1]
-					class_schedule = {'title': course.deptnum + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10], 'className':
-					'precept_render', 'id': course.deptnum + "-" + m.section}
+					class_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10], 'className':
+					'precept_render', 'id': course_title + "-" + m.section}
 					course_classes_schedule.append(class_schedule)
-			responseobject[course.deptnum] = json.dumps(course_classes_schedule, default=str)
+			responseobject[course_title] = json.dumps(course_classes_schedule, default=str)
 
 		responseobject['schedule'] = json.dumps(comb_schedule, default=str)
 		return JsonResponse(responseobject)	

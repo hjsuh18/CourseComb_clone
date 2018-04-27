@@ -27,7 +27,10 @@
     $(function() {
       $("#calendar").fullCalendar({
         eventClick: function(calEvent, jsEvent, view) {
-          if (calEvent["className"] == "precept_render") {
+          // if (calEvent["className"] == "precept_render") {
+          // console.log($.inArray("precept_render", calEvent["className"]));
+          
+          if (calEvent["className"].indexOf("precept_render") != -1) {
             title = calEvent["id"].split("-")[0];
             all_sources = $("#calendar").fullCalendar('getEventSources');
             precepts_display = false;
@@ -37,7 +40,10 @@
                 var selected_precept;
                 for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
                   if (all_sources[i]["rawEventDefs"][j]["id"] == calEvent["id"]) {
-                    selected_precept = [all_sources[i]["rawEventDefs"][j]];
+                    selected_precept = all_sources[i]["rawEventDefs"][j];
+                    temp = selected_precept["className"];
+                    selected_precept["className"] = [temp, "selected_precept"];
+                    selected_precept = [selected_precept];
                   }
                 }
                 $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
