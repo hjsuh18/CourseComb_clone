@@ -79,7 +79,6 @@ def home(request):
 				course_list.append(course)
 		
 		course_num = curr_profile.filter.number_of_courses
-		print 'course_num: ', course_num
 		if course_num > len(course_list):
 			# need to show an error message
 			responseobject = {}
