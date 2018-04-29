@@ -212,7 +212,11 @@ def home(request):
 				days = day_convert(m.days)
 				newdays = [i+1 for i, j in enumerate(days) if j == 1]
 				
-				course_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10]}
+				if length > 1:
+					course_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10], 'className':
+					'precept_render primary', 'id': course_title}
+				else:
+					course_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10]}
 				comb_schedule.append(course_schedule)
 			
 			# get non-primary meetings
