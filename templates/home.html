@@ -30,30 +30,31 @@
           if (calEvent["className"].indexOf("precept_render") != -1) {
             // for primary meeting
             if (calEvent["className"].indexOf("primary") != -1) {
-              title = calEvent["id"];
+              title = calEvent["id"].split("-")[0];
               all_sources = $("#calendar").fullCalendar('getEventSources');
               precepts_display = false;
+              
               for (i = 0; i < all_sources.length; i++) { 
-                console.log(all_sources[i]["rawEventDefs"]);
-                // if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title])[section_type])) {
-                //   precepts_display = true;
-                //   var selected_precept;
-                //   for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
-                //     if (all_sources[i]["rawEventDefs"][j]["id"] == calEvent["id"]) {
-                //       selected_precept = all_sources[i]["rawEventDefs"][j];
-                //       temp = selected_precept["className"];
-                //       selected_precept["className"] = [temp, "selected_precept"];
-                //       selected_precept = [selected_precept];
-                //     }
-                //   }
-                //   $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
-                //   $("#calendar").fullCalendar('addEventSource', selected_precept);
-                // } 
+                if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(JSON.parse(schedule_data["schedule"])[title]))) {
+                  precepts_display = true;
+                  var selected_precept;
+                  for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
+                    if (all_sources[i]["rawEventDefs"][j]["id"] == calEvent["id"]) {
+                      selected_precept = all_sources[i]["rawEventDefs"][j];
+                      temp = selected_precept["className"].split(" ");
+                      temp.push("selected_class");
+                      selected_precept["className"] = temp;
+                      selected_precept = [selected_precept];
+                    }
+                  }
+                  $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
+                  $("#calendar").fullCalendar('addEventSource', selected_precept);
+                } 
               }
-              // if (precepts_display == false) {
-              //   $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
-              //   $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[title])[section_type]);
-              // }
+              if (precepts_display == false) {
+                $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
+                $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(schedule_data["schedule"])[title]));
+              }
             }
             else {
               title = calEvent["id"].split("-")[0];
@@ -129,22 +130,6 @@
           <b>Selected Schedule</b>
         </label>
         <div id="calendar"> </div>
-<!--         <div class="event-modal">
-          <header class="header">
-            <div class="content">
-              <span class="event-date"></span>
-              <h3 class="event-name"></h3>
-            </div>
-
-            <div class="header-bg"></div>
-          </header>
-
-          <div class="body">
-            <div class="event-info"></div>
-            <div class="body-bg"></div>
-          </div>
-          <a href="#0" class="close">Close</a>
-        </div> -->
         <div id="selected-coursecomb" class="row">
         </div>
       </div>
@@ -152,7 +137,10 @@
     </div> 
   </div>
 
+
   {% include 'style.html' %}
+
+  {% include 'helper.html' %}
 
   {% include 'script.html' %}
 

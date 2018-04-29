@@ -176,7 +176,7 @@ def home(request):
 		comb_id = request.GET.get("comb_id", "")
 		comb = curr_profile.combinations.get(comb_id=comb_id)
 		comb = comb.registrar_combo.split(',')
-		comb_schedule = []
+		
 		responseobject = {}
 
 		single_meeting_course = []
@@ -185,9 +185,12 @@ def home(request):
 			if len(meetings) == 1:
 				single_meeting_course.append(meetings[0])
 
+		course_names = []
+		comb_schedule = {}
 		for registrar_id in comb:
 			course = Course.objects.get(registrar_id = registrar_id)
 			course_title = course.deptnum.split("/")[0]
+			course_names.append(course_title)
 			# get primary meeting
 			meeting = list(Meeting.objects.filter(course = course, is_primary = True))
 
@@ -199,7 +202,7 @@ def home(request):
 						if meeting[i].is_conflict(x):
 							meeting.pop(i)
 							break
-
+			course_schedule_all = []
 			for m in meeting:
 				if full_filter and m.enroll > m.limit:
 					continue
@@ -214,15 +217,16 @@ def home(request):
 				
 				if length > 1:
 					course_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10], 'className':
-					'precept_render primary', 'id': course_title}
+					'precept_render primary', 'id': course_title + "-" + m.section}
 				else:
 					course_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10]}
-				comb_schedule.append(course_schedule)
+				course_schedule_all.append(course_schedule)
+				
 			
+			comb_schedule[course_title] = json.dumps(course_schedule_all, default = str)
 			# get non-primary meetings
 			meetings = Meeting.objects.filter(course = course, is_primary = False)
 			class_types = set()
-			course_classes_schedule = []
 			course_classes = {}
 			for m in meetings:
 				class_types.add(m.section[0])
@@ -244,9 +248,9 @@ def home(request):
 					'precept_render', 'id': course_title + "-" + m.section}
 					class_type = m.section[0]
 					course_classes[class_type].append(class_schedule)
-					course_classes_schedule.append(class_schedule)
 			responseobject[course_title] = json.dumps(course_classes, default=str)
 
+		comb_schedule['names'] = json.dumps(course_names, default = str)
 		responseobject['schedule'] = json.dumps(comb_schedule, default=str)
 		return JsonResponse(responseobject)	
 		

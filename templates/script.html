@@ -96,7 +96,11 @@
       data: coursecomb_data,
       success: function(data) {
         $("#calendar").fullCalendar('removeEventSources');
-        $("#calendar").fullCalendar('addEventSource', JSON.parse(data["schedule"]));
+        all_courses = JSON.parse(JSON.parse(data["schedule"])["names"]);
+        for (k = 0; k < all_courses.length; k++) {
+          $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(data["schedule"])[all_courses[k]]));
+        }
+        
         schedule_data = data;
         
         var selectedCourses = $(".coursecomb." + comb_id).text();
@@ -104,7 +108,7 @@
         selectedCourses = selectedCourses.split(",");
         $("div#selected-coursecomb").empty();
 
-        var classes = JSON.parse(schedule_data["schedule"]);
+        var classes = JSON.parse(JSON.parse(schedule_data["schedule"])["names"]);
         var j = 0;
 
         for (i = 0; i < selectedCourses.length; i++) {
@@ -118,15 +122,15 @@
             );
           }
           
-          while (j < classes.length) {
-            var temp = classes[j].title.trim();
-            j++;
-            if (contains(course, temp.substring(0, temp.length-4))) {
-              $(".col." + i).css("background-color", classes[j-1].color);
-              /*console.log(classes[j-1].color);*/
-              break;
-            }
-          }
+          // while (j < classes.length) {
+          //   var temp = classes[j];
+          //   j++;
+          //   if (contains(course, temp.substring(0, temp.length-4))) {
+          //     $(".col." + i).css("background-color", classes[j-1].color);
+          //     /*console.log(classes[j-1].color);*/
+          //     break;
+          //   }
+          // }
         }
       }
     });
