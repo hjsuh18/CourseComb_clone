@@ -108,12 +108,15 @@
 
         for (i = 0; i < selectedCourses.length; i++) {
           var course = selectedCourses[i].trim();
-          $("div#selected-coursecomb").append(
-            $("<div/>", {"class": "col"}).append(
-              $("<input class = 'course-checkbox' type = 'checkbox' name = '" + course + "' id = '" + course + "'/>" + "<label class = 'col " + i + "' id = 'precept-button' for = '" +
-              course + "'>" + course + "</label>")
-            )
-          );
+          if (JSON.parse(schedule_data[course]).length != 0) {
+            $("div#selected-coursecomb").append(
+              $("<div/>", {"class": "col"}).append(
+                $("<input class = 'course-checkbox' type = 'checkbox' name = '" + course + "' id = '" + course + "'/>" + "<label class = 'col " + i + "' id = 'precept-button' for = '" +
+                course + "'>" + course + "</label>")
+              )
+            );
+          }
+          
           while (j < classes.length) {
             var temp = classes[j].title.trim();
             j++;
@@ -163,7 +166,7 @@
   // precept checks
   $('div#selected-coursecomb').on('click', 'input[type=checkbox]', function() {
     all_sources = $("#calendar").fullCalendar('getEventSources');
-    // console.log(schedule_data);
+    console.log(schedule_data);
     title = this.id;
     course_display = false;
     var course_remove;

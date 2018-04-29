@@ -27,9 +27,6 @@
     $(function() {
       $("#calendar").fullCalendar({
         eventClick: function(calEvent, jsEvent, view) {
-          // if (calEvent["className"] == "precept_render") {
-          // console.log($.inArray("precept_render", calEvent["className"]));
-          
           if (calEvent["className"].indexOf("precept_render") != -1) {
             title = calEvent["id"].split("-")[0];
             all_sources = $("#calendar").fullCalendar('getEventSources');
