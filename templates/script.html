@@ -200,8 +200,8 @@
 
 
 
-  // Click the Filter button -> dynamically change the form
-  $('body').on('click', '.filter_button', function(e) {
+  // Make filter options pop up, change entries depending on course queue content
+  $('body').on('click', '.create_schedule', function(e) {
     e.preventDefault();
     var filter = {
       click_filter: 'click_filter',
@@ -273,9 +273,9 @@
       no_evening_class = true;
     }
 
-    var ten_am = false;
-    if ($('#ten-am').is(":checked")){
-      ten_am = true;
+    var after_ten_am = false;
+    if ($('#after-ten-am').is(":checked")){
+      after_ten_am = true;
     }
 
     var full = false;
@@ -296,7 +296,7 @@
       max_dept: max_dept,
       no_friday_class: no_friday_class,
       no_evening_class: no_evening_class,
-      ten_am: ten_am,
+      after_ten_am: after_ten_am,
       full: full,
       pdf: pdf,
       csrfmiddlewaretoken: csrfmiddlewaretoken
@@ -308,8 +308,8 @@
      data: createschedule_data,
      success: function(data) {
       var courses_com = JSON.parse(data["courses_com"]);
-      $("#search-results").empty();
-      $("#search-results").append(courses_com);
+      $("#combqueue").empty();
+      $("#combqueue").append(courses_com);
     },
     error: function(xhr, textStatus, errorThrown) {
       alert("some error");

@@ -6,10 +6,13 @@ def exclude_conflicts(anchor, course_list):
 	length = len(course_list)
 	for i in range(length - 1, -1, -1):
 		course_meetings = course_list[i].meetings.filter(is_primary=True)
+		conflict = True
 		for j in range(0, len(course_meetings)):
-			if anchor.is_conflict(course_meetings[j]):
-				course_list.pop(i)
+			if not anchor.is_conflict(course_meetings[j]):
+				conflict = False
 				break
+		if conflict:
+			course_list.pop(i)
 	return course_list
 
 # append all elements in list l with prefix
@@ -20,6 +23,8 @@ def append(prefix, l):
 
 
 # courses is a list of courses, k is the number courses being selected
+# returns an array of all course combinations without time conflicts of primary meetings
+# combination is represented as a String of registrar ids separated by commas
 def combine(courses, k):
 	# error: k is greater than length of courses
 	if (k > len(courses)):
@@ -51,5 +56,5 @@ def combine(courses, k):
 			seen.add(combinations[i])
 		else:
 			combinations.pop(i)
-			
+
 	return combinations

@@ -1,6 +1,6 @@
 <div class="filter-container form-inline d-inline">
   <div class="filter">
-    <button type='button' class="btn btn-primary align-top filter_button" data-toggle="modal" data-target="#filter-modal">
+    <button type='button' class="btn btn-primary align-top create_schedule" data-toggle="modal" data-target="#filter-modal">
       Create My Schedule!
     </button>
   </div>
@@ -10,7 +10,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="filter-options">Sort by:</h5>
+          <h5 class="modal-title" id="filter-options">Set your preferences:</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -107,8 +107,8 @@
                 No Evening Class:<input class="form-check-input" type="checkbox" id="no-evening-class">
               </label>
 
-              <label class="form-check-label" for="ten-am">
-                After 10am:<input class="form-check-input" type="checkbox" id="ten-am">
+              <label class="form-check-label" for="after-ten-am">
+                After 10am:<input class="form-check-input" type="checkbox" id="after-ten-am">
               </label>
             </div>
 
@@ -131,7 +131,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary update_filter">Show Combinations</button>
+            <button type="submit" class="btn btn-primary show_combo">Show Combinations</button>
           </div>
         </form>
       </div>
