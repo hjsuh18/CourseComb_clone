@@ -29,10 +29,11 @@
         eventClick: function(calEvent, jsEvent, view) {
           if (calEvent["className"].indexOf("precept_render") != -1) {
             title = calEvent["id"].split("-")[0];
+            section_type = calEvent["id"].split("-")[1][0];
             all_sources = $("#calendar").fullCalendar('getEventSources');
             precepts_display = false;
             for (i = 0; i < all_sources.length; i++) { 
-              if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title]))) {
+              if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title])[section_type])) {
                 precepts_display = true;
                 var selected_precept;
                 for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
@@ -49,7 +50,7 @@
             }
             if (precepts_display == false) {
               $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
-              $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[title]));
+              $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[title])[section_type]);
             }
           }
         },

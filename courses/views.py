@@ -217,7 +217,13 @@ def home(request):
 			
 			# get non-primary meetings
 			meetings = Meeting.objects.filter(course = course, is_primary = False)
+			class_types = set()
 			course_classes_schedule = []
+			course_classes = {}
+			for m in meetings:
+				class_types.add(m.section[0])
+			for class_type in class_types:
+				course_classes[class_type] = []
 			for m in meetings:
 				if m.start_time != None:
 					if full_filter and m.enroll > m.limit:
@@ -232,8 +238,10 @@ def home(request):
 					newdays = [i+1 for i, j in enumerate(days) if j == 1]
 					class_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10], 'className':
 					'precept_render', 'id': course_title + "-" + m.section}
+					class_type = m.section[0]
+					course_classes[class_type].append(class_schedule)
 					course_classes_schedule.append(class_schedule)
-			responseobject[course_title] = json.dumps(course_classes_schedule, default=str)
+			responseobject[course_title] = json.dumps(course_classes, default=str)
 
 		responseobject['schedule'] = json.dumps(comb_schedule, default=str)
 		return JsonResponse(responseobject)	
