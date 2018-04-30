@@ -1,8 +1,9 @@
 <style>
+
   body {
     margin: 0;
     text-align: center;
-    background-color: #e8e8ee;
+    background-color: #EBEBF5;
   }
 
   .navbar {
@@ -91,8 +92,9 @@
     margin-bottom: 0;
   }
 
-  div#calendar-container {
-    font: 14px Arial;
+  #calendar {
+    font: 12px Arial;
+    margin-bottom: 5px;
   }
 
   .course-checkbox {
@@ -153,10 +155,19 @@
 
   .precept_render {
     cursor: pointer;
+    opacity: 0.5;
+  }
+
+  .selected_precept {
+    opacity: 1;
+  }
+
+  .selected_class {
+    opacity: 1;
   }
 
   #calendar .fc-today {
-    background-color: #e8e8ee !important;
+    background-color: #EBEBF5 !important;
   }
 
   #calendar .fc-content {
@@ -164,7 +175,7 @@
   }
 
   #calendar .fc-event {
-    box-shadow: 1px 1px 1px #706868;
+    /*box-shadow: 1px 1px 1px #706868;*/
   }
 
   #calendar .fc-agenda-axis, #calendar .fc-widget-header {
