@@ -116,6 +116,12 @@ class Combination(models.Model):
     def __str__(self):
         return self.course_combo
 
+# A user's favorite schedule
+class Favorite(models.Model):
+    user = models.ForeignKey(Profile, related_name='favorites')
+    favorite_fields = models.TextField(default=None, null=True)
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
