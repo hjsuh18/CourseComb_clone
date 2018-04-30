@@ -89,12 +89,13 @@
         columnHeaderFormat: 'ddd',
         minTime: '08:0:00',
         maxTime: '23:00:00',
-        slotDuration: '00:30:00',
+        // slotDuration: '00:30:00',
         allDaySlot: false,
         weekends: false,
         contentHeight: 'auto',
         eventOverlap: false,
         aspectRatio: .5,
+        // slotMinutes: 30,
         timeFromat: 'H:mm'
         /*editable: true*/
       })
@@ -125,11 +126,14 @@
       </div>
 
       <!-- THIRD COLUMN -->
-      <div class = "col-xs-8 col-md-8 hidden" id = "calendar-container">
+      <div class = "col-xs-8 col-md-8 hidden">
         <label for="schedule-calendar">
           <b>Selected Schedule</b>
         </label>
         <div id="calendar"> </div>
+        <label for="precept-toggles">
+          <b> Click to show precepts </b>
+        </label>
         <div id="selected-coursecomb" class="row">
         </div>
       </div>

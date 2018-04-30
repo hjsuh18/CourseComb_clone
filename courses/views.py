@@ -16,7 +16,7 @@ from time_compare import day_convert, time_compare
 from .course_filter import filter_course
 
 # colorsssssss
-lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "##CD853F", "#B0C4DE"];
+lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#CD853F", "#B0C4DE"];
 darkpalette  = ["#001f3f"];
 
 # temporarily so that heroku problem can be identified
