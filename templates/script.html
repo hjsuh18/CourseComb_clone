@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#CD853F", "#B0C4DE"];
+  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
   var darkpalette  = ["#001f3f"];
   var csrfmiddlewaretoken = '{{ csrf_token }}';
   var schedule_data;
@@ -34,72 +34,42 @@
       success: function(data) {
         $("#calendar").fullCalendar('removeEventSources');
         all_courses = JSON.parse(JSON.parse(data["schedule"])["names"]);
+
         for (k = 0; k < all_courses.length; k++) {
           $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(data["schedule"])[all_courses[k]]));
         }
         
         schedule_data = data;
-        
-        var selectedCourses = $(".coursecomb." + comb_id).text();
-        selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
-        selectedCourses = selectedCourses.split(",");
         $("div#selected-coursecomb").empty();
 
-        var classes = JSON.parse(JSON.parse(schedule_data["schedule"])["names"]);
-        var j = 0;
-
-        for (i = 0; i < selectedCourses.length; i++) {
-          var course = selectedCourses[i].trim();
-          if (schedule_data[course] != "{}") {
+        for (i = 0; i < all_courses.length; i++) {
+          var course = all_courses[i];
+          if (data[course] != "{}") {
+            var temp = JSON.parse(data[course]);
+            var precepts;
             $("div#selected-coursecomb").append(
               $("<div/>", {"class": "col"}).append(
                 $("<input class = 'course-checkbox' type = 'checkbox' name = '" + course + "' id = '" + course + "'/>" + "<label class = 'col " + i + "' id = 'precept-button' for = '" +
                 course + "'>" + course + "</label>")
               )
             );
-          }
 
-          
-          while (j < classes.length) {
-            var temp = classes[j].title.trim();
-            j++;
-            if (contains(course, temp.substring(0, temp.length-4))) {
-              $(".col." + i).css("background-color", classes[j-1].color);
-              console.log(classes[j-1].color);
-              break;
+            precepts = temp.hasOwnProperty("C") ? temp["C"] : temp["P"];
+            /*if (temp.hasOwnProperty("C")) {
+              precepts = temp["C"];
             }
-          }          
-          
-          // while (j < classes.length) {
-          //   var temp = classes[j];
-          //   j++;
-          //   if (contains(course, temp.substring(0, temp.length-4))) {
-          //     $(".col." + i).css("background-color", classes[j-1].color);
-          //     /*console.log(classes[j-1].color);*/
-          //     break;
-          //   }
-          // }
+            else {
+              precepts = temp["P"];
+            }*/
+            $(".col." + i).css("background-color", precepts[0].color);
+/*            $(".col." + i).css("border", "1px solid " + precepts[0].color);*/
+          }
         }
+
       }
     });
     
     // second column highlighting
-/*    if ($(this).css("opacity") == "1") {
-      $(this).css("opacity", "0.5");
-    }
-    else {
-      $(".coursecomb").each(function () {
-        if ($(this).css("opacity") == "1") {
-          $(this).css("opacity", "0.5");
-        }
-      });
-      if ($(this).css("opacity") == "0.5") {
-        $(this).css("opacity", "1");
-      } 
-      else {
-        $(this).css("opacity", "0.5");
-      }
-    }*/
     if ($(this).css("background-color") == "rgb(255, 184, 77)") {
       $(this).css("background-color", "rgb(255, 255, 255)");
     }
@@ -324,7 +294,7 @@
                 $("<button type = 'button' class = 'btn btn-xs deleteclass' id = " + newid + "> x </button>")
               )
             )
-            $(".course-results" + newid).css("background-color", lightpalette[newid%10]);
+            $(".course-results" + newid).css("background-color", lightpalette[newid%11]);
           }
           }
         });
