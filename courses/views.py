@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from .models import Course, Profile, Combination, Meeting, Filter
+from .models import Course, Profile, Combination, Meeting, Filter, Favorite
 from django.contrib.postgres.search import SearchVector
 import json, cgi, datetime
 from .cas import CASClient
@@ -266,7 +266,23 @@ def home(request):
 		comb_schedule['names'] = json.dumps(course_names, default = str)
 		responseobject['schedule'] = json.dumps(comb_schedule, default=str)
 		return JsonResponse(responseobject)	
-		
+	
+	elif 'save_schedule' in request.POST:
+		calendar = json.loads(request.POST.get("calendar_data", ""))
+		calendar_data = []
+		for i in calendar:
+			calendar_data.append(json.dumps(i))
+
+		curr_favorites = curr_profile.favorites.all()
+		responseobject = {}
+		try:
+			f = Favorite.objects.create(
+				user = curr_profile,
+				favorite_fields = calendar_data)
+			responseobject = {'message': 'Schedule successfully saved!'}
+		except:
+			responseobject = {'error': 'This schedule is already saved'}
+		return JsonResponse(responseobject)
 	else:
 		favorites = curr_profile.faves
 		favorites = favorites.split(",")
@@ -289,9 +305,7 @@ def home(request):
 def get_courses(request):
 	if request.is_ajax():
 		q = request.GET.get('term', '')
-		searchresults = Course.objects.annotate(
-			search=SearchVector('title', 'deptnum'),
-		).filter(search=q)
+		searchresults = Course.objects.filter(deptnum__icontains = q)
 		results = []
 		for result in searchresults:
 			course_json = {}
