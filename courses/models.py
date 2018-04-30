@@ -119,7 +119,8 @@ class Combination(models.Model):
 # A user's favorite schedule
 class Favorite(models.Model):
     user = models.ForeignKey(Profile, related_name='favorites')
-    favorite_fields = models.TextField(default=None, null=True)
+    # favorite_fields = ArrayField(ArrayField(models.TextField(), null=True), null=True)
+    favorite_fields = ArrayField(models.TextField(), null = True, unique = True)
 
 
 @receiver(post_save, sender=User)

@@ -7,16 +7,44 @@
 
   // Save schedule
   function saveSchedule() {
+    console.log("hello");
     calendar_data = []
     all_sources = $("#calendar").fullCalendar('getEventSources');
     for (i = 0; i < all_sources.length; i++) { 
       for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
-        calendar_data.append(all_sources[i]["rawEventDefs"][j]);
+        calendar_data.push(all_sources[i]["rawEventDefs"][j]);
       }
     }
-    console.log(all_sources);
-    
 
+
+    if (calendar_data.length == 0) {
+      $(".save-schedule-message").append("Cannot save empty schedule");
+      $(".save-schedule-message").css("color", "red");
+    }
+    else {
+      var saveschedule_data = {
+        csrfmiddlewaretoken: csrfmiddlewaretoken,
+        save_schedule: 'save_schedule',
+        calendar_data: JSON.stringify(calendar_data)
+      };
+      $.ajax({
+        type: "POST",
+        url: '/',
+        data: saveschedule_data,
+        success: function(data) {
+          $(".save-schedule-message").empty();
+          if (data["message"]) {
+            $(".save-schedule-message").append(data["message"]);
+            $(".save-schedule-message").css("color", "green");
+          }
+          else if (data["error"]) {
+            $(".save-schedule-message").append(data["error"]);
+            $(".save-schedule-message").css("color", "red");
+          }      
+          }
+        });
+    }
+    
   }
 
   // Click on a combination
