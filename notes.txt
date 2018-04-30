@@ -32,3 +32,5 @@ TBA classes?
 
 Clean Code:
 Make it so that time filter is not an array of strings, but just separate boolean fileds
+
+Clear combinations when there are no courses in the coursequeue and click on create my schedule

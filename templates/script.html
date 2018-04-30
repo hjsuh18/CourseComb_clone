@@ -69,11 +69,28 @@
           $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(data["schedule"])[all_courses[k]]));
         }
         
+        var classes = JSON.parse(JSON.parse(schedule_data["schedule"])["names"]);
+        var j = 0;
+        for (i = 0; i < selectedCourses.length; i++) {
+          var course = selectedCourses[i].trim();
+          if (schedule_data[course] != "{}") {
+            $("div#selected-coursecomb").append(
+              $("<div/>", {"class": "col"}).append(
+                $("<input class = 'course-checkbox' type = 'checkbox' name = '" + course + "' id = '" + course + "'/>" + "<label class = 'col " + i + "' id = 'precept-button' for = '" +
+                course + "'>" + course + "</label>")
+              )
+            );
+          }
+        }
+
         schedule_data = data;
+        
+        var selectedCourses = $(".coursecomb." + comb_id).text();
+        selectedCourses = selectedCourses.split(",");
         $("div#selected-coursecomb").empty();
 
-        for (i = 0; i < all_courses.length; i++) {
-          var course = all_courses[i];
+        for (i = 0; i < selectedCourses.length; i++) {
+          var course = selectedCourses[i].trim();
           if (data[course] != "{}") {
             var temp = JSON.parse(data[course]);
             var precepts;
@@ -95,7 +112,6 @@
 /*            $(".col." + i).css("border", "1px solid " + precepts[0].color);*/
           }
         }
-
       }
     });
     
