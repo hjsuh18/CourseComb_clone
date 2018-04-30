@@ -118,7 +118,7 @@
         <label for="course-combinations-list">
           <b>Possible Schedules:</b>
         </label>
-        <div class = "combqueue">
+        <div class = "combqueue" id="combqueue">
           {% for i in combinations%}
           {{ i | safe}}
           {% endfor %}
