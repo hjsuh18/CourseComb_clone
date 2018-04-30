@@ -5,16 +5,18 @@
   var schedule_data;
   var section_types = ["L", "C", "S", "U", "B", "D", "E", "F", "P"]
 
-  // helper function
-  function contains(str1, str2) {
-    var i = 0;
-    while (i < str1.length && i < str2.length) {
-      if (str1.charAt(i) != str2.charAt(i)) {
-        return false;
+  // Save schedule
+  function saveSchedule() {
+    calendar_data = []
+    all_sources = $("#calendar").fullCalendar('getEventSources');
+    for (i = 0; i < all_sources.length; i++) { 
+      for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
+        calendar_data.append(all_sources[i]["rawEventDefs"][j]);
       }
-      i++;
     }
-    return true;
+    console.log(all_sources);
+    
+
   }
 
   // Click on a combination
