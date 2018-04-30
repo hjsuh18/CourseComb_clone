@@ -276,9 +276,7 @@ def home(request):
 def get_courses(request):
 	if request.is_ajax():
 		q = request.GET.get('term', '')
-		searchresults = Course.objects.annotate(
-			search=SearchVector('title', 'deptnum'),
-		).filter(search=q)
+		searchresults = Course.objects.filter(deptnum__icontains = q)
 		results = []
 		for result in searchresults:
 			course_json = {}
