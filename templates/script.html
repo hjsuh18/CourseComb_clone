@@ -71,9 +71,10 @@
         schedule_data = data;
         
         var selectedCourses = $(".coursecomb." + comb_id).text();
-        selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
+        // selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
         selectedCourses = selectedCourses.split(",");
         $("div#selected-coursecomb").empty();
+
 
         var classes = JSON.parse(JSON.parse(schedule_data["schedule"])["names"]);
         var j = 0;
