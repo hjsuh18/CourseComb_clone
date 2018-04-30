@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "##CD853F", "#B0C4DE"];
+  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#CD853F", "#B0C4DE"];
   var darkpalette  = ["#001f3f"];
   var csrfmiddlewaretoken = '{{ csrf_token }}';
   var schedule_data;
@@ -119,7 +119,7 @@
             j++;
             if (contains(course, temp.substring(0, temp.length-4))) {
               $(".col." + i).css("background-color", classes[j-1].color);
-              /*console.log(classes[j-1].color);*/
+              console.log(classes[j-1].color);
               break;
             }
           }
