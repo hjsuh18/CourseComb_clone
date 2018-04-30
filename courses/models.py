@@ -94,7 +94,6 @@ class Profile(models.Model):
 # Saves latest filter for a particular user
 class Filter(models.Model):
     user = models.OneToOneField(Profile, related_name='filter')
-    # SET THE DEFAULT AS 4 COURSES
     number_of_courses = models.SmallIntegerField(default=0)
     must_courses = ArrayField(models.TextField(), null=True)
     must_dept = ArrayField(models.TextField(), null=True)
@@ -102,7 +101,7 @@ class Filter(models.Model):
     max_dept = models.SmallIntegerField(default=-1)
     no_friday_class = models.BooleanField(default=False)
     no_evening_class = models.BooleanField(default=False)
-    ten_am = models.BooleanField(default=False)
+    after_ten_am = models.BooleanField(default=False)
     full = models.BooleanField(default=False)
     pdf = models.BooleanField(default=False)
 
@@ -116,6 +115,13 @@ class Combination(models.Model):
 
     def __str__(self):
         return self.course_combo
+
+# A user's favorite schedule
+class Favorite(models.Model):
+    user = models.ForeignKey(Profile, related_name='favorites')
+    # favorite_fields = ArrayField(ArrayField(models.TextField(), null=True), null=True)
+    favorite_fields = ArrayField(models.TextField(), null = True, unique = True)
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

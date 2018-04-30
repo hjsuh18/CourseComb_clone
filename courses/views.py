@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from .models import Course, Profile, Combination, Meeting, Filter
+from .models import Course, Profile, Combination, Meeting, Filter, Favorite
 from django.contrib.postgres.search import SearchVector
 import json, cgi, datetime
 from .cas import CASClient
@@ -65,7 +65,7 @@ def home(request):
 				'max_dept': int(d.get("max_dept")[0]),
 				'no_friday_class': (d.get("no_friday_class")[0] == 'true'),
 				'no_evening_class': (d.get("no_evening_class")[0] == 'true'),
-				'ten_am': (d.get("ten_am")[0] == 'true'),
+				'after_ten_am': (d.get("after_ten_am")[0] == 'true'),
 				'full': (d.get("full")[0] == 'true'),
 				'pdf': (d.get("pdf")[0] == 'true'),
 			}
@@ -83,6 +83,7 @@ def home(request):
 			# need to show an error message
 			responseobject = {}
 			return JsonResponse(responseobject)
+
 		registrar_combo = combine(course_list, course_num)
 
 		# if registrar_combo is None, render a message saying no combinations
@@ -136,7 +137,7 @@ def home(request):
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
-			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
+			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + "</div>")
 
 		responseobject = {'courses_com': json.dumps(response)}
 
@@ -171,7 +172,7 @@ def home(request):
 		full_filter = curr_profile.filter.full
 		no_friday_class = curr_profile.filter.no_friday_class
 		no_evening_class = curr_profile.filter.no_evening_class
-		ten_am = curr_profile.filter.ten_am
+		after_ten_am = curr_profile.filter.after_ten_am
 
 		comb_id = request.GET.get("comb_id", "")
 		comb = curr_profile.combinations.get(comb_id=comb_id)
@@ -210,7 +211,7 @@ def home(request):
 					continue
 				if no_evening_class and time_compare(datetime.time(19,00), m.end_time) == 1:
 					continue
-				if ten_am and time_compare(datetime.time(9,59), m.start_time) == -1:
+				if after_ten_am and time_compare(datetime.time(9,59), m.start_time) == -1:
 					continue
 				days = day_convert(m.days)
 				newdays = [i+1 for i, j in enumerate(days) if j == 1]
@@ -240,7 +241,7 @@ def home(request):
 						continue
 					if no_evening_class and time_compare(datetime.time(19,00), m.end_time) == 1:
 						continue
-					if ten_am and time_compare(datetime.time(9,59), m.start_time) == -1:
+					if after_ten_am and time_compare(datetime.time(9,59), m.start_time) == -1:
 						continue
 					days = day_convert(m.days)
 					newdays = [i+1 for i, j in enumerate(days) if j == 1]
@@ -260,7 +261,23 @@ def home(request):
 		comb_schedule['names'] = json.dumps(course_names, default = str)
 		responseobject['schedule'] = json.dumps(comb_schedule, default=str)
 		return JsonResponse(responseobject)	
-		
+	
+	elif 'save_schedule' in request.POST:
+		calendar = json.loads(request.POST.get("calendar_data", ""))
+		calendar_data = []
+		for i in calendar:
+			calendar_data.append(json.dumps(i))
+
+		curr_favorites = curr_profile.favorites.all()
+		responseobject = {}
+		try:
+			f = Favorite.objects.create(
+				user = curr_profile,
+				favorite_fields = calendar_data)
+			responseobject = {'message': 'Schedule successfully saved!'}
+		except:
+			responseobject = {'error': 'This schedule is already saved'}
+		return JsonResponse(responseobject)
 	else:
 		favorites = curr_profile.faves
 		favorites = favorites.split(",")
@@ -275,7 +292,7 @@ def home(request):
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
-			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + " <button type = 'button' class = 'btn btn-xs deletecomb' id = " + str(combination[i].comb_id) + "> x </button> </div>")
+			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + "</div>")
 
 		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs})
 
@@ -283,9 +300,7 @@ def home(request):
 def get_courses(request):
 	if request.is_ajax():
 		q = request.GET.get('term', '')
-		searchresults = Course.objects.annotate(
-			search=SearchVector('title', 'deptnum'),
-		).filter(search=q)
+		searchresults = Course.objects.filter(deptnum__icontains = q)
 		results = []
 		for result in searchresults:
 			course_json = {}

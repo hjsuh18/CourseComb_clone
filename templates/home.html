@@ -111,12 +111,13 @@
       <!-- FIRST COLUMN -->
       {% include 'course-search.html' %}
 
+
       <!-- SECOND COLUMN -->
       <div class = "col-xs-4 col-md-2" id="search-results">
         <label for="course-combinations-list">
           <b>Possible Schedules:</b>
         </label>
-        <div class = "combqueue">
+        <div class = "combqueue" id="combqueue">
           {% for i in combinations%}
           {{ i | safe}}
           {% endfor %}
@@ -128,6 +129,8 @@
         <label for="schedule-calendar">
           <b>Selected Schedule</b>
         </label>
+        <button class = "btn btn-primary" id = "save-schedule" onclick="saveSchedule();"> Save Schedule </button>
+        <span class = "save-schedule-message"> </span>
         <div id="calendar"> </div>
         <label for="precept-toggles">
           <b> Click to show precepts </b>

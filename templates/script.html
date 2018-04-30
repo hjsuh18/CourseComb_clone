@@ -5,16 +5,46 @@
   var schedule_data;
   var section_types = ["L", "C", "S", "U", "B", "D", "E", "F", "P"]
 
-  // helper function
-  function contains(str1, str2) {
-    var i = 0;
-    while (i < str1.length && i < str2.length) {
-      if (str1.charAt(i) != str2.charAt(i)) {
-        return false;
+  // Save schedule
+  function saveSchedule() {
+    console.log("hello");
+    calendar_data = []
+    all_sources = $("#calendar").fullCalendar('getEventSources');
+    for (i = 0; i < all_sources.length; i++) { 
+      for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
+        calendar_data.push(all_sources[i]["rawEventDefs"][j]);
       }
-      i++;
     }
-    return true;
+
+
+    if (calendar_data.length == 0) {
+      $(".save-schedule-message").append("Cannot save empty schedule");
+      $(".save-schedule-message").css("color", "red");
+    }
+    else {
+      var saveschedule_data = {
+        csrfmiddlewaretoken: csrfmiddlewaretoken,
+        save_schedule: 'save_schedule',
+        calendar_data: JSON.stringify(calendar_data)
+      };
+      $.ajax({
+        type: "POST",
+        url: '/',
+        data: saveschedule_data,
+        success: function(data) {
+          $(".save-schedule-message").empty();
+          if (data["message"]) {
+            $(".save-schedule-message").append(data["message"]);
+            $(".save-schedule-message").css("color", "green");
+          }
+          else if (data["error"]) {
+            $(".save-schedule-message").append(data["error"]);
+            $(".save-schedule-message").css("color", "red");
+          }      
+          }
+        });
+    }
+    
   }
 
   // Click on a combination
@@ -125,8 +155,8 @@
 
 
 
-  // Click the Filter button -> dynamically change the form
-  $('body').on('click', '.filter_button', function(e) {
+  // Make filter options pop up, change entries depending on course queue content
+  $('body').on('click', '.create_schedule', function(e) {
     e.preventDefault();
     var filter = {
       click_filter: 'click_filter',
@@ -198,9 +228,9 @@
       no_evening_class = true;
     }
 
-    var ten_am = false;
-    if ($('#ten-am').is(":checked")){
-      ten_am = true;
+    var after_ten_am = false;
+    if ($('#after-ten-am').is(":checked")){
+      after_ten_am = true;
     }
 
     var full = false;
@@ -221,7 +251,7 @@
       max_dept: max_dept,
       no_friday_class: no_friday_class,
       no_evening_class: no_evening_class,
-      ten_am: ten_am,
+      after_ten_am: after_ten_am,
       full: full,
       pdf: pdf,
       csrfmiddlewaretoken: csrfmiddlewaretoken
@@ -233,8 +263,8 @@
      data: createschedule_data,
      success: function(data) {
       var courses_com = JSON.parse(data["courses_com"]);
-      $("#search-results").empty();
-      $("#search-results").append(courses_com);
+      $("#combqueue").empty();
+      $("#combqueue").append(courses_com);
     },
     error: function(xhr, textStatus, errorThrown) {
       alert("some error");
