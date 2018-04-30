@@ -19,9 +19,21 @@ from .course_filter import filter_course
 lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#CD853F", "#B0C4DE"];
 darkpalette  = ["#001f3f"];
 
-# temporarily so that heroku problem can be identified
+# loads landing page
 def landing(request):
 	return render(request, 'landing.html')
+
+# loads about page
+def about(request):
+	return render(request, 'about.html')
+
+# loads feedback page
+def feedback(request):
+	return render(request, 'feedback.html')
+
+# loads feedback page
+def favorites(request):
+	return render(request, 'favorites.html')
 
 def home(request):
 	curr_profile = request.user.profile
@@ -294,15 +306,3 @@ def get_courses(request):
 	
 	mimetype = 'application/json'
 	return HttpResponse(data, mimetype)
-
-
-def login(request):
-	# return render(request, 'home.html')
-	C = CASClient()
-	auth_attempt = C.Authenticate(request.GET)
-	if "netid" in auth_attempt:  # Successfully authenticated.
-		return render(request, 'home.html')
-	elif "location" in auth_attempt:  # Redirect to CAS.
-		return HttpResponseRedirect(auth_attempt["location"])
-	else:  # This should never happen!
-		abort(500)

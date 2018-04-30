@@ -29,7 +29,7 @@
 
     $.ajax({
       type: "GET",
-      url: '/',
+      url: '/home/',
       data: coursecomb_data,
       success: function(data) {
         $("#calendar").fullCalendar('removeEventSources');
@@ -152,9 +152,6 @@
     }
   });
 
-
-
-
   // Make filter options pop up, change entries depending on course queue content
   $('body').on('click', '.create_schedule', function(e) {
     e.preventDefault();
@@ -164,7 +161,7 @@
     };
     $.ajax({
      type: "POST",
-     url: '/',
+     url: '/home/',
      data: filter,
     success: function(data) {
       var must_have_courses = JSON.parse(data["must_have_courses"]);
@@ -259,7 +256,7 @@
 
     $.ajax({
      type: "POST",
-     url: '/',
+     url: '/home/',
      data: createschedule_data,
      success: function(data) {
       var courses_com = JSON.parse(data["courses_com"]);
@@ -283,7 +280,7 @@
     };
     $.ajax({
      type: "POST",
-     url: '/',
+     url: '/home/',
      data: class_delete_data,
      success: function(data) {
       parent.remove();
@@ -313,7 +310,7 @@
         e.preventDefault();
         $.ajax({
           type: "POST",
-          url: '/',
+          url: '/home/',
           data: class_select_data,
           success: function(data) {
           if (data != {}) {

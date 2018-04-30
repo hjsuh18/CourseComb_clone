@@ -17,12 +17,15 @@ from django.conf.urls import url
 from django.contrib import admin
 from courses import views
 import django_cas_ng.views
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    url(r'^landing/$', views.landing, name='landing'),
-	url(r'^$', views.home, name='home'),
+    url(r'^$', views.landing, name='landing'),
+	url(r'^home/$', login_required(views.home)),
 	url(r'^api/get_courses/', views.get_courses, name='get_courses'),
-    url(r'^login/$', views.login, name='login'),
+    url(r'^favorites/', views.favorites, name='feedback'),
+    url(r'^about/', views.about, name='about'),
+    url(r'^feedback/', views.feedback, name='feedback'),
     url(r'^admin/', admin.site.urls),
     url(r'accounts/login/$', django_cas_ng.views.login, name='cas_ng_login'),
     url(r'accounts/logout/$', django_cas_ng.views.logout, name='cas_ng_logout',)
