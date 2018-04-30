@@ -3,6 +3,7 @@
   var darkpalette  = ["#001f3f"];
   var csrfmiddlewaretoken = '{{ csrf_token }}';
   var schedule_data;
+  var section_types = ["L", "C", "S", "U", "B", "D", "E", "F", "P"]
 
   // helper function
   function contains(str1, str2) {
@@ -95,7 +96,11 @@
       data: coursecomb_data,
       success: function(data) {
         $("#calendar").fullCalendar('removeEventSources');
-        $("#calendar").fullCalendar('addEventSource', JSON.parse(data["schedule"]));
+        all_courses = JSON.parse(JSON.parse(data["schedule"])["names"]);
+        for (k = 0; k < all_courses.length; k++) {
+          $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(data["schedule"])[all_courses[k]]));
+        }
+        
         schedule_data = data;
         
         var selectedCourses = $(".coursecomb." + comb_id).text();
@@ -103,11 +108,12 @@
         selectedCourses = selectedCourses.split(",");
         $("div#selected-coursecomb").empty();
 
-        var classes = JSON.parse(schedule_data["schedule"]);
+        var classes = JSON.parse(JSON.parse(schedule_data["schedule"])["names"]);
         var j = 0;
 
         for (i = 0; i < selectedCourses.length; i++) {
           var course = selectedCourses[i].trim();
+<<<<<<< HEAD
           $("div#selected-coursecomb").append(
             $("<div/>", {"class": "col"}).append(
               $("<input class = 'course-checkbox' type = 'checkbox' name = '" + course + "' id = '" + course + "'/>" + "<label class = 'col " + i + "' id = 'precept-button' for = '" +
@@ -122,7 +128,26 @@
               console.log(classes[j-1].color);
               break;
             }
+=======
+          if (schedule_data[course] != "{}") {
+            $("div#selected-coursecomb").append(
+              $("<div/>", {"class": "col"}).append(
+                $("<input class = 'course-checkbox' type = 'checkbox' name = '" + course + "' id = '" + course + "'/>" + "<label class = 'col " + i + "' id = 'precept-button' for = '" +
+                course + "'>" + course + "</label>")
+              )
+            );
+>>>>>>> 5e07f9891322def9be6955a1809865638286aea2
           }
+          
+          // while (j < classes.length) {
+          //   var temp = classes[j];
+          //   j++;
+          //   if (contains(course, temp.substring(0, temp.length-4))) {
+          //     $(".col." + i).css("background-color", classes[j-1].color);
+          //     /*console.log(classes[j-1].color);*/
+          //     break;
+          //   }
+          // }
         }
       }
     });
@@ -160,40 +185,40 @@
     }
   });
 
-  // precept checks
+  // Click on precept/labs/etc.
   $('div#selected-coursecomb').on('click', 'input[type=checkbox]', function() {
     all_sources = $("#calendar").fullCalendar('getEventSources');
-    // console.log(schedule_data);
     title = this.id;
     course_display = false;
     var course_remove;
     var precept_remove;
     for (i = 0; i < all_sources.length; i++) { 
-
-      if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title]))) {
-        course_display = true;
-        course_remove = all_sources[i]["rawEventDefs"];
-      } 
+      
+      for (j = 0; j < section_types.length; j++){
+        if (JSON.parse(schedule_data[title])[section_types[j]]) {
+          if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title])[section_types[j]])) {
+            course_display = true;
+            course_remove = all_sources[i]["rawEventDefs"];
+            $("#calendar").fullCalendar('removeEventSource', course_remove);
+          } 
+        }
+      }
       
       if (all_sources[i]["rawEventDefs"][0]["className"]) {
         if (all_sources[i]["rawEventDefs"][0]["className"].indexOf("selected_precept") != -1) {
           if (all_sources[i]["rawEventDefs"][0]["id"].split("-")[0] == title) {
             precept_remove = all_sources[i]["rawEventDefs"];
+            $("#calendar").fullCalendar('removeEventSource', precept_remove);
           }
         }
       }
-      // if (all_sources[i]["rawEventDefs"][0]["id"].split("-")[0] == title) {
-      //   console.log("true");
-      // }
     }
     if (course_display == false) {
-      $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[title]));
-      if (precept_remove) {
-        $("#calendar").fullCalendar('removeEventSource', precept_remove);
+      for (k = 0; k < section_types.length; k++) {
+        if (JSON.parse(schedule_data[title])[section_types[k]]) {
+          $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[title])[section_types[k]]);
+        }
       }
-    }
-    else {
-      $("#calendar").fullCalendar('removeEventSource', course_remove);
     }
   });
 
