@@ -120,7 +120,7 @@ class Combination(models.Model):
 class Favorite(models.Model):
     name = models.TextField(null = True)
     user = models.ForeignKey(Profile, related_name='favorites')
-    # favorite_fields = ArrayField(ArrayField(models.TextField(), null=True), null=True)
+    courses = models.TextField(null = True)
     favorite_fields = ArrayField(models.TextField(), null = True, unique = True)
 
 

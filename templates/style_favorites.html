@@ -1,0 +1,193 @@
+<style>
+
+  body {
+    margin: 0;
+    text-align: center;
+    background-color: #FFFFFF;
+  }
+
+  .navbar {
+    background: #ffb84d;
+  }
+
+  .container-fluid {
+    margin: 10px;
+    overflow: hidden;
+  }
+
+  #course-search {
+    position: relative;
+    border: 1px solid transparent;
+    font: 12px Arial;
+  }
+
+  .ui-widget {
+    position: relative;
+  }
+
+  .ui-widget input {
+    width: 100%;
+    height: 25px;
+    border: 1px solid #ffb84d;
+    border-radius: 5px;
+    font: 15px Arial;
+  }
+  
+  .aftersearch {
+    border: 1px solid #ffb84d;
+    font: 12px Arial;
+  }
+
+  .aftersearch .course-results:hover {
+    background-color: #ffb84d;
+  }
+
+  .coursequeue {
+    font: 12px Arial;
+  }
+
+  .createschedule {
+    position: relative;
+  }
+
+  ul.ui-autocomplete {
+    position: relative;
+    display: inline-block;
+    height: 280px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    font: 12px Arial;
+    list-style: none;
+    padding-left: 0;
+  }
+
+  #search-results {
+    font: 14px Arial;
+  }
+
+  .combqueue {
+    max-height: 700px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 10px 10px 0;
+    margin-bottom: 10px;
+  }
+
+  .coursecomb {
+    cursor: pointer;
+    border: 1px solid rgb(255, 184, 77);
+    border-radius: 5px;
+    font: 12px Arial;
+    background-color: rgb(255, 255, 255);
+    /*opacity: 0.5;*/
+    max-height: 700px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px 10px 10px 0;
+    margin-bottom: 10px;
+  }
+
+  div#selected-coursecomb {
+    position: relative;
+    margin-bottom: 0;
+  }
+
+  #calendar {
+    font: 12px Arial;
+    margin-bottom: 5px;
+  }
+
+  .course-checkbox {
+    display: none;
+  }
+
+  #precept-button {
+    color: black;
+    font-size: 12px;
+    opacity: 0.5;
+    transition: 0.8s;
+    cursor: pointer;
+    border-radius: 6px;
+    opacity: 0.5;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0;
+    padding: 5px;
+  }
+
+  .course-checkbox:checked + #precept-button {
+    opacity: 1;
+  }
+
+  .deleteclass {
+    float: right;
+    margin-top: 0;
+    margin-right: -10px;
+    cursor: pointer;
+    color: #fff;
+    border: 1px solid blue;
+    border-radius: 30px;
+    font: 10px Arial;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0;
+    padding: 5px 5px;
+  }
+
+  .deletecomb {
+    float: right;
+    margin-top: 0;
+    margin-right: -10px;
+    cursor: pointer;
+    color: #fff;
+    border: 1px solid blue;
+    border-radius: 30px;
+    font: 10px Arial;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0;
+    padding: 5px 5px;
+  }
+
+  .fc-agendaDay-view .fc-today { 
+    background: white !important; 
+  }
+
+  .precept_render {
+    opacity: 0.5;
+  }
+
+  .selected_precept {
+    opacity: 1;
+  }
+
+  .selected_class {
+    opacity: 1;
+  }
+
+  #calendar .fc-today {
+    background-color: #EBEBF5 !important;
+  }
+
+  #calendar .fc-content {
+    font: 12px Arial;
+  }
+
+  #calendar .fc-event {
+    /*box-shadow: 1px 1px 1px #706868;*/
+  }
+
+  #calendar .fc-agenda-axis, #calendar .fc-widget-header {
+    font-weight: normal;
+    padding: 3px;
+    border-radius: 3px;
+  }
+
+  .fa-arrow-alt-circle-right {
+    cursor: pointer;
+    font-size:20px;
+  }
+
+
+</style>
+

@@ -35,10 +35,15 @@ def feedback(request):
 def favorites(request):
 	curr_profile = request.user.profile
 	schedule_favorites = curr_profile.favorites.all()
+	favoriteobject = []
 	for i in schedule_favorites:
-		print i.name
-	
-	return render(request, 'favorites.html')
+		favorite = []
+		favorite.append(i.name)
+		favorite.append(i.courses)
+		favorite.append(i.favorite_fields)
+		favoriteobject.append(favorite)
+
+	return render(request, 'favorites.html', {"favorites": json.dumps(favoriteobject)})
 
 def home(request):
 	curr_profile = request.user.profile
@@ -278,6 +283,7 @@ def home(request):
 		# Favorite.objects.all().delete()
 
 		calendar_name = request.POST.get("calendar_name", "")
+		calendar_courses = request.POST.get("calendar_courses", "")
 		calendar = json.loads(request.POST.get("calendar_data", ""))
 		calendar_data = []
 		for i in calendar:
@@ -289,6 +295,7 @@ def home(request):
 			f = Favorite.objects.create(
 				user = curr_profile,
 				name = calendar_name,
+				courses = calendar_courses,
 				favorite_fields = calendar_data)
 			responseobject = {'message': 'Schedule successfully saved!'}
 		except:

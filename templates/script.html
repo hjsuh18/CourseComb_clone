@@ -9,6 +9,9 @@
       selector: '[data-toggle=tooltip]',
       size: '5px'
   });
+  // $(function () {
+  //   $('[data-toggle="tooltip"]').tooltip()
+  // })
 
   // Save schedule when pressed enter
   $(".save-schedule-message").on('keyup', '#schedule_name', function (e) {
@@ -21,6 +24,7 @@
   function saveSchedule () {
     calendar_data = []
     all_sources = $("#calendar").fullCalendar('getEventSources');
+   
     for (i = 0; i < all_sources.length; i++) { 
       for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
         calendar_data.push(all_sources[i]["rawEventDefs"][j]);
@@ -37,6 +41,7 @@
         csrfmiddlewaretoken: csrfmiddlewaretoken,
         save_schedule: 'save_schedule',
         calendar_name: $("#schedule_name").val(),
+        calendar_courses: JSON.parse(schedule_data["schedule"])["names"],
         calendar_data: JSON.stringify(calendar_data)
       };
       $.ajax({
@@ -61,8 +66,9 @@
   // Save schedule button is clicked
   function saveScheduleButton() {
     $(".save-schedule-message").empty();
-    new_element = "<input type='text' title = '(Optional) Name Your Schedule' id ='schedule_name'> <i class='far fa-arrow-alt-circle-right' onclick = 'saveSchedule();'></i>"
+    new_element = "<input type='text' data-delay = '0' data-toggle='tooltip' data-placement='top' title = '(Optional) Name Your Schedule' id ='schedule_name'> <i class='far fa-arrow-alt-circle-right' onclick = 'saveSchedule();'></i>"
     $(".save-schedule-message").append(new_element);
+    
   }
 
   // Click on a combination
