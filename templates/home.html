@@ -6,11 +6,13 @@
   <meta charset="utf-8">
   <title> CourseComb </title>
 
-  <!-- Bootstrap stylesheet CDN Version 4-->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
   <!-- JQuery  -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <!-- Bootstrap stylesheet CDN Version 4-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
   <!-- JQuery UI (for autocomplete) -->
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
@@ -23,86 +25,13 @@
   <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/fullcalendar.css' %}"/> 
   <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
 
-  <script>
-    $(function() {
-      $("#calendar").fullCalendar({
-        eventClick: function(calEvent, jsEvent, view) {
-          if (calEvent["className"].indexOf("precept_render") != -1) {
-            // for primary meeting
-            if (calEvent["className"].indexOf("primary") != -1) {
-              title = calEvent["id"].split("-")[0];
-              all_sources = $("#calendar").fullCalendar('getEventSources');
-              precepts_display = false;
-              
-              for (i = 0; i < all_sources.length; i++) { 
-                if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(JSON.parse(schedule_data["schedule"])[title]))) {
-                  precepts_display = true;
-                  var selected_precept;
-                  for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
-                    if (all_sources[i]["rawEventDefs"][j]["id"] == calEvent["id"]) {
-                      selected_precept = all_sources[i]["rawEventDefs"][j];
-                      temp = selected_precept["className"].split(" ");
-                      temp.push("selected_class");
-                      selected_precept["className"] = temp;
-                      selected_precept = [selected_precept];
-                    }
-                  }
-                  $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
-                  $("#calendar").fullCalendar('addEventSource', selected_precept);
-                } 
-              }
-              if (precepts_display == false) {
-                $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
-                $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(schedule_data["schedule"])[title]));
-              }
-            }
-            else {
-              title = calEvent["id"].split("-")[0];
-              section_type = calEvent["id"].split("-")[1][0];
-              all_sources = $("#calendar").fullCalendar('getEventSources');
-              precepts_display = false;
-              for (i = 0; i < all_sources.length; i++) { 
-                if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title])[section_type])) {
-                  precepts_display = true;
-                  var selected_precept;
-                  for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
-                    if (all_sources[i]["rawEventDefs"][j]["id"] == calEvent["id"]) {
-                      selected_precept = all_sources[i]["rawEventDefs"][j];
-                      temp = selected_precept["className"];
-                      selected_precept["className"] = [temp, "selected_precept"];
-                      selected_precept = [selected_precept];
-                    }
-                  }
-                  $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
-                  $("#calendar").fullCalendar('addEventSource', selected_precept);
-                } 
-              }
-              if (precepts_display == false) {
-                $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
-                $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[title])[section_type]);
-              }
-            }
-          }
-        },
-        defaultView: 'agendaWeek',
-        header: false,
-        columnHeaderFormat: 'ddd',
-        minTime: '08:0:00',
-        maxTime: '23:00:00',
-        // slotDuration: '00:30:00',
-        allDaySlot: false,
-        weekends: false,
-        contentHeight: 'auto',
-        eventOverlap: false,
-        aspectRatio: .5,
-        // slotMinutes: 30,
-        timeFromat: 'H:mm'
-        /*editable: true*/
-      })
-    });
-  </script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+
+  {% include 'calendar.html' %}
 
 </head>
+
 <body>
 
   {% include 'navbar.html' %}
@@ -117,21 +46,23 @@
       <!-- SECOND COLUMN -->
       <div class = "col-xs-4 col-md-2" id="search-results">
         <label for="course-combinations-list">
-          <b>Possible Schedules:</b>
+          <b>Possible Schedules: </b>
         </label>
         <div class = "combqueue" id="combqueue">
           {% for i in combinations%}
           {{ i | safe}}
           {% endfor %}
         </div>
+
       </div>
 
       <!-- THIRD COLUMN -->
       <div class = "col-xs-8 col-md-8 hidden">
         <label for="schedule-calendar">
-          <b>Selected Schedule</b>
+          <b>Selected Schedule</b> 
+
         </label>
-        <button class = "btn btn-primary" id = "save-schedule" onclick="saveSchedule();"> Save Schedule </button>
+        <button class = "btn btn-primary" id = "save-schedule" onclick="saveScheduleButton();"> Save Schedule </button>
         <span class = "save-schedule-message"> </span>
         <div id="calendar"> </div>
         <label for="precept-toggles">

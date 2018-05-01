@@ -1,0 +1,20 @@
+<script type="text/javascript">
+	var favorites = JSON.parse('{{ favorites | escapejs }}');
+	for (i = 0; i < favorites.length; i++) {
+		courses = JSON.parse(favorites[i][1]).join(", ");
+		string = '<div class = "coursecomb" id =' + i + '>' + favorites[i][0] + " (" + courses + ")" + "</div>"
+		$('.favorite-list').append(string);
+	}
+
+
+	$('.favorite-list').on('click', '.coursecomb', function () {
+		$("#calendar").fullCalendar('removeEventSources');
+	    events = favorites[this.id][2];
+	    eventSource = [];
+	    for (i = 0; i < events.length; i++) {
+			eventSource.push(JSON.parse(events[i]));
+		}
+		$("#calendar").fullCalendar('addEventSource', eventSource);
+	 });
+
+</script>
