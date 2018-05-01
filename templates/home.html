@@ -23,9 +23,13 @@
   <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/fullcalendar.css' %}"/> 
   <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
 
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+
   {% include 'calendar.html' %}
 
 </head>
+
 <body>
 
   {% include 'navbar.html' %}
@@ -40,21 +44,23 @@
       <!-- SECOND COLUMN -->
       <div class = "col-xs-4 col-md-2" id="search-results">
         <label for="course-combinations-list">
-          <b>Possible Schedules:</b>
+          <b>Possible Schedules: <span class="glyphicon glyphicon-arrow-right"></span></b>
         </label>
         <div class = "combqueue" id="combqueue">
           {% for i in combinations%}
           {{ i | safe}}
           {% endfor %}
         </div>
+
       </div>
 
       <!-- THIRD COLUMN -->
       <div class = "col-xs-8 col-md-8 hidden">
         <label for="schedule-calendar">
-          <b>Selected Schedule</b>
+          <b>Selected Schedule</b> 
+
         </label>
-        <button class = "btn btn-primary" id = "save-schedule" onclick="saveSchedule();"> Save Schedule </button>
+        <button class = "btn btn-primary" id = "save-schedule" onclick="saveScheduleButton();"> Save Schedule </button>
         <span class = "save-schedule-message"> </span>
         <div id="calendar"> </div>
         <label for="precept-toggles">

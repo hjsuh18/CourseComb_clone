@@ -5,9 +5,20 @@
   var schedule_data;
   var section_types = ["L", "C", "S", "U", "B", "D", "E", "F", "P"]
 
-  // Save schedule
-  function saveSchedule() {
-    console.log("hello");
+  $('body').tooltip({
+      selector: '[data-toggle=tooltip]',
+      size: '5px'
+  });
+
+  // Save schedule when pressed enter
+  $(".save-schedule-message").on('keyup', '#schedule_name', function (e) {
+    if (e.which == 13) {
+      saveSchedule();
+    }
+  });
+
+  // Save schedule when clicking on arrow
+  function saveSchedule () {
     calendar_data = []
     all_sources = $("#calendar").fullCalendar('getEventSources');
     for (i = 0; i < all_sources.length; i++) { 
@@ -16,8 +27,8 @@
       }
     }
 
-
     if (calendar_data.length == 0) {
+      $(".save-schedule-message").empty();
       $(".save-schedule-message").append("Cannot save empty schedule");
       $(".save-schedule-message").css("color", "red");
     }
@@ -25,6 +36,7 @@
       var saveschedule_data = {
         csrfmiddlewaretoken: csrfmiddlewaretoken,
         save_schedule: 'save_schedule',
+        calendar_name: $("#schedule_name").val(),
         calendar_data: JSON.stringify(calendar_data)
       };
       $.ajax({
@@ -44,12 +56,19 @@
           }
         });
     }
-    
+  }
+
+  // Save schedule button is clicked
+  function saveScheduleButton() {
+    $(".save-schedule-message").empty();
+    new_element = "<input type='text' title = '(Optional) Name Your Schedule' id ='schedule_name'> <i class='far fa-arrow-alt-circle-right' onclick = 'saveSchedule();'></i>"
+    $(".save-schedule-message").append(new_element);
   }
 
   // Click on a combination
   $('body').on('click', '.coursecomb', function (e) {
     e.preventDefault();
+    $(".save-schedule-message").empty();
     comb_id = $(this).attr("class").split(" ")[1];
     var coursecomb_data = {
       comb_click:'comb_click',
@@ -148,6 +167,7 @@
 
   // Click on precept/labs/etc.
   $('div#selected-coursecomb').on('click', 'input[type=checkbox]', function() {
+    $(".save-schedule-message").empty();
     all_sources = $("#calendar").fullCalendar('getEventSources');
     title = this.id;
     course_display = false;

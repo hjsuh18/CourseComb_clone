@@ -31,8 +31,13 @@ def about(request):
 def feedback(request):
 	return render(request, 'feedback.html')
 
-# loads feedback page
+# loads favorites page
 def favorites(request):
+	curr_profile = request.user.profile
+	schedule_favorites = curr_profile.favorites.all()
+	for i in schedule_favorites:
+		print i.name
+	
 	return render(request, 'favorites.html')
 
 def home(request):
@@ -268,6 +273,11 @@ def home(request):
 		return JsonResponse(responseobject)	
 	
 	elif 'save_schedule' in request.POST:
+		# Comment this in and comment all the below things out except return statement to delete all favorites
+		# responseobject = {}
+		# Favorite.objects.all().delete()
+
+		calendar_name = request.POST.get("calendar_name", "")
 		calendar = json.loads(request.POST.get("calendar_data", ""))
 		calendar_data = []
 		for i in calendar:
@@ -278,10 +288,12 @@ def home(request):
 		try:
 			f = Favorite.objects.create(
 				user = curr_profile,
+				name = calendar_name,
 				favorite_fields = calendar_data)
 			responseobject = {'message': 'Schedule successfully saved!'}
 		except:
 			responseobject = {'error': 'This schedule is already saved'}
+
 		return JsonResponse(responseobject)
 	else:
 		favorites = curr_profile.faves

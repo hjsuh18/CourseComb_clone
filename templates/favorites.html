@@ -5,9 +5,26 @@
 <head>
 
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title> CourseComb </title>
 
+  <!-- Bootstrap stylesheet CDN Version 4-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <!-- JQuery  -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <!-- JQuery UI (for autocomplete) -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+  <!-- Moment (for Calendar) -->
+  <script src="{% static 'moment.js' %}"></script>
+
+  <!-- FullCalendar -->
+  <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/fullcalendar.css' %}"/> 
+  <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
 
   <style type="text/css">
   body,
@@ -20,13 +37,50 @@
   }
 </style>
 
+<script>
+  $(function() {
+    $("#calendar").fullCalendar({
+      defaultView: 'agendaWeek',
+      header: false,
+      columnHeaderFormat: 'ddd',
+      minTime: '08:0:00',
+      maxTime: '23:00:00',
+        // slotDuration: '00:30:00',
+        allDaySlot: false,
+        weekends: false,
+        contentHeight: 'auto',
+        eventOverlap: false,
+        aspectRatio: .5,
+        // slotMinutes: 30,
+        timeFromat: 'H:mm'
+        /*editable: true*/
+      })
+  });
+</script>
+
 </head>
 
 <body>
-{% include 'navbar.html' %}
+  {% include 'navbar.html' %}
 
-<!-- Bootstrap Javascript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <div class = "row">
+    <div class = "col-md-4"> 
+
+    </div>
+    <div class = "col-md-8 hidden"> 
+
+        <label for="schedule-calendar">
+          <b>Selected Schedule</b>
+        </label>
+        <div id="calendar"> </div>
+        </div>
+
+    </div>
+
+
+ {% include 'style.html' %}
+  <!-- Bootstrap Javascript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 </body>
 
