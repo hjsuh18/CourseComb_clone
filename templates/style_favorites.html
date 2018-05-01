@@ -3,22 +3,22 @@
   body {
     margin: 0;
     text-align: center;
-    overflow: hidden;
     background-color: #FFFFFF;
   }
 
   .navbar {
     background: #ffb84d;
-    font-weight: 500;
   }
 
   .container-fluid {
-    margin-top: 10px;
+    margin: 10px;
+    overflow: hidden;
   }
 
   #course-search {
     position: relative;
-    font: 14px Arial;
+    border: 1px solid transparent;
+    font: 12px Arial;
   }
 
   .ui-widget {
@@ -27,14 +27,15 @@
 
   .ui-widget input {
     width: 100%;
-    height: 40px;
-    border: 1px solid #ffffff;
-    border-bottom: 1px solid black;
-    outline: none;
-    border-radius: 1px;
-    font: 18px Arial;
-    margin-bottom: 15px;
-    padding: 10px 10px 10px 10px;
+    height: 25px;
+    border: 1px solid #ffb84d;
+    border-radius: 5px;
+    font: 15px Arial;
+  }
+  
+  .aftersearch {
+    border: 1px solid #ffb84d;
+    font: 12px Arial;
   }
 
   .aftersearch .course-results:hover {
@@ -42,16 +43,7 @@
   }
 
   .coursequeue {
-    max-height: 250px;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  .refreshed-courses {
-    border: 1px solid rgb(255, 184, 77);
-    border-radius: 5px;
-    font: 13px Arial;
-    background-color: rgb(255, 255, 255);
-    padding: 10px 10px 10px 0;
+    font: 12px Arial;
   }
 
   .createschedule {
@@ -69,16 +61,16 @@
     padding-left: 0;
   }
 
-  .filter_button {
-    background-color: #ffb84d;
-  }
-
   #search-results {
     font: 14px Arial;
+  }
+
+  .combqueue {
     max-height: 700px;
     overflow-y: auto;
     overflow-x: hidden;
-    margin: 0;
+    padding: 0 10px 10px 0;
+    margin-bottom: 10px;
   }
 
   .coursecomb {
@@ -87,6 +79,10 @@
     border-radius: 5px;
     font: 12px Arial;
     background-color: rgb(255, 255, 255);
+    /*opacity: 0.5;*/
+    max-height: 700px;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 10px 10px 10px 0;
     margin-bottom: 10px;
   }
@@ -135,7 +131,7 @@
     font-weight: bold;
     display: inline-block;
     line-height: 0;
-    padding: 10px 5px;
+    padding: 5px 5px;
   }
 
   .deletecomb {
@@ -158,7 +154,6 @@
   }
 
   .precept_render {
-    cursor: pointer;
     opacity: 0.5;
   }
 

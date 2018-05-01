@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^$', views.landing, name='landing'),
 	url(r'^home/$', login_required(views.home)),
 	url(r'^api/get_courses/', views.get_courses, name='get_courses'),
-    url(r'^favorites/', views.favorites, name='feedback'),
+    url(r'^favorites/', views.favorites, name='favorites'),
     url(r'^about/', views.about, name='about'),
     url(r'^feedback/', views.feedback, name='feedback'),
     url(r'^admin/', admin.site.urls),
