@@ -1,10 +1,6 @@
 ERRORS
 
-Cross listed courses search doesn't quite work e.g. ORF 363
-
 Multiple tabs: should there be a different way of saving/rendering pages?
-
-Calendar changes when deleting a Course combination
 
 QUESTIONS:
 How do we update only parts of the database when periodically scraping for courses.
@@ -12,14 +8,6 @@ How do we update only parts of the database when periodically scraping for cours
 heroku scheduler, chronjob, 
 
 Discussion:
-Should we keep the course data for previous semesters?
-
-Search doesn't take into account the filters 
-
-Autocomplete doesn't work for some courses: e.g. FIN 501
-Seems like this is a cross-listed courses problem
-
-Must-have courses and must have departments reset after update filter: probably because I empty it in script.html
 
 HJ:
 Stretch goal: Scraping periodically, keeping track of class enrollment
