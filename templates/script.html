@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#CD853F", "#B0C4DE"];
+  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
   var darkpalette  = ["#001f3f"];
   var csrfmiddlewaretoken = '{{ csrf_token }}';
   var schedule_data;
@@ -43,7 +43,7 @@
       };
       $.ajax({
         type: "POST",
-        url: '/home/',
+        url: '/',
         data: saveschedule_data,
         success: function(data) {
           $(".save-schedule-message").empty();
@@ -72,7 +72,7 @@
 
   // Click on a combination
   $('body').on('click', '.coursecomb', function (e) {
-    e.preventDefault();
+     e.preventDefault();
     $(".save-schedule-message").empty();
     comb_id = $(this).attr("class").split(" ")[1];
     var coursecomb_data = {
@@ -80,7 +80,6 @@
       comb_id: comb_id
     };
     var classes;
-
     $.ajax({
       type: "GET",
       url: '/home/',
@@ -95,66 +94,36 @@
         schedule_data = data;
         
         var selectedCourses = $(".coursecomb." + comb_id).text();
-        // selectedCourses = selectedCourses.substring(0,selectedCourses.length-3);
         selectedCourses = selectedCourses.split(",");
         $("div#selected-coursecomb").empty();
 
-
-        var classes = JSON.parse(JSON.parse(schedule_data["schedule"])["names"]);
-        var j = 0;
-
         for (i = 0; i < selectedCourses.length; i++) {
           var course = selectedCourses[i].trim();
-          if (schedule_data[course] != "{}") {
+          if (data[course] != "{}") {
+            var temp = JSON.parse(data[course]);
+            var precepts;
             $("div#selected-coursecomb").append(
               $("<div/>", {"class": "col"}).append(
                 $("<input class = 'course-checkbox' type = 'checkbox' name = '" + course + "' id = '" + course + "'/>" + "<label class = 'col " + i + "' id = 'precept-button' for = '" +
                 course + "'>" + course + "</label>")
               )
             );
-          }
 
-          
-          while (j < classes.length) {
-            var temp = classes[j].title.trim();
-            j++;
-            if (contains(course, temp.substring(0, temp.length-4))) {
-              $(".col." + i).css("background-color", classes[j-1].color);
-              console.log(classes[j-1].color);
-              break;
+            precepts = temp.hasOwnProperty("C") ? temp["C"] : temp["P"];
+            /*if (temp.hasOwnProperty("C")) {
+              precepts = temp["C"];
             }
-          }          
-          
-          // while (j < classes.length) {
-          //   var temp = classes[j];
-          //   j++;
-          //   if (contains(course, temp.substring(0, temp.length-4))) {
-          //     $(".col." + i).css("background-color", classes[j-1].color);
-          //     /*console.log(classes[j-1].color);*/
-          //     break;
-          //   }
-          // }
+            else {
+              precepts = temp["P"];
+            }*/
+            $(".col." + i).css("background-color", precepts[0].color);
+/*            $(".col." + i).css("border", "1px solid " + precepts[0].color);*/
+          }
         }
       }
     });
     
     // second column highlighting
-/*    if ($(this).css("opacity") == "1") {
-      $(this).css("opacity", "0.5");
-    }
-    else {
-      $(".coursecomb").each(function () {
-        if ($(this).css("opacity") == "1") {
-          $(this).css("opacity", "0.5");
-        }
-      });
-      if ($(this).css("opacity") == "0.5") {
-        $(this).css("opacity", "1");
-      } 
-      else {
-        $(this).css("opacity", "0.5");
-      }
-    }*/
     if ($(this).css("background-color") == "rgb(255, 184, 77)") {
       $(this).css("background-color", "rgb(255, 255, 255)");
     }
@@ -208,6 +177,9 @@
     }
   });
 
+
+
+
   // Make filter options pop up, change entries depending on course queue content
   $('body').on('click', '.create_schedule', function(e) {
     e.preventDefault();
@@ -233,10 +205,8 @@
   // FOR ACTUAL FILTERING
   $('#filter').on('submit', function(e){
     e.preventDefault();
-
     // number of courses
     var x = $("#coursenum option:selected").text();
-
     // Must have courses
     var allCourses = [];
     $('.class-check:checked').each(function () {
@@ -248,7 +218,6 @@
     $('.dep-check:checked').each(function () {
         allDeps.push($(this).val());
     });
-
     // distribution filter
     var distribution = [];
     if ($('#ha').is(":checked"))
@@ -267,34 +236,27 @@
       distribution.push("LA");
     if ($('#qr').is(":checked"))
       distribution.push("QR");
-
     // max departmentals filter
     var max_dept = $("#max_dept option:selected").text();
-
     var no_friday_class = false;
     if ($('#no-friday-class').is(":checked")){
       no_friday_class = true;
     }
-
     var no_evening_class = false;
     if ($('#no-evening-class').is(":checked")){
       no_evening_class = true;
     }
-
     var after_ten_am = false;
     if ($('#after-ten-am').is(":checked")){
       after_ten_am = true;
     }
-
     var full = false;
     if ($('#full').is(":checked")){
       full = true;
     }
-
     var pdf = false;
     if ($('#pdf').is(":checked"))
       pdf = true;
-
     var createschedule_data = {
       searchresults: 'searchresults',
       number_of_courses: x,
@@ -309,7 +271,6 @@
       pdf: pdf,
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
-
     $.ajax({
      type: "POST",
      url: '/home/',
@@ -336,7 +297,7 @@
     };
     $.ajax({
      type: "POST",
-     url: '/home/',
+     url: '/',
      data: class_delete_data,
      success: function(data) {
       parent.remove();

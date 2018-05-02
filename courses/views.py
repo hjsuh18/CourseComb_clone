@@ -16,7 +16,7 @@ from time_compare import day_convert, time_compare
 from .course_filter import filter_course
 
 # colorsssssss
-lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#CD853F", "#B0C4DE"];
+lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
 darkpalette  = ["#001f3f"];
 
 # loads landing page
@@ -239,10 +239,10 @@ def home(request):
 				newdays = [i+1 for i, j in enumerate(days) if j == 1]
 				
 				if length > 1:
-					course_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10], 'className':
+					course_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%11], 'className':
 					'precept_render primary', 'id': course_title + "-" + m.section}
 				else:
-					course_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10]}
+					course_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%11]}
 				course_schedule_all.append(course_schedule)
 				
 			
@@ -267,10 +267,17 @@ def home(request):
 						continue
 					days = day_convert(m.days)
 					newdays = [i+1 for i, j in enumerate(days) if j == 1]
-					class_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%10], 'className':
+					class_schedule = {'title': course_title + " " + m.section, 'dow': newdays, 'start': m.start_time, 'end':m.end_time, 'color': lightpalette[int(registrar_id)%11], 'className':
 					'precept_render', 'id': course_title + "-" + m.section}
 					class_type = m.section[0]
 					course_classes[class_type].append(class_schedule)
+
+			empty_class = True
+			for class_type in class_types:
+				if course_classes[class_type] != []:
+					empty_class = False
+			if empty_class:
+				course_classes = {}
 			responseobject[course_title] = json.dumps(course_classes, default=str)
 
 		comb_schedule['names'] = json.dumps(course_names, default = str)
@@ -312,7 +319,7 @@ def home(request):
 		for i in favorites:
 			if (i != ''):
 				course = Course.objects.filter(registrar_id = i)
-				curr_faves.append("<div class = '" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-xs deleteclass' id = " + i + "> x </button> </div>") 
+				curr_faves.append("<div class = 'refreshed-courses " + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-xs deleteclass' id = " + i + "> x </button> </div>") 
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
