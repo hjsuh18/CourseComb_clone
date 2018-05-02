@@ -331,8 +331,8 @@
           if (data != {}) {
             var newclass = JSON.stringify(data["newclass"]);
             var newid = JSON.stringify(data["newid"]);
-            $(".aftersearch").append(
-              $("<div class = 'course-results " + newid + "''>" + JSON.parse(newclass) + "</div>").append(
+            $(".coursequeue").append(
+              $("<div class = 'refreshed-courses " + newid + "''>" + JSON.parse(newclass) + "</div>").append(
                 $("<button type = 'button' class = 'btn btn-xs deleteclass' id = " + newid + "> x </button>")
               )
             )
