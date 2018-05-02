@@ -36,8 +36,11 @@
     padding: 10px 10px 10px 10px;
   }
 
-  .aftersearch .course-results:hover {
-    background-color: #ffb84d;
+  .aftersearch .course-results {
+    border: 1px solid rgb(255, 184, 77);
+    font: 13px Arial;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 10px 10px 0;
   }
 
   .coursequeue {
@@ -45,12 +48,16 @@
     overflow-y: auto;
     overflow-x: hidden;
   }
-  .refreshed-courses {
+
+  .refreshed-courses::before {
     border: 1px solid rgb(255, 184, 77);
-    border-radius: 5px;
     font: 13px Arial;
     background-color: rgb(255, 255, 255);
     padding: 10px 10px 10px 0;
+  }
+
+  .refresh-courses:hover::after {
+    animation: sheen 1s forwards;
   }
 
   .createschedule {
@@ -93,6 +100,9 @@
   div#selected-coursecomb {
     position: relative;
     margin-bottom: 0;
+  }
+
+  #scheduling-col {
   }
 
   #calendar {

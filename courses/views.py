@@ -16,7 +16,7 @@ from time_compare import day_convert, time_compare
 from .course_filter import filter_course
 
 # colorsssssss
-lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
+lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#74b9ff", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
 darkpalette  = ["#001f3f"];
 
 # loads landing page
@@ -286,8 +286,8 @@ def home(request):
 	
 	elif 'save_schedule' in request.POST:
 		# Comment this in and comment all the below things out except return statement to delete all favorites
-		# responseobject = {}
-		# Favorite.objects.all().delete()
+		responseobject = {}
+		Favorite.objects.all().delete()
 
 		calendar_name = request.POST.get("calendar_name", "")
 		calendar_courses = request.POST.get("calendar_courses", "")

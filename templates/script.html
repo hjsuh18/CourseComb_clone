@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
+  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#74b9ff", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
   var darkpalette  = ["#001f3f"];
   var csrfmiddlewaretoken = '{{ csrf_token }}';
   var schedule_data;
@@ -79,7 +79,6 @@
       comb_click:'comb_click',
       comb_id: comb_id
     };
-    var classes;
     $.ajax({
       type: "GET",
       url: '/home/',
@@ -111,6 +110,7 @@
 
             precepts = temp.hasOwnProperty("C") ? temp["C"] : temp["P"];
             $(".col." + i).css("background-color", precepts[0].color);
+            console.log(precepts[0].color);
           }
         }
       }
@@ -181,18 +181,18 @@
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
     $.ajax({
-     type: "POST",
-     url: '/home/',
-     data: filter,
-    success: function(data) {
+      type: "POST",
+      url: '/home/',
+      data: filter,
+      success: function(data) {
       var must_have_courses = JSON.parse(data["must_have_courses"]);
       var must_have_departments = JSON.parse(data["must_have_departments"]);
       $("#must-have-courses").empty();
       $("#must-have-courses").append(must_have_courses);
       $("#must-have-departments").empty();
       $("#must-have-departments").append(must_have_departments);
-    }
-  });
+      }
+    });
   });
 
   // FOR ACTUAL FILTERING
@@ -265,18 +265,18 @@
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
     $.ajax({
-     type: "POST",
-     url: '/home/',
-     data: createschedule_data,
-     success: function(data) {
+      type: "POST",
+      url: '/home/',
+      data: createschedule_data,
+      success: function(data) {
       var courses_com = JSON.parse(data["courses_com"]);
       $("#combqueue").empty();
       $("#combqueue").append(courses_com);
-    },
-    error: function(xhr, textStatus, errorThrown) {
-      alert("some error");
-    }
-  });
+      },
+      error: function(xhr, textStatus, errorThrown) {
+        alert("some error");
+      }
+    });
   });
 
   // Delete a course
