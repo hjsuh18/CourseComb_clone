@@ -8,17 +8,16 @@
 
   .navbar {
     background: #ffb84d;
+    font-weight: 500;
   }
 
   .container-fluid {
-    margin: 10px;
-    overflow: hidden;
+    margin-top: 10px;
   }
 
   #course-search {
     position: relative;
-    border: 1px solid transparent;
-    font: 12px Arial;
+    font: 14px Arial;
   }
 
   .ui-widget {
@@ -27,15 +26,14 @@
 
   .ui-widget input {
     width: 100%;
-    height: 25px;
-    border: 1px solid #ffb84d;
-    border-radius: 5px;
-    font: 15px Arial;
-  }
-  
-  .aftersearch {
-    border: 1px solid #ffb84d;
-    font: 12px Arial;
+    height: 40px;
+    border: 1px solid #ffffff;
+    border-bottom: 1px solid black;
+    outline: none;
+    border-radius: 1px;
+    font: 18px Arial;
+    margin-bottom: 15px;
+    padding: 10px 10px 10px 10px;
   }
 
   .aftersearch .course-results:hover {
@@ -43,7 +41,16 @@
   }
 
   .coursequeue {
-    font: 12px Arial;
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .refreshed-courses {
+    border: 1px solid rgb(255, 184, 77);
+    border-radius: 5px;
+    font: 13px Arial;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 10px 10px 0;
   }
 
   .createschedule {
@@ -61,16 +68,16 @@
     padding-left: 0;
   }
 
-  #search-results {
-    font: 14px Arial;
+  .filter_button {
+    background-color: #ffb84d;
   }
 
-  .combqueue {
+  #search-results {
+    font: 14px Arial;
     max-height: 700px;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0 10px 10px 0;
-    margin-bottom: 10px;
+    margin: 0;
   }
 
   .coursecomb {
@@ -79,10 +86,6 @@
     border-radius: 5px;
     font: 12px Arial;
     background-color: rgb(255, 255, 255);
-    /*opacity: 0.5;*/
-    max-height: 700px;
-    overflow-y: auto;
-    overflow-x: hidden;
     padding: 10px 10px 10px 0;
     margin-bottom: 10px;
   }
@@ -131,22 +134,7 @@
     font-weight: bold;
     display: inline-block;
     line-height: 0;
-    padding: 5px 5px;
-  }
-
-  .deletecomb {
-    float: right;
-    margin-top: 0;
-    margin-right: -10px;
-    cursor: pointer;
-    color: #fff;
-    border: 1px solid blue;
-    border-radius: 30px;
-    font: 10px Arial;
-    font-weight: bold;
-    display: inline-block;
-    line-height: 0;
-    padding: 5px 5px;
+    padding: 10px 5px;
   }
 
   .fc-agendaDay-view .fc-today { 
@@ -188,6 +176,20 @@
     cursor: pointer;
     font-size:20px;
   }
+
+  .schedule-name-input {
+    border-radius: 25px;
+    border: 1px solid ;
+  }
+
+  .save-schedule-panel {
+    padding-bottom: 5px;
+  }
+
+  .btn:focus,.btn:active {
+   outline: none !important;
+   box-shadow: none;
+}
 
 
 </style>
