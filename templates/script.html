@@ -189,10 +189,13 @@
     success: function(data) {
       var must_have_courses = JSON.parse(data["must_have_courses"]);
       var must_have_departments = JSON.parse(data["must_have_departments"]);
+      var course_priority = JSON.parse(data["course_priority"]);
       $("#must-have-courses").empty();
       $("#must-have-courses").append(must_have_courses);
       $("#must-have-departments").empty();
       $("#must-have-departments").append(must_have_departments);
+      $("#course-priority").empty();
+      $("#course-priority").append(course_priority);
     }
   });
   });
@@ -310,7 +313,7 @@
         noResults: '',
         results: function() {}
       },
-      appendTo: '.aftersearch',
+      appendTo: '.course_search',
       select: function (e, ui) {
         // console.log(ui.item.value)
         var class_select_data = {

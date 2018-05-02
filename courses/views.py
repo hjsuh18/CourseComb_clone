@@ -173,6 +173,7 @@ def home(request):
 		response_course = []
 		departments = []
 		response_dept = []
+		response_priority = []
 		queue = curr_profile.faves.split(',')
 		for i in range(0, len(queue)):
 			if queue[i] is '':
@@ -182,14 +183,18 @@ def home(request):
 			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"	
 			response_course.append(temp_course)
 
+			# make form for course priority
+			temp_priority = "<select class= 'form-control-in-line' id=" + course + "-priority> "> + course + "  <option value='high'>High</option><option value='medium'>Medium</option><option value='low'>Low</option></select>"
+			response_priority.append(temp_priority)
+
 			# make form for must take departmentals
 			dept = course.split(' ')[0]
 			if dept not in departments:
 				departments.append(dept)
 				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
 				response_dept.append(temp_dept)
-						
-		responseobject = {'must_have_courses': json.dumps(response_course), 'must_have_departments': json.dumps(response_dept)}
+
+		responseobject = {'must_have_courses': json.dumps(response_course), 'must_have_departments': json.dumps(response_dept), 'course_priority': json.dumps(response_priority)}
 		return JsonResponse(responseobject)
 
 	# show schedule of selected combination
@@ -322,7 +327,7 @@ def home(request):
 		for i in favorites:
 			if (i != ''):
 				course = Course.objects.filter(registrar_id = i)
-				curr_faves.append("<div class = 'refreshed-courses " + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-xs deleteclass' id = " + i + "> x </button> </div>") 
+				curr_faves.append("<div class = 'refreshed-courses" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-xs deleteclass' id = " + i + "> x </button> </div>") 
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
