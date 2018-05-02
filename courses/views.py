@@ -289,15 +289,9 @@ def home(request):
 	
 	elif 'save_schedule' in request.POST:
 		# Comment this in and comment all the below things out except return statement to delete all favorites
-<<<<<<< HEAD
-		responseobject = {}
-		Favorite.objects.all().delete()
-
-=======
 		# responseobject = {}
 		# Favorite.objects.all().delete()
 		print "hello"
->>>>>>> 4f89d7799f83c215c024ad524ea2d1cd601d3447
 		calendar_name = request.POST.get("calendar_name", "")
 		calendar_courses = request.POST.get("calendar_courses", "")
 		calendar = json.loads(request.POST.get("calendar_data", ""))
