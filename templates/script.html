@@ -5,13 +5,10 @@
   var schedule_data;
   var section_types = ["L", "C", "S", "U", "B", "D", "E", "F", "P"]
 
+  // Activate tooltip
   $('body').tooltip({
-      selector: '[data-toggle=tooltip]',
-      size: '5px'
+      selector: '.schedule-name-input'
   });
-  // $(function () {
-  //   $('[data-toggle="tooltip"]').tooltip()
-  // })
 
   // Save schedule when pressed enter
   $(".save-schedule-message").on('keyup', '#schedule_name', function (e) {
@@ -65,8 +62,10 @@
 
   // Save schedule button is clicked
   function saveScheduleButton() {
+
     $(".save-schedule-message").empty();
-    new_element = "<input type='text' data-delay = '0' data-toggle='tooltip' data-placement='top' title = '(Optional) Name Your Schedule' id ='schedule_name'> <i class='far fa-arrow-alt-circle-right' onclick = 'saveSchedule();'></i>"
+    // new_element = '<button type="button" class="btn btn-secondary createdDiv" data-toggle="tooltip" data-placement="top" title="Tooltip on top"> Tooltip on top </button>'
+    new_element = "<input class = 'schedule-name-input' type='text' data-delay = '0' data-toggle='tooltip' data-placement='top' title = '(Optional) Name Your Schedule' id ='schedule_name'> <i class='far fa-arrow-alt-circle-right' onclick = 'saveSchedule();'></i>"
     $(".save-schedule-message").append(new_element);
     
   }
