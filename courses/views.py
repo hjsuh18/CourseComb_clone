@@ -21,7 +21,10 @@ darkpalette  = ["#001f3f"];
 
 # loads landing page
 def landing(request):
-	return render(request, 'landing.html')
+	if request.user.is_authenticated:
+		return HttpResponseRedirect('/home')
+	else:
+		return render(request, 'landing.html')
 
 # loads about page
 def about(request):
@@ -288,7 +291,7 @@ def home(request):
 		# Comment this in and comment all the below things out except return statement to delete all favorites
 		# responseobject = {}
 		# Favorite.objects.all().delete()
-
+		print "hello"
 		calendar_name = request.POST.get("calendar_name", "")
 		calendar_courses = request.POST.get("calendar_courses", "")
 		calendar = json.loads(request.POST.get("calendar_data", ""))
@@ -307,7 +310,7 @@ def home(request):
 			responseobject = {'message': 'Schedule successfully saved!'}
 		except:
 			responseobject = {'error': 'This schedule is already saved'}
-
+		print responseobject
 		return JsonResponse(responseobject)
 	else:
 		favorites = curr_profile.faves

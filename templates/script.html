@@ -46,6 +46,8 @@
         url: '/',
         data: saveschedule_data,
         success: function(data) {
+          console.log("Save");
+          console.log(data);
           $(".save-schedule-message").empty();
           if (data["message"]) {
             $(".save-schedule-message").append(data["message"]);
