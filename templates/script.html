@@ -43,9 +43,11 @@
       };
       $.ajax({
         type: "POST",
-        url: '/',
+        url: '/home/',
         data: saveschedule_data,
         success: function(data) {
+          console.log("Save");
+          console.log(data);
           $(".save-schedule-message").empty();
           if (data["message"]) {
             $(".save-schedule-message").append(data["message"]);
@@ -290,7 +292,7 @@
     };
     $.ajax({
      type: "POST",
-     url: '/',
+     url: '/home/',
      data: class_delete_data,
      success: function(data) {
       parent.remove();
