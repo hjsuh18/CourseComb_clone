@@ -110,14 +110,7 @@
             );
 
             precepts = temp.hasOwnProperty("C") ? temp["C"] : temp["P"];
-            /*if (temp.hasOwnProperty("C")) {
-              precepts = temp["C"];
-            }
-            else {
-              precepts = temp["P"];
-            }*/
             $(".col." + i).css("background-color", precepts[0].color);
-/*            $(".col." + i).css("border", "1px solid " + precepts[0].color);*/
           }
         }
       }
