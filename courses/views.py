@@ -61,8 +61,6 @@ def home(request):
 	curr_profile = request.user.profile
 	# add course to faves by registrar_id
 	if 'addclass' in request.POST:
-		# update previous_faves to current faves
-		curr_profile.previous_faves = curr_profile.faves
 		registrar_id = request.POST.get("registrar_id", "")
 		class_name = request.POST.get("class", "")
 		if registrar_id not in curr_profile.faves:
@@ -201,11 +199,14 @@ def home(request):
 		response_dept = []
 		response_priority = []
 		queue = curr_profile.faves.split(',')
-		# previous_queue = curr_profile.previous_faves
 
-		previous_must_courses = curr_profile.filter.must_courses
-		previous_course_priority = curr_profile.filter.priority
-		previous_must_dept = curr_profile.filter.must_dept
+		previous_must_courses = []
+		previous_course_priority = []
+		previous_must_dept = []
+		if hasattr(curr_profile, 'filter'):
+			previous_must_courses = curr_profile.filter.must_courses
+			previous_course_priority = curr_profile.filter.priority
+			previous_must_dept = curr_profile.filter.must_dept
 
 
 		for i in range(0, len(queue)):
@@ -217,6 +218,7 @@ def home(request):
 			temp_priority = ''
 
 			course = Course.objects.get(registrar_id=queue[i]).deptnum
+			course = course.split('/')[0]
 
 			# restore must course form value
 			if previous_must_courses != None and queue[i] in previous_must_courses:
@@ -250,9 +252,6 @@ def home(request):
 			response_course.append(temp_course)
 			response_priority.append(temp_priority)
 
-
-		# NEED AN IF STATEMENT TO CHECK THAT FILTER ALREADY EXISTS
-
 		responseobject = dict()
 		responseobject['must_have_courses'] = json.dumps(response_course)
 		responseobject['must_have_departments'] = json.dumps(response_dept)
@@ -277,9 +276,11 @@ def home(request):
 		response_priority = []
 		queue = curr_profile.faves.split(',')
 
-		must_courses = curr_profile.filter.must_courses
-		course_priority = curr_profile.filter.priority
-		must_dept = curr_profile.filter.must_dept
+		if hasattr(curr_profile, 'filter'):
+			curr_profile.filter.must_courses = []
+			curr_profile.filter.priority = []
+			curr_profile.filter.must_dept = []
+			curr_profile.filter.save()
 
 
 		for i in range(0, len(queue)):
@@ -287,6 +288,7 @@ def home(request):
 				continue
 
 			course = Course.objects.get(registrar_id=queue[i]).deptnum
+			course = course.split('/')[0]
 
 			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
 			response_course.append(temp_course)
