@@ -80,15 +80,6 @@
     margin: 0;
   }
 
-  .coursecomb {
-    cursor: pointer;
-    border: 1px solid rgb(255, 184, 77);
-    border-radius: 5px;
-    font: 12px Arial;
-    background-color: rgb(255, 255, 255);
-    padding: 10px 10px 10px 0;
-    margin-bottom: 10px;
-  }
 
   div#selected-coursecomb {
     position: relative;
@@ -200,6 +191,21 @@
   cursor: pointer;
 }
 
+.coursecomb {
+    cursor: pointer;
+    border: 1px solid rgb(255, 184, 77);
+    border-radius: 5px;
+    font: 12px Arial;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 10px 10px 0;
+    margin-bottom: 10px;
+    /* added to enable text overflow*/
+    text-overflow: ellipsis;
+    width:30vw;
+    white-space:nowrap;
+    display:inline-block;
+    overflow:hidden;
+  }
 
 </style>
 
