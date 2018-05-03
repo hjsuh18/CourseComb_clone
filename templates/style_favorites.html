@@ -80,15 +80,6 @@
     margin: 0;
   }
 
-  .coursecomb {
-    cursor: pointer;
-    border: 1px solid rgb(255, 184, 77);
-    border-radius: 5px;
-    font: 12px Arial;
-    background-color: rgb(255, 255, 255);
-    padding: 10px 10px 10px 0;
-    margin-bottom: 10px;
-  }
 
   div#selected-coursecomb {
     position: relative;
@@ -137,10 +128,6 @@
     padding: 10px 5px;
   }
 
-  .fc-agendaDay-view .fc-today { 
-    background: white !important; 
-  }
-
   .precept_render {
     cursor: pointer;
     opacity: 0.5;
@@ -155,7 +142,7 @@
   }
 
   #calendar .fc-today {
-    background-color: #EBEBF5 !important;
+    background-color: white !important;
   }
 
   #calendar .fc-content {
@@ -171,6 +158,7 @@
     padding: 3px;
     border-radius: 3px;
   }
+
 
   .fa-arrow-alt-circle-right {
     cursor: pointer;
@@ -200,6 +188,21 @@
   cursor: pointer;
 }
 
+.coursecomb {
+    cursor: pointer;
+    border: 1px solid rgb(255, 184, 77);
+    border-radius: 5px;
+    font: 12px Arial;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 10px 10px 0;
+    margin-bottom: 10px;
+    /* added to enable text overflow*/
+    text-overflow: ellipsis;
+    width:30vw;
+    white-space:nowrap;
+    display:inline-block;
+    overflow:hidden;
+  }
 
 </style>
 
