@@ -68,6 +68,7 @@ CAS_SERVER_URL= 'https://fed.princeton.edu/cas/'
 
 ROOT_URLCONF = 'coursecomb.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

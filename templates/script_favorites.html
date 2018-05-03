@@ -1,8 +1,9 @@
 <script type="text/javascript">
+	var csrfmiddlewaretoken = '{{ csrf_token }}';
 	var favorites = JSON.parse('{{ favorites | escapejs }}');
 	for (i = 0; i < favorites.length; i++) {
 		courses = JSON.parse(favorites[i][1]).join(", ");
-		string = '<div class = "coursecomb" id =' + i + '>' + favorites[i][0] + " (" + courses + ")" + "</div>"
+		string = '<div class = "coursecomb" id =' + i + '>' + favorites[i][0] + " (" + courses + ")" + '<button type="button" class="close delete-favorite" id="' + i + '"> &times;</button> </div>'
 		$('.favorite-list').append(string);
 	}
 
@@ -16,5 +17,25 @@
 		}
 		$("#calendar").fullCalendar('addEventSource', eventSource);
 	 });
+
+	// Delete a course
+	  $('.delete-favorite').on('click', function (e) {
+	    e.preventDefault();
+	    var parent = $(this).parent();
+	    events = favorites[this.id][2];
+	    var fav_delete_data = {
+	      deletefav: 'deletefav',
+	      fav_data: JSON.stringify(events),
+	      csrfmiddlewaretoken: csrfmiddlewaretoken
+	    };
+	    $.ajax({
+	     type: "POST",
+	     url: '/favorites/',
+	     data: fav_delete_data,
+	     success: function(data) {
+	      parent.remove();
+	    }
+	  });
+	  });
 
 </script>

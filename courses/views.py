@@ -36,17 +36,25 @@ def feedback(request):
 
 # loads favorites page
 def favorites(request):
+	# delete a favorited schedule
 	curr_profile = request.user.profile
-	schedule_favorites = curr_profile.favorites.all()
-	favoriteobject = []
-	for i in schedule_favorites:
-		favorite = []
-		favorite.append(i.name)
-		favorite.append(i.courses)
-		favorite.append(i.favorite_fields)
-		favoriteobject.append(favorite)
+	if 'deletefav' in request.POST:
+		fav_data = json.loads(request.POST.get("fav_data", ""))
+		fav_object = curr_profile.favorites.get(favorite_fields = fav_data)
+		fav_object.delete()
+		return JsonResponse({})
+	else:
+		
+		schedule_favorites = curr_profile.favorites.all()
+		favoriteobject = []
+		for i in schedule_favorites:
+			favorite = []
+			favorite.append(i.name)
+			favorite.append(i.courses)
+			favorite.append(i.favorite_fields)
+			favoriteobject.append(favorite)
 
-	return render(request, 'favorites.html', {"favorites": json.dumps(favoriteobject)})
+		return render(request, 'favorites.html', {"favorites": json.dumps(favoriteobject)})
 
 def home(request):
 	curr_profile = request.user.profile
