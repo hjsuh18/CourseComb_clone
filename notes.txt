@@ -1,7 +1,5 @@
 QUESTIONS:
-How do we update only parts of the database when periodically scraping for courses.
-(I think this already happens, if courseid same, just updates the changed fields)
-heroku scheduler, chronjob, 
+Database conflict with heroku scheduler
 
 Have Maximum # of courses in one department able to be blank, because rn the default is 1 and this is annoying
 There are grad courses between 4:30 and 7:30 e.g. FIN 501
@@ -9,5 +7,13 @@ There are grad courses between 4:30 and 7:30 e.g. FIN 501
 TBA classes?
 
 Clean Code:
+Think about errors that might come up if user does not have filter or course combinations initialized
+
 
 Clear combinations when there are no courses in the coursequeue and click on create my schedule
+
+Things to implement:
+Course link to registrar and course evaluations
+Enrollment to pop up when hovering over a precept
+Have number of courses in coursequeue and possible combinations to be shown in brackets
+Omit canceled classes?
