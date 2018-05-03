@@ -53,6 +53,8 @@ def home(request):
 	curr_profile = request.user.profile
 	# add course to faves by registrar_id
 	if 'addclass' in request.POST:
+		# update previous_faves to current faves
+		curr_profile.previous_faves = curr_profile.faves
 		registrar_id = request.POST.get("registrar_id", "")
 		class_name = request.POST.get("class", "")
 		if registrar_id not in curr_profile.faves:
@@ -197,6 +199,11 @@ def home(request):
 		response_dept = []
 		response_priority = []
 		queue = curr_profile.faves.split(',')
+		previous_queue = curr_profile.previous_faves.split(',')
+
+		common = set(queue) & set(previous_queue)
+
+
 		for i in range(0, len(queue)):
 			if queue[i] is '':
 				continue
@@ -218,14 +225,6 @@ def home(request):
 
 
 		# NEED AN IF STATEMENT TO CHECK THAT FILTER ALREADY EXISTS
-		# filter_distribution = curr_profile.filter.distribution
-		# filter_coursenum = curr_profile.filter.number_of_courses
-		# filter_maxdept = curr_profile.filter.must_dept
-		# filter_nofridayclass = curr_profile.filter.no_friday_class
-		# filter_noeveningclass = curr_profile.filter.no_evening_class
-		# filter_aftertenam = curr_profile.filter.after_ten_am
-		# filter_full = curr_profile.filter.full
-		# filter_pdf = curr_profile.filter.pdf
 
 		responseobject = dict()
 		responseobject['must_have_courses'] = json.dumps(response_course)

@@ -87,9 +87,10 @@ class Meeting(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique = True)
     faves = models.TextField()
+    previous_faves = models.TextField(default="")
     
     def __unicode__(self):
-        return "User: " + self.user.username + ", Favorites: " + self.faves
+        return "User: " + self.user.username + ", Favorites: " + self.faves + ", Previous Favorites: " + self.previous_faves
 
 # Saves latest filter for a particular user
 class Filter(models.Model):
@@ -128,7 +129,7 @@ class Favorite(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance, faves="")
+        Profile.objects.create(user=instance, faves="", previous_faves="")
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
