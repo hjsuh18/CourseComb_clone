@@ -1,24 +1,13 @@
-ERRORS
-
-Multiple tabs: should there be a different way of saving/rendering pages?
-
 QUESTIONS:
 How do we update only parts of the database when periodically scraping for courses.
 (I think this already happens, if courseid same, just updates the changed fields)
 heroku scheduler, chronjob, 
 
-Discussion:
-
-HJ:
-Stretch goal: Scraping periodically, keeping track of class enrollment
-
-When you refresh page, the filters get reset, but the saved filters in profile do not get reset
-Have Maximum # of courses in one department able to be black, because rn the default is 1 and this is annoying
+Have Maximum # of courses in one department able to be blank, because rn the default is 1 and this is annoying
 There are grad courses between 4:30 and 7:30 e.g. FIN 501
 
 TBA classes?
 
 Clean Code:
-Make it so that time filter is not an array of strings, but just separate boolean fileds
 
 Clear combinations when there are no courses in the coursequeue and click on create my schedule
