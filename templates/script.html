@@ -172,11 +172,6 @@
     }
   });
 
-
-
-
-
-
   // Make filter options pop up, change entries depending on course queue content
   $('body').on('click', '.reset_filter', function(e) {
     e.preventDefault();
@@ -218,17 +213,6 @@
     }
   });
   });
-
-
-
-
-
-
-
-
-
-
-
 
   // Make filter options pop up, change entries depending on course queue content
   $('body').on('click', '.create_schedule', function(e) {
@@ -391,9 +375,23 @@
      url: '/home/',
      data: createschedule_data,
      success: function(data) {
-      var courses_com = JSON.parse(data["courses_com"]);
+
       $("#combqueue").empty();
+
+      if (data["course_number"]) {
+        $("#combqueue").append(data["course_number"]);
+      }
+      else if (data["no_combo"]) {
+        $("#combqueue").append(data["no_combo"]);
+      }
+      else if (data["filter_restrict"]) {
+        $("#combqueue").append(data["filter_restrict"]);
+      }
+      else {
+      var courses_com = JSON.parse(data["courses_com"]);
       $("#combqueue").append(courses_com);
+    }
+
     },
     error: function(xhr, textStatus, errorThrown) {
       alert("some error");

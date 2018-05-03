@@ -112,9 +112,6 @@ def home(request):
 
 		priority = curr_profile.filter.priority
 
-		# if len(priority) % 2 != 0:
-		# 	print "priority length is odd"
-
 		high_priority = []
 		medium_priority = []
 		low_priority = []
@@ -136,12 +133,15 @@ def home(request):
 		course_num = curr_profile.filter.number_of_courses
 		if course_num > len(course_list):
 			# need to show an error message
-			responseobject = {}
+			responseobject = {'course_number': "You don't have enough courses in your course queue"}
 			return JsonResponse(responseobject)
 
 		registrar_combo = combine(course_list, course_num)
 
 		# if registrar_combo is None, render a message saying no combinations
+		if not registrar_combo:
+			responseobject = {'no_combo': "There are no possible combinations of your courses"}
+			return JsonResponse(responseobject)
 
 		# make course_combo array
 		course_combo = []
@@ -185,6 +185,10 @@ def home(request):
 			if combination[i].filtered == True:
 				continue
 			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + "</div>")
+
+		if not response:
+			responseobject = {'filter_restrict': 'Your filters are too restrictive. There are no possible combinations for your filter settings.'}
+			return JsonResponse(responseobject)
 
 		responseobject = {'courses_com': json.dumps(response)}
 
