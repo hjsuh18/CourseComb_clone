@@ -197,30 +197,32 @@
 
       // load the saved filter distributions
       var filter_distribution = JSON.parse(data['filter_distribution']);
-      for (a = 0; a < filter_distribution.length; a++) {
-        if (filter_distribution[a].localeCompare("HA") == 0){
-          $("#ha").prop('checked', true);
-        }
-        else if (filter_distribution[a].localeCompare("SA") == 0){
-          $("#sa").prop('checked', true);
-        }
-        else if (filter_distribution[a].localeCompare("STL") == 0){
-          $("#stl").prop('checked', true);
-        }
-        else if (filter_distribution[a].localeCompare("STN") == 0){
-          $("#stn").prop('checked', true);
-        }
-        else if (filter_distribution[a].localeCompare("EC") == 0){
-          $("#ec").prop('checked', true);
-        }
-        else if (filter_distribution[a].localeCompare("EM") == 0){
-          $("#em").prop('checked', true);
-        }
-        else if (filter_distribution[a].localeCompare("LA") == 0){
-          $("#la").prop('checked', true);
-        }
-        else if (filter_distribution[a].localeCompare("QR") == 0){
-          $("#qr").prop('checked', true);
+      if (filter_distribution != null){
+        for (a = 0; a < filter_distribution.length; a++) {
+          if (filter_distribution[a].localeCompare("HA") == 0){
+            $("#ha").prop('checked', true);
+          }
+          else if (filter_distribution[a].localeCompare("SA") == 0){
+            $("#sa").prop('checked', true);
+          }
+          else if (filter_distribution[a].localeCompare("STL") == 0){
+            $("#stl").prop('checked', true);
+          }
+          else if (filter_distribution[a].localeCompare("STN") == 0){
+            $("#stn").prop('checked', true);
+          }
+          else if (filter_distribution[a].localeCompare("EC") == 0){
+            $("#ec").prop('checked', true);
+          }
+          else if (filter_distribution[a].localeCompare("EM") == 0){
+            $("#em").prop('checked', true);
+          }
+          else if (filter_distribution[a].localeCompare("LA") == 0){
+            $("#la").prop('checked', true);
+          }
+          else if (filter_distribution[a].localeCompare("QR") == 0){
+            $("#qr").prop('checked', true);
+          }
         }
       }
       

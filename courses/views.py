@@ -109,13 +109,11 @@ def home(request):
 			)
 
 		ids = curr_profile.faves.split(',')
-		print 'curr profile', curr_profile.faves
-		print 'priority filter ', curr_profile.filter.priority
 
 		priority = curr_profile.filter.priority
 
-		if len(priority) % 2 != 0:
-			print "priority length is odd"
+		# if len(priority) % 2 != 0:
+		# 	print "priority length is odd"
 
 		high_priority = []
 		medium_priority = []
@@ -199,29 +197,54 @@ def home(request):
 		response_dept = []
 		response_priority = []
 		queue = curr_profile.faves.split(',')
-		previous_queue = curr_profile.previous_faves.split(',')
+		# previous_queue = curr_profile.previous_faves
 
-		common = set(queue) & set(previous_queue)
+		previous_must_courses = curr_profile.filter.must_courses
+		previous_course_priority = curr_profile.filter.priority
+		previous_must_dept = curr_profile.filter.must_dept
 
 
 		for i in range(0, len(queue)):
 			if queue[i] is '':
 				continue
-			# make form for must take courses
+			
+			temp_course = ''
+			temp_dept = ''
+			temp_priority = ''
+
 			course = Course.objects.get(registrar_id=queue[i]).deptnum
-			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"	
-			response_course.append(temp_course)
 
-			# make form for course priority
-			temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
-			response_priority.append(temp_priority)
+			# restore must course form value
+			if previous_must_courses != None and queue[i] in previous_must_courses:
+				temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + " checked></label>"
+			else:
+				temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
 
-			# make form for must take departmentals
+			# restore course priority value
+			if previous_course_priority != None and queue[i] in previous_course_priority:
+				x = previous_course_priority.index(queue[i])
+				p = int(previous_course_priority[x + 1])
+				if p == 1:
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option selected='selected' value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+				elif p == 2:
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option selected='selected' value='2'>Medium</option><option value='3'>High</option></select>"
+				else:
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option selected='selected' value='3'>High</option></select>"
+			else:
+				temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+
+			# restore must dept form value
 			dept = course.split(' ')[0]
 			if dept not in departments:
 				departments.append(dept)
+			if previous_must_dept != None and dept in previous_must_dept:
+				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + " checked></label>"
+			else:
 				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
-				response_dept.append(temp_dept)
+					
+			response_course.append(temp_course)
+			response_dept.append(temp_dept)
+			response_priority.append(temp_priority)
 
 
 		# NEED AN IF STATEMENT TO CHECK THAT FILTER ALREADY EXISTS
@@ -373,7 +396,7 @@ def home(request):
 		for i in favorites:
 			if (i != ''):
 				course = Course.objects.filter(registrar_id = i)
-				curr_faves.append("<div class = 'refreshed-courses" + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-xs deleteclass' id = " + i + "> x </button> </div>") 
+				curr_faves.append("<div class = 'refreshed-courses " + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-xs deleteclass' id = " + i + "> x </button> </div>") 
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
