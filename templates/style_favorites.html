@@ -1,6 +1,6 @@
 <style>
 
-  body {
+    body {
     margin: 0;
     text-align: center;
     background-color: #FFFFFF;
@@ -8,17 +8,16 @@
 
   .navbar {
     background: #ffb84d;
+    font-weight: 500;
   }
 
   .container-fluid {
-    margin: 10px;
-    overflow: hidden;
+    margin-top: 10px;
   }
 
   #course-search {
     position: relative;
-    border: 1px solid transparent;
-    font: 12px Arial;
+    font: 14px Arial;
   }
 
   .ui-widget {
@@ -27,15 +26,14 @@
 
   .ui-widget input {
     width: 100%;
-    height: 25px;
-    border: 1px solid #ffb84d;
-    border-radius: 5px;
-    font: 15px Arial;
-  }
-  
-  .aftersearch {
-    border: 1px solid #ffb84d;
-    font: 12px Arial;
+    height: 40px;
+    border: 1px solid #ffffff;
+    border-bottom: 1px solid black;
+    outline: none;
+    border-radius: 1px;
+    font: 18px Arial;
+    margin-bottom: 15px;
+    padding: 10px 10px 10px 10px;
   }
 
   .aftersearch .course-results:hover {
@@ -43,7 +41,16 @@
   }
 
   .coursequeue {
-    font: 12px Arial;
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .refreshed-courses {
+    border: 1px solid rgb(255, 184, 77);
+    border-radius: 5px;
+    font: 13px Arial;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 10px 10px 0;
   }
 
   .createschedule {
@@ -61,31 +68,18 @@
     padding-left: 0;
   }
 
+  .filter_button {
+    background-color: #ffb84d;
+  }
+
   #search-results {
     font: 14px Arial;
-  }
-
-  .combqueue {
     max-height: 700px;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0 10px 10px 0;
-    margin-bottom: 10px;
+    margin: 0;
   }
 
-  .coursecomb {
-    cursor: pointer;
-    border: 1px solid rgb(255, 184, 77);
-    border-radius: 5px;
-    font: 12px Arial;
-    background-color: rgb(255, 255, 255);
-    /*opacity: 0.5;*/
-    max-height: 700px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 10px 10px 10px 0;
-    margin-bottom: 10px;
-  }
 
   div#selected-coursecomb {
     position: relative;
@@ -131,29 +125,11 @@
     font-weight: bold;
     display: inline-block;
     line-height: 0;
-    padding: 5px 5px;
-  }
-
-  .deletecomb {
-    float: right;
-    margin-top: 0;
-    margin-right: -10px;
-    cursor: pointer;
-    color: #fff;
-    border: 1px solid blue;
-    border-radius: 30px;
-    font: 10px Arial;
-    font-weight: bold;
-    display: inline-block;
-    line-height: 0;
-    padding: 5px 5px;
-  }
-
-  .fc-agendaDay-view .fc-today { 
-    background: white !important; 
+    padding: 10px 5px;
   }
 
   .precept_render {
+    cursor: pointer;
     opacity: 0.5;
   }
 
@@ -166,7 +142,7 @@
   }
 
   #calendar .fc-today {
-    background-color: #EBEBF5 !important;
+    background-color: white !important;
   }
 
   #calendar .fc-content {
@@ -183,16 +159,50 @@
     border-radius: 3px;
   }
 
+
   .fa-arrow-alt-circle-right {
     cursor: pointer;
     font-size:20px;
   }
 
+  /* Specific to favorites */
   .favorite-list {
     padding-top: 15px;
     padding-left: 30px;
   }
 
+  .close {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 18px;
+  color: red;
+  text-shadow: 0 1px 0 #ffffff;
+  filter: alpha(opacity=20);
+  text-decoration: none;
+}
+.close:hover {
+  color: #000000;
+  text-decoration: none;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+  cursor: pointer;
+}
+
+.coursecomb {
+    cursor: pointer;
+    border: 1px solid rgb(255, 184, 77);
+    border-radius: 5px;
+    font: 12px Arial;
+    background-color: rgb(255, 255, 255);
+    padding: 10px 10px 10px 0;
+    margin-bottom: 10px;
+    /* added to enable text overflow*/
+    text-overflow: ellipsis;
+    width:30vw;
+    white-space:nowrap;
+    display:inline-block;
+    overflow:hidden;
+  }
 
 </style>
 

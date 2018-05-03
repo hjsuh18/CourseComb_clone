@@ -9,6 +9,7 @@ from django.contrib.postgres.search import SearchVector
 import json, cgi, datetime
 from .cas import CASClient
 from django.urls import resolve
+from collections import OrderedDict
 
 from combination import combine
 from time_compare import day_convert, time_compare
@@ -36,17 +37,25 @@ def feedback(request):
 
 # loads favorites page
 def favorites(request):
+	# delete a favorited schedule
 	curr_profile = request.user.profile
-	schedule_favorites = curr_profile.favorites.all()
-	favoriteobject = []
-	for i in schedule_favorites:
-		favorite = []
-		favorite.append(i.name)
-		favorite.append(i.courses)
-		favorite.append(i.favorite_fields)
-		favoriteobject.append(favorite)
+	if 'deletefav' in request.POST:
+		fav_data = json.loads(request.POST.get("fav_data", ""))
+		fav_object = curr_profile.favorites.get(favorite_fields = fav_data)
+		fav_object.delete()
+		return JsonResponse({})
+	else:
+		
+		schedule_favorites = curr_profile.favorites.all()
+		favoriteobject = []
+		for i in schedule_favorites:
+			favorite = []
+			favorite.append(i.name)
+			favorite.append(i.courses)
+			favorite.append(i.favorite_fields)
+			favoriteobject.append(favorite)
 
-	return render(request, 'favorites.html', {"favorites": json.dumps(favoriteobject)})
+		return render(request, 'favorites.html', {"favorites": json.dumps(favoriteobject)})
 
 def home(request):
 	curr_profile = request.user.profile
@@ -87,6 +96,7 @@ def home(request):
 				'must_courses': d.get("courses[]"),
 				'must_dept': d.get("depts[]"),
 				'distribution': d.get("distribution[]"),
+				'priority': d.get("priority[]"),
 				'max_dept': int(d.get("max_dept")[0]),
 				'no_friday_class': (d.get("no_friday_class")[0] == 'true'),
 				'no_evening_class': (d.get("no_evening_class")[0] == 'true'),
@@ -97,21 +107,39 @@ def home(request):
 			)
 
 		ids = curr_profile.faves.split(',')
-		course_list = []
+
+		priority = curr_profile.filter.priority
+
+		high_priority = []
+		medium_priority = []
+		low_priority = []
 		for i in ids:
 			if (i != ''):
+				# p is 1, 2 or 3 depending on priority of course i
+				# 1 is low priority, 3 is high priority
+				p = int(priority[priority.index(i) + 1])
 				course = Course.objects.get(registrar_id=i)
-				course_list.append(course)
+				if p == 1:
+					low_priority.append(course)
+				elif p == 2:
+					medium_priority.append(course)
+				else:
+					high_priority.append(course)
+
+		course_list = high_priority + medium_priority + low_priority
 		
 		course_num = curr_profile.filter.number_of_courses
 		if course_num > len(course_list):
 			# need to show an error message
-			responseobject = {}
+			responseobject = {'course_number': "You don't have enough courses in your course queue"}
 			return JsonResponse(responseobject)
 
 		registrar_combo = combine(course_list, course_num)
 
 		# if registrar_combo is None, render a message saying no combinations
+		if not registrar_combo:
+			responseobject = {'no_combo': "There are no possible combinations of your courses"}
+			return JsonResponse(responseobject)
 
 		# make course_combo array
 		course_combo = []
@@ -145,14 +173,6 @@ def home(request):
 				filtered = False,
 				)
 			c.save()
-			# possibly need to keep a count of the total number of combination created
-
-		# apply the filters currently stored to profile
-		# if hasattr(curr_profile, 'filter'):
-		# 	filter_course(curr_profile)
-		# else:
-		# 	f = Filter.objects.create(user = curr_profile)
-
 
 		filter_course(curr_profile)
 
@@ -164,6 +184,10 @@ def home(request):
 				continue
 			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + "</div>")
 
+		if not response:
+			responseobject = {'filter_restrict': 'Your filters are too restrictive. There are no possible combinations for your filter settings.'}
+			return JsonResponse(responseobject)
+
 		responseobject = {'courses_com': json.dumps(response)}
 
 		return JsonResponse(responseobject)
@@ -173,24 +197,119 @@ def home(request):
 		response_course = []
 		departments = []
 		response_dept = []
+		response_priority = []
 		queue = curr_profile.faves.split(',')
+
+		previous_must_courses = []
+		previous_course_priority = []
+		previous_must_dept = []
+		if hasattr(curr_profile, 'filter'):
+			previous_must_courses = curr_profile.filter.must_courses
+			previous_course_priority = curr_profile.filter.priority
+			previous_must_dept = curr_profile.filter.must_dept
+
+
 		for i in range(0, len(queue)):
 			if queue[i] is '':
 				continue
-			# make form for must take courses
+			
+			temp_course = ''
+			temp_dept = ''
+			temp_priority = ''
+
 			course = Course.objects.get(registrar_id=queue[i]).deptnum
-			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"	
+			course = course.split('/')[0]
+
+			# restore must course form value
+			if previous_must_courses != None and queue[i] in previous_must_courses:
+				temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + " checked></label>"
+			else:
+				temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
+
+			# restore course priority value
+			if previous_course_priority != None and queue[i] in previous_course_priority:
+				x = previous_course_priority.index(queue[i])
+				p = int(previous_course_priority[x + 1])
+				if p == 1:
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option selected='selected' value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+				elif p == 2:
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option selected='selected' value='2'>Medium</option><option value='3'>High</option></select>"
+				else:
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option selected='selected' value='3'>High</option></select>"
+			else:
+				temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+
+			# restore must dept form value
+			dept = course.split(' ')[0]
+			if dept not in departments:
+				departments.append(dept)
+				if previous_must_dept != None and dept in previous_must_dept:
+					temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + " checked></label>"
+				else:
+					temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
+				response_dept.append(temp_dept)
+			
+			response_course.append(temp_course)
+			response_priority.append(temp_priority)
+
+		responseobject = dict()
+		responseobject['must_have_courses'] = json.dumps(response_course)
+		responseobject['must_have_departments'] = json.dumps(response_dept)
+		responseobject['course_priority'] = json.dumps(response_priority)
+		responseobject['filter_coursenum'] = curr_profile.filter.number_of_courses
+		responseobject['filter_distribution'] = json.dumps(curr_profile.filter.distribution)
+		responseobject['filter_maxdept'] = curr_profile.filter.max_dept
+		responseobject['filter_nofridayclass'] = curr_profile.filter.no_friday_class
+		responseobject['filter_noeveningclass'] = curr_profile.filter.no_evening_class
+		responseobject['filter_aftertenam'] = curr_profile.filter.after_ten_am
+		responseobject['filter_full'] = curr_profile.filter.full
+		responseobject['filter_pdf'] = curr_profile.filter.pdf
+
+		return JsonResponse(responseobject)
+
+
+	# user clicks on the filter button on main page
+	elif 'reset_filter' in request.POST:
+		response_course = []
+		departments = []
+		response_dept = []
+		response_priority = []
+		queue = curr_profile.faves.split(',')
+
+		if hasattr(curr_profile, 'filter'):
+			curr_profile.filter.must_courses = []
+			curr_profile.filter.priority = []
+			curr_profile.filter.must_dept = []
+			curr_profile.filter.save()
+
+
+		for i in range(0, len(queue)):
+			if queue[i] is '':
+				continue
+
+			course = Course.objects.get(registrar_id=queue[i]).deptnum
+			course = course.split('/')[0]
+
+			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
 			response_course.append(temp_course)
 
-			# make form for must take departmentals
+			temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+			response_priority.append(temp_priority)
+
 			dept = course.split(' ')[0]
 			if dept not in departments:
 				departments.append(dept)
 				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
 				response_dept.append(temp_dept)
-						
-		responseobject = {'must_have_courses': json.dumps(response_course), 'must_have_departments': json.dumps(response_dept)}
+
+		# NEED AN IF STATEMENT TO CHECK THAT FILTER ALREADY EXISTS
+		responseobject = dict()
+		responseobject['must_have_courses'] = json.dumps(response_course)
+		responseobject['must_have_departments'] = json.dumps(response_dept)
+		responseobject['course_priority'] = json.dumps(response_priority)
+
 		return JsonResponse(responseobject)
+
 
 	# show schedule of selected combination
 	elif 'comb_click' in request.GET:
@@ -291,7 +410,7 @@ def home(request):
 		# Comment this in and comment all the below things out except return statement to delete all favorites
 		# responseobject = {}
 		# Favorite.objects.all().delete()
-		print "hello"
+		# print "hello"
 		calendar_name = request.POST.get("calendar_name", "")
 		calendar_courses = request.POST.get("calendar_courses", "")
 		calendar = json.loads(request.POST.get("calendar_data", ""))
@@ -310,7 +429,7 @@ def home(request):
 			responseobject = {'message': 'Schedule successfully saved!'}
 		except:
 			responseobject = {'error': 'This schedule is already saved'}
-		print responseobject
+		# print responseobject
 		return JsonResponse(responseobject)
 	else:
 		favorites = curr_profile.faves

@@ -98,6 +98,7 @@ class Filter(models.Model):
     must_courses = ArrayField(models.TextField(), null=True)
     must_dept = ArrayField(models.TextField(), null=True)
     distribution = ArrayField(models.TextField(), null=True)
+    priority = ArrayField(models.TextField(), null=True)
     max_dept = models.SmallIntegerField(default=-1)
     no_friday_class = models.BooleanField(default=False)
     no_evening_class = models.BooleanField(default=False)

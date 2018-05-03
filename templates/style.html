@@ -4,7 +4,10 @@
     margin: 0;
     text-align: center;
     background-color: #FFFFFF;
+    height: 100%;
+/*    overflow: hidden;*/
   }
+
 
   .navbar {
     background: #ffb84d;
@@ -13,11 +16,14 @@
 
   .container-fluid {
     margin-top: 10px;
+/*    height:500px;*/
+    overflow:hidden;
   }
 
   #course-search {
     position: relative;
-    font: 14px Arial;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
   }
 
   .ui-widget {
@@ -31,7 +37,8 @@
     border-bottom: 1px solid black;
     outline: none;
     border-radius: 1px;
-    font: 18px Arial;
+    font-size: 18px;
+    font-family: 'Open Sans', sans-serif;
     margin-bottom: 15px;
     padding: 10px 10px 10px 10px;
   }
@@ -51,7 +58,13 @@
 
   .refreshed-courses::before {
     border: 1px solid rgb(255, 184, 77);
+<<<<<<< HEAD
     font: 13px Arial;
+=======
+    border-radius: 5px;
+    font-size: 13px;
+    font-family: 'Open Sans', sans-serif;
+>>>>>>> 1d394e25086c6dd23e9029df84f5aa5edbd45808
     background-color: rgb(255, 255, 255);
     padding: 10px 10px 10px 0;
   }
@@ -70,7 +83,8 @@
     height: 280px;
     overflow-y: scroll;
     overflow-x: hidden;
-    font: 12px Arial;
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
     list-style: none;
     padding-left: 0;
   }
@@ -80,7 +94,8 @@
   }
 
   #search-results {
-    font: 14px Arial;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
     max-height: 700px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -91,7 +106,8 @@
     cursor: pointer;
     border: 1px solid rgb(255, 184, 77);
     border-radius: 5px;
-    font: 12px Arial;
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
     background-color: rgb(255, 255, 255);
     padding: 10px 10px 10px 0;
     margin-bottom: 10px;
@@ -103,8 +119,10 @@
   }
 
   #calendar {
-    font: 12px Arial;
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
     margin-bottom: 5px;
+    height:500px;
   }
 
   .course-checkbox {
@@ -113,7 +131,8 @@
 
   #precept-button {
     color: black;
-    font-size: 12px;
+    font-size-size: 12px;
+    font-family: 'Open Sans', sans-serif;
     opacity: 0.5;
     transition: 0.8s;
     cursor: pointer;
@@ -137,15 +156,12 @@
     color: #fff;
     border: 1px solid blue;
     border-radius: 30px;
-    font: 10px Arial;
+    font-size: 10px;
+    font-family: 'Open Sans', sans-serif;
     font-weight: bold;
     display: inline-block;
     line-height: 0;
     padding: 10px 5px;
-  }
-
-  .fc-agendaDay-view .fc-today { 
-    background: white !important; 
   }
 
   .precept_render {
@@ -162,11 +178,12 @@
   }
 
   #calendar .fc-today {
-    background-color: #EBEBF5 !important;
+    background-color: white !important;
   }
 
   #calendar .fc-content {
-    font: 12px Arial;
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
   }
 
   #calendar .fc-event {

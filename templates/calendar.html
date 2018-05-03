@@ -2,8 +2,8 @@
     $(function() {
         $("#calendar").fullCalendar({
             eventClick: function(calEvent, jsEvent, view) {
-            if (calEvent["className"].indexOf("precept_render") != -1) {
-                $(".save-schedule-message").empty();
+                if (calEvent["className"].indexOf("precept_render") != -1) {
+                    $(".save-schedule-message").empty();
                 // for primary meeting
                 if (calEvent["className"].indexOf("primary") != -1) {
                     title = calEvent["id"].split("-")[0];
@@ -60,20 +60,32 @@
                 }
             }
         },
+
+
+        // windowResize: function(view) {
+        //     // alert('The calendar has adjusted to a window resize');
+        //     var calHeight = $(window).height()*0.5;
+        //     $('#calendar').fullCalendar('option', 'height', calHeight);
+        // },
+
+
         defaultView: 'agendaWeek',
         header: false,
         columnHeaderFormat: 'ddd',
         minTime: '08:0:00',
         maxTime: '23:00:00',
-            // slotDuration: '00:30:00',
-            allDaySlot: false,
-            weekends: false,
-            contentHeight: 'auto',
-            eventOverlap: false,
-            aspectRatio: .5,
-            // slotMinutes: 30,
-            timeFromat: 'H:mm'
-            /*editable: true*/
-        })
-        });
+        // slotDuration: '00:30:00',
+        allDaySlot: false,
+        weekends: false,
+        // contentHeight: 'auto',
+        height: 500,
+        contentHeight: 500,
+        eventOverlap: false,
+        aspectRatio: .5,
+        // slotMinutes: 30,
+        timeFromat: 'H:mm',
+        /*editable: true*/
+        handleWindowResize: true
+    })
+});
 </script>
