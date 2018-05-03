@@ -297,27 +297,27 @@ def home(request):
 	
 	elif 'save_schedule' in request.POST:
 		# Comment this in and comment all the below things out except return statement to delete all favorites
-		responseobject = {}
-		Favorite.objects.all().delete()
-		# print "hello"
-		# calendar_name = request.POST.get("calendar_name", "")
-		# calendar_courses = request.POST.get("calendar_courses", "")
-		# calendar = json.loads(request.POST.get("calendar_data", ""))
-		# calendar_data = []
-		# for i in calendar:
-		# 	calendar_data.append(json.dumps(i))
-
-		# curr_favorites = curr_profile.favorites.all()
 		# responseobject = {}
-		# try:
-		# 	f = Favorite.objects.create(
-		# 		user = curr_profile,
-		# 		name = calendar_name,
-		# 		courses = calendar_courses,
-		# 		favorite_fields = calendar_data)
-		# 	responseobject = {'message': 'Schedule successfully saved!'}
-		# except:
-		# 	responseobject = {'error': 'This schedule is already saved'}
+		# Favorite.objects.all().delete()
+		# print "hello"
+		calendar_name = request.POST.get("calendar_name", "")
+		calendar_courses = request.POST.get("calendar_courses", "")
+		calendar = json.loads(request.POST.get("calendar_data", ""))
+		calendar_data = []
+		for i in calendar:
+			calendar_data.append(json.dumps(i))
+
+		curr_favorites = curr_profile.favorites.all()
+		responseobject = {}
+		try:
+			f = Favorite.objects.create(
+				user = curr_profile,
+				name = calendar_name,
+				courses = calendar_courses,
+				favorite_fields = calendar_data)
+			responseobject = {'message': 'Schedule successfully saved!'}
+		except:
+			responseobject = {'error': 'This schedule is already saved'}
 		# print responseobject
 		return JsonResponse(responseobject)
 	else:
