@@ -237,13 +237,13 @@ def home(request):
 			dept = course.split(' ')[0]
 			if dept not in departments:
 				departments.append(dept)
-			if previous_must_dept != None and dept in previous_must_dept:
-				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + " checked></label>"
-			else:
-				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
-					
+				if previous_must_dept != None and dept in previous_must_dept:
+					temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + " checked></label>"
+				else:
+					temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
+				response_dept.append(temp_dept)
+			
 			response_course.append(temp_course)
-			response_dept.append(temp_dept)
 			response_priority.append(temp_priority)
 
 
@@ -262,9 +262,48 @@ def home(request):
 		responseobject['filter_full'] = curr_profile.filter.full
 		responseobject['filter_pdf'] = curr_profile.filter.pdf
 
-
-		# responseobject = {'must_have_courses': json.dumps(response_course), 'must_have_departments': json.dumps(response_dept), 'course_priority': json.dumps(response_priority), 'filter_distribution': json.dumps(filter_distribution), "filter_coursenum": filter_coursenum}
 		return JsonResponse(responseobject)
+
+
+	# user clicks on the filter button on main page
+	elif 'reset_filter' in request.POST:
+		response_course = []
+		departments = []
+		response_dept = []
+		response_priority = []
+		queue = curr_profile.faves.split(',')
+
+		must_courses = curr_profile.filter.must_courses
+		course_priority = curr_profile.filter.priority
+		must_dept = curr_profile.filter.must_dept
+
+
+		for i in range(0, len(queue)):
+			if queue[i] is '':
+				continue
+
+			course = Course.objects.get(registrar_id=queue[i]).deptnum
+
+			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
+			response_course.append(temp_course)
+
+			temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+			response_priority.append(temp_priority)
+
+			dept = course.split(' ')[0]
+			if dept not in departments:
+				departments.append(dept)
+				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
+				response_dept.append(temp_dept)
+
+		# NEED AN IF STATEMENT TO CHECK THAT FILTER ALREADY EXISTS
+		responseobject = dict()
+		responseobject['must_have_courses'] = json.dumps(response_course)
+		responseobject['must_have_departments'] = json.dumps(response_dept)
+		responseobject['course_priority'] = json.dumps(response_priority)
+
+		return JsonResponse(responseobject)
+
 
 	# show schedule of selected combination
 	elif 'comb_click' in request.GET:

@@ -175,6 +175,61 @@
 
 
 
+
+
+  // Make filter options pop up, change entries depending on course queue content
+  $('body').on('click', '.reset_filter', function(e) {
+    e.preventDefault();
+    var reset_filter = {
+      reset_filter: 'reset_filter',
+      csrfmiddlewaretoken: csrfmiddlewaretoken
+    };
+    $.ajax({
+     type: "POST",
+     url: '/home/',
+     data: reset_filter,
+    success: function(data) {
+      // reset all form entries to default
+      $("#coursenum").val('1');
+      $("#ha").prop('checked', false);
+      $("#sa").prop('checked', false);
+      $("#stl").prop('checked', false);
+      $("#stn").prop('checked', false);
+      $("#ec").prop('checked', false);
+      $("#em").prop('checked', false);
+      $("#la").prop('checked', false);
+      $("#qr").prop('checked', false);
+      $("#max-dept").val('1');
+      $("#no-friday-class").prop('checked', false);
+      $("#no-evening-class").prop('checked', false);
+      $("#after-ten-am").prop('checked', false);
+      $("#full").prop('checked', false);
+      $("#pdf").prop('checked', false);
+
+      var must_have_courses = JSON.parse(data["must_have_courses"]);
+      var must_have_departments = JSON.parse(data["must_have_departments"]);
+      var course_priority = JSON.parse(data["course_priority"]);
+      $("#must-have-courses").empty();
+      $("#must-have-courses").append(must_have_courses);
+      $("#must-have-departments").empty();
+      $("#must-have-departments").append(must_have_departments);
+      $("#course-priority").empty();
+      $("#course-priority").append(course_priority);
+    }
+  });
+  });
+
+
+
+
+
+
+
+
+
+
+
+
   // Make filter options pop up, change entries depending on course queue content
   $('body').on('click', '.create_schedule', function(e) {
     e.preventDefault();
@@ -187,13 +242,9 @@
      url: '/home/',
      data: filter,
     success: function(data) {
-      // test setting values
-
       // load the saved course number
       var filter_coursenum = JSON.parse(data['filter_coursenum']);
       $("#coursenum").val(filter_coursenum);
-
-      //
 
       // load the saved filter distributions
       var filter_distribution = JSON.parse(data['filter_distribution']);
