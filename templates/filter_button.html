@@ -22,7 +22,7 @@
           <form id="filter" method="post">
             {% csrf_token %}
 
-            <label for="number_of_courses">Number of Courses: </label>
+            <label for="number_of_courses">Number of Courses:
             <select class="form-control-in-line" id="coursenum">
               <option value="1">1</option>
               <option value="2">2</option>
@@ -34,14 +34,15 @@
               <option value="8">8</option>
               <option value="9">9</option>
             </select>
+            </label>
 
             <label class="form-check-label" for="must-have-courses">Must have Courses: </label>
-            <div id="must-have-courses">
+            <div class="form-check form-check-inline" id="must-have-courses">
             </div>
             <br>
 
             <label class="form-check-label" for="must-have-departments">Must have Departments: </label>
-            <div id="must-have-departments">
+            <div class="form-check form-check-inline" id="must-have-departments">
             </div>
             <br>
 
@@ -94,7 +95,7 @@
 
             <div id="max_dept">
               <label class="form-check-label" for="dept_max"> Maximum # of Courses in one department:
-                <select class="form-control-in-line" id="max_dept">
+                <select class="form-control-in-line" id="max-dept">
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>

@@ -187,6 +187,61 @@
      url: '/home/',
      data: filter,
     success: function(data) {
+      // test setting values
+
+      // load the saved course number
+      var filter_coursenum = JSON.parse(data['filter_coursenum']);
+      $("#coursenum").val(filter_coursenum);
+
+      //
+
+      // load the saved filter distributions
+      var filter_distribution = JSON.parse(data['filter_distribution']);
+      for (a = 0; a < filter_distribution.length; a++) {
+        if (filter_distribution[a].localeCompare("HA") == 0){
+          $("#ha").prop('checked', true);
+        }
+        else if (filter_distribution[a].localeCompare("SA") == 0){
+          $("#sa").prop('checked', true);
+        }
+        else if (filter_distribution[a].localeCompare("STL") == 0){
+          $("#stl").prop('checked', true);
+        }
+        else if (filter_distribution[a].localeCompare("STN") == 0){
+          $("#stn").prop('checked', true);
+        }
+        else if (filter_distribution[a].localeCompare("EC") == 0){
+          $("#ec").prop('checked', true);
+        }
+        else if (filter_distribution[a].localeCompare("EM") == 0){
+          $("#em").prop('checked', true);
+        }
+        else if (filter_distribution[a].localeCompare("LA") == 0){
+          $("#la").prop('checked', true);
+        }
+        else if (filter_distribution[a].localeCompare("QR") == 0){
+          $("#qr").prop('checked', true);
+        }
+      }
+      
+      var filter_maxdept = JSON.parse(data['filter_maxdept']);
+      $("#max-dept").val(filter_maxdept);
+
+      var filter_nofridayclass = JSON.parse(data['filter_nofridayclass']);
+      $("#no-friday-class").prop('checked', filter_nofridayclass);
+
+      var filter_noeveningclass = JSON.parse(data['filter_noeveningclass']);
+      $("#no-evening-class").prop('checked', filter_noeveningclass);
+
+      var filter_aftertenam = JSON.parse(data['filter_aftertenam']);
+      $("#after-ten-am").prop('checked', filter_aftertenam);
+
+      var filter_full = JSON.parse(data['filter_full']);
+      $("#full").prop('checked', filter_full);
+
+      var filter_pdf = JSON.parse(data['filter_pdf']);
+      $("#pdf").prop('checked', filter_pdf);
+
       var must_have_courses = JSON.parse(data["must_have_courses"]);
       var must_have_departments = JSON.parse(data["must_have_departments"]);
       var course_priority = JSON.parse(data["course_priority"]);
@@ -234,6 +289,14 @@
       distribution.push("LA");
     if ($('#qr').is(":checked"))
       distribution.push("QR");
+
+    // priority of each course
+    var priority = [];
+    $('.priority-select').each(function (){
+        priority.push($(this).attr('id'));
+        priority.push($(this).val());
+    });
+
     // max departmentals filter
     var max_dept = $("#max_dept option:selected").text();
     var no_friday_class = false;
@@ -261,6 +324,7 @@
       courses: allCourses,
       depts: allDeps,
       distribution: distribution,
+      priority: priority,
       max_dept: max_dept,
       no_friday_class: no_friday_class,
       no_evening_class: no_evening_class,
@@ -313,7 +377,7 @@
         noResults: '',
         results: function() {}
       },
-      appendTo: '.course_search',
+      appendTo: '.aftersearch',
       select: function (e, ui) {
         // console.log(ui.item.value)
         var class_select_data = {
