@@ -153,14 +153,6 @@ def home(request):
 				filtered = False,
 				)
 			c.save()
-			# possibly need to keep a count of the total number of combination created
-
-		# apply the filters currently stored to profile
-		# if hasattr(curr_profile, 'filter'):
-		# 	filter_course(curr_profile)
-		# else:
-		# 	f = Filter.objects.create(user = curr_profile)
-
 
 		filter_course(curr_profile)
 
