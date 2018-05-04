@@ -414,16 +414,16 @@
           success: function(data) {
             if (data != {}) {
               var newclass = JSON.stringify(data["newclass"]);
-              var newid = JSON.stringify(data["newid"]);
-              var eval = JSON.stringify(data["eval"]);
-              var url = JSON.stringify(data["url"]);
+              var newid = data["newid"];
+              var eval = data["eval"];
+              var url = data["url"];
               $(".coursequeue").append(
                 "<div class = 'refreshed-courses container " + newid + "'>" + JSON.parse(newclass) + 
                 '<div class="overlay"> <span class = "row1"> \
                 <a href="' + url + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
                 <a href="' + eval + '" target="_blank"><div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div></a> \
                 <div class = "deletebutton deleteclass" id ="' + newid + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
-              $(".course-results" + newid).css("background-color", lightpalette[newid%10]);
+              // $(".course-results" + newid).css("background-color", lightpalette[newid%10]);
             }
           }
         });
