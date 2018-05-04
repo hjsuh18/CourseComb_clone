@@ -68,8 +68,8 @@ def home(request):
 			curr_profile.faves = new_faves
 			curr_profile.save()
 
-			evaluation = Course.objects.get(registrar_id=i).evals
-			url = Course.objects.get(registrar_id=i).url
+			evaluation = Course.objects.get(registrar_id=registrar_id).evals
+			url = Course.objects.get(registrar_id=registrar_id).url
 
 			responseobject = {'newclass': class_name, 'newid': registrar_id, 'eval': evaluation, 'url': url}
 		else:
@@ -449,8 +449,6 @@ def home(request):
 		for i in favorites:
 			if (i != ''):
 				course = Course.objects.get(registrar_id = i)
-				print 'evaluations: ', course.evals
-				print 'registrar url ', course.url
 				curr_faves.append("<div class = 'refreshed-courses container " + i + "'>" + course.deptnum + ": " + course.title + 
 					'<div class="overlay"> <span class = "row1"> \
 					<a href="' + course.evals + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
@@ -460,9 +458,6 @@ def home(request):
 			if combination[i].filtered == True:
 				continue
 			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + "</div>")
-
-		for i in curr_faves:
-			print i
 
 		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs})
 
