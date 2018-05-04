@@ -1,22 +1,19 @@
 <script type="text/javascript">
-  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#74b9ff", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
+  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
   var darkpalette  = ["#001f3f"];
   var csrfmiddlewaretoken = '{{ csrf_token }}';
   var schedule_data;
   var section_types = ["L", "C", "S", "U", "B", "D", "E", "F", "P"]
-
   // Activate tooltip
   $('body').tooltip({
       selector: '.schedule-name-input'
   });
-
   // Save schedule when pressed enter
   $(".save-schedule-message").on('keyup', '#schedule_name', function (e) {
     if (e.which == 13) {
       saveSchedule();
     }
   });
-
   // Save schedule when clicking on arrow
   function saveSchedule () {
     calendar_data = []
@@ -27,7 +24,6 @@
         calendar_data.push(all_sources[i]["rawEventDefs"][j]);
       }
     }
-
     if (calendar_data.length == 0) {
       $(".save-schedule-message").empty();
       $(".save-schedule-message").append("Cannot save empty schedule");
@@ -61,17 +57,14 @@
         });
     }
   }
-
   // Save schedule button is clicked
   function saveScheduleButton() {
-
     $(".save-schedule-message").empty();
     // new_element = '<button type="button" class="btn btn-secondary createdDiv" data-toggle="tooltip" data-placement="top" title="Tooltip on top"> Tooltip on top </button>'
     new_element = "<input class = 'schedule-name-input' type='text' data-delay = '0' data-toggle='tooltip' data-placement='top' title = '(Optional) Name Your Schedule' id ='schedule_name'> <i class='far fa-arrow-alt-circle-right' onclick = 'saveSchedule();'></i>"
     $(".save-schedule-message").append(new_element);
     
   }
-
   // Click on a combination
   $('body').on('click', '.coursecomb', function (e) {
      e.preventDefault();
@@ -81,6 +74,7 @@
       comb_click:'comb_click',
       comb_id: comb_id
     };
+    var classes;
     $.ajax({
       type: "GET",
       url: '/home/',
@@ -97,7 +91,6 @@
         var selectedCourses = $(".coursecomb." + comb_id).text();
         selectedCourses = selectedCourses.split(",");
         $("div#selected-coursecomb").empty();
-
         for (i = 0; i < selectedCourses.length; i++) {
           var course = selectedCourses[i].trim();
           if (data[course] != "{}") {
@@ -109,10 +102,8 @@
                 course + "'>" + course + "</label>")
               )
             );
-
             precepts = temp.hasOwnProperty("C") ? temp["C"] : temp["P"];
             $(".col." + i).css("background-color", precepts[0].color);
-            console.log(precepts[0].color);
           }
         }
       }
@@ -133,7 +124,6 @@
       } 
     }
   });
-
   // Click on precept/labs/etc.
   $('div#selected-coursecomb').on('click', 'input[type=checkbox]', function() {
     $(".save-schedule-message").empty();
@@ -171,7 +161,6 @@
       }
     }
   });
-
   // Make filter options pop up, change entries depending on course queue content
   $('body').on('click', '.reset_filter', function(e) {
     e.preventDefault();
@@ -200,7 +189,6 @@
       $("#after-ten-am").prop('checked', false);
       $("#full").prop('checked', false);
       $("#pdf").prop('checked', false);
-
       var must_have_courses = JSON.parse(data["must_have_courses"]);
       var must_have_departments = JSON.parse(data["must_have_departments"]);
       var course_priority = JSON.parse(data["course_priority"]);
@@ -213,7 +201,6 @@
     }
   });
   });
-
   // Make filter options pop up, change entries depending on course queue content
   $('body').on('click', '.create_schedule', function(e) {
     e.preventDefault();
@@ -222,12 +209,6 @@
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
     $.ajax({
-<<<<<<< HEAD
-      type: "POST",
-      url: '/home/',
-      data: filter,
-      success: function(data) {
-=======
      type: "POST",
      url: '/home/',
      data: filter,
@@ -235,7 +216,6 @@
       // load the saved course number
       var filter_coursenum = JSON.parse(data['filter_coursenum']);
       $("#coursenum").val(filter_coursenum);
-
       // load the saved filter distributions
       var filter_distribution = JSON.parse(data['filter_distribution']);
       if (filter_distribution != null){
@@ -269,23 +249,16 @@
       
       var filter_maxdept = JSON.parse(data['filter_maxdept']);
       $("#max-dept").val(filter_maxdept);
-
       var filter_nofridayclass = JSON.parse(data['filter_nofridayclass']);
       $("#no-friday-class").prop('checked', filter_nofridayclass);
-
       var filter_noeveningclass = JSON.parse(data['filter_noeveningclass']);
       $("#no-evening-class").prop('checked', filter_noeveningclass);
-
       var filter_aftertenam = JSON.parse(data['filter_aftertenam']);
       $("#after-ten-am").prop('checked', filter_aftertenam);
-
       var filter_full = JSON.parse(data['filter_full']);
       $("#full").prop('checked', filter_full);
-
       var filter_pdf = JSON.parse(data['filter_pdf']);
       $("#pdf").prop('checked', filter_pdf);
-
->>>>>>> 1d394e25086c6dd23e9029df84f5aa5edbd45808
       var must_have_courses = JSON.parse(data["must_have_courses"]);
       var must_have_departments = JSON.parse(data["must_have_departments"]);
       var course_priority = JSON.parse(data["course_priority"]);
@@ -293,17 +266,11 @@
       $("#must-have-courses").append(must_have_courses);
       $("#must-have-departments").empty();
       $("#must-have-departments").append(must_have_departments);
-<<<<<<< HEAD
-      }
-    });
-=======
       $("#course-priority").empty();
       $("#course-priority").append(course_priority);
     }
   });
->>>>>>> 1d394e25086c6dd23e9029df84f5aa5edbd45808
   });
-
   // FOR ACTUAL FILTERING
   $('#filter').on('submit', function(e){
     e.preventDefault();
@@ -338,14 +305,12 @@
       distribution.push("LA");
     if ($('#qr').is(":checked"))
       distribution.push("QR");
-
     // priority of each course
     var priority = [];
     $('.priority-select').each(function (){
         priority.push($(this).attr('id'));
         priority.push($(this).val());
     });
-
     // max departmentals filter
     var max_dept = $("#max_dept option:selected").text();
     var no_friday_class = false;
@@ -383,21 +348,11 @@
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
     $.ajax({
-<<<<<<< HEAD
-      type: "POST",
-      url: '/home/',
-      data: createschedule_data,
-      success: function(data) {
-      var courses_com = JSON.parse(data["courses_com"]);
-=======
      type: "POST",
      url: '/home/',
      data: createschedule_data,
      success: function(data) {
-
->>>>>>> 1d394e25086c6dd23e9029df84f5aa5edbd45808
       $("#combqueue").empty();
-
       if (data["course_number"]) {
         $("#combqueue").append(data["course_number"]);
       }
@@ -410,23 +365,13 @@
       else {
       var courses_com = JSON.parse(data["courses_com"]);
       $("#combqueue").append(courses_com);
-<<<<<<< HEAD
-      },
-      error: function(xhr, textStatus, errorThrown) {
-        alert("some error");
-      }
-    });
-=======
     }
-
     },
     error: function(xhr, textStatus, errorThrown) {
       alert("some error");
     }
   });
->>>>>>> 1d394e25086c6dd23e9029df84f5aa5edbd45808
   });
-
   // Delete a course
   $('body').on('click', '.deleteclass', function (e) {
     e.preventDefault();
@@ -446,7 +391,6 @@
     }
   });
   });
-
   // Autocomplete
   $(function() {
     $("#courses").autocomplete({
