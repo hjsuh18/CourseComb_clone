@@ -419,17 +419,21 @@ def home(request):
 			calendar_data.append(json.dumps(i))
 
 		curr_favorites = curr_profile.favorites.all()
+		curr_favorite_fields = []
+		for i in curr_favorites:
+			curr_favorite_fields.append(i.favorite_fields)
+		
 		responseobject = {}
-		try:
+		if calendar_data in curr_favorite_fields:
+			responseobject = {'error': 'This schedule is already saved'}
+		else:
 			f = Favorite.objects.create(
 				user = curr_profile,
 				name = calendar_name,
 				courses = calendar_courses,
 				favorite_fields = calendar_data)
 			responseobject = {'message': 'Schedule successfully saved!'}
-		except:
-			responseobject = {'error': 'This schedule is already saved'}
-		# print responseobject
+
 		return JsonResponse(responseobject)
 	else:
 		favorites = curr_profile.faves
@@ -440,13 +444,19 @@ def home(request):
 		curr_combs = []
 		for i in favorites:
 			if (i != ''):
-				course = Course.objects.filter(registrar_id = i)
-				curr_faves.append("<div class = 'refreshed-courses " + i + "'>" + course[0].deptnum + ": " + course[0].title + " <button type = 'button' class = 'btn btn-xs deleteclass' id = " + i + "> x </button> </div>") 
+				course = Course.objects.get(registrar_id = i)
+				curr_faves.append("<div class = 'refreshed-courses container " + i + "'>" + course.deptnum + ": " + course.title + 
+					'<div class="overlay"> <span class = "row1"> \
+					<div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div> \
+        			<div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div> \
+        			<div class = "deletebutton deleteclass" id ="' + i + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
 			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + "</div>")
 
+		for i in curr_faves:
+			print i
 		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs})
 
 # get courses for autocomplete functionality
