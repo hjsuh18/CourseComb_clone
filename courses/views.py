@@ -451,8 +451,8 @@ def home(request):
 				course = Course.objects.get(registrar_id = i)
 				curr_faves.append("<div class = 'refreshed-courses container " + i + "'>" + course.deptnum + ": " + course.title + 
 					'<div class="overlay"> <span class = "row1"> \
-					<a href="' + course.evals + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
-        			<a href="' + course.url + '"target="_blank"><div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div></a> \
+					<a href="' + course.url + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
+        			<a href="' + course.evals + '"target="_blank"><div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div></a> \
         			<div class = "deletebutton deleteclass" id ="' + i + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
