@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
+  var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#74b9ff", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
   var darkpalette  = ["#001f3f"];
   var csrfmiddlewaretoken = '{{ csrf_token }}';
   var schedule_data;
@@ -415,13 +415,15 @@
             if (data != {}) {
               var newclass = JSON.stringify(data["newclass"]);
               var newid = JSON.stringify(data["newid"]);
+              var class_num = newclass.substring(5,8);
               $(".coursequeue").append(
-                "<div class = 'refreshed-courses container " + newid + "'>" + JSON.parse(newclass) + 
+                "<div class = 'refreshed-courses container " + newid + " " + class_num + "'>" + JSON.parse(newclass) + 
                 '<div class="overlay"> <span class = "row1"> \
                 <div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div> \
                 <div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div> \
-                <div class = "deletebutton deleteclass" id ="' + newid + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
-              $(".course-results" + newid).css("background-color", lightpalette[newid%10]);
+                <div class = "deletebutton deleteclass" id ="' + newid + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>');
+              $(".refreshed-courses." + class_num).css("background-color", lightpalette[data["newid"]%11]);
+
             }
           }
         });
