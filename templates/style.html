@@ -1,5 +1,4 @@
 <style>
-
   body {
     margin: 0;
     text-align: center;
@@ -7,29 +6,28 @@
     height: 100vh;
 /*    overflow: hidden;*/
   }
-
-
   .navbar {
     background: #ffb84d;
+    /*background: #ffb900;*/
     font-weight: 500;
   }
-
+  .navbar-brand {
+    color: white !important;
+  }
+  
   .container-fluid {
     margin-top: 10px;
 /*    height:500px;*/
     overflow:hidden;
   }
-
   #course-search {
     position: relative;
     font-size: 14px;
     font-family: 'Open Sans', sans-serif;
   }
-
   .ui-widget {
     position: relative;
   }
-
   .ui-widget input {
     width: 100%;
     height: 40px;
@@ -42,37 +40,23 @@
     margin-bottom: 15px;
     padding: 10px 10px 10px 10px;
   }
-
-  .aftersearch .course-results:hover {
-    background-color: #ffb84d;
-  }
-
   .coursequeue {
-    max-height: 250px;
+    max-height: 50vh;
     overflow-y: auto;
     overflow-x: hidden;
   }
   .refreshed-courses {
-    /*border: 1px solid rgb(255, 184, 77);
-    border-radius: 5px;
-    font-size: 13px;
-    font-family: 'Open Sans', sans-serif;
-    background-color: rgb(255, 255, 255);
-    padding: 10px 10px 10px 0;*/
     cursor: pointer;
     border: 1px solid rgb(255, 184, 77);
     border-radius: 5px;
-    font: 12px Arial;
+    font-family: 'Open Sans', sans-serif;
     background-color: rgb(255, 255, 255);
     padding: 10px 10px 10px 0;
     margin-bottom: 10px;
-
   }
-
   .createschedule {
     position: relative;
   }
-
   ul.ui-autocomplete {
     position: relative;
     display: inline-block;
@@ -84,11 +68,9 @@
     list-style: none;
     padding-left: 0;
   }
-
   .filter_button {
     background-color: #ffb84d;
   }
-
   #search-results {
     font-size: 14px;
     font-family: 'Open Sans', sans-serif;
@@ -97,7 +79,6 @@
     overflow-x: hidden;
     margin: 0;
   }
-
   .coursecomb {
     cursor: pointer;
     border: 1px solid rgb(255, 184, 77);
@@ -107,24 +88,21 @@
     background-color: rgb(255, 255, 255);
     padding: 10px 10px 10px 0;
     margin-bottom: 10px;
+    transition: 0.1s;
   }
-
   div#selected-coursecomb {
     position: relative;
     margin-bottom: 0;
   }
-
   #calendar {
     font-size: 12px;
     font-family: 'Open Sans', sans-serif;
     margin-bottom: 5px;
-    height:500px;
+    height: 500px;
   }
-
   .course-checkbox {
     display: none;
   }
-
   #precept-button {
     color: black;
     font-size-size: 12px;
@@ -139,85 +117,54 @@
     margin: 0;
     padding: 5px;
   }
-
   .course-checkbox:checked + #precept-button {
     opacity: 1;
   }
-
- /* .deleteclass {
-    float: right;
-    margin-top: 0;
-    margin-right: -10px;
-    cursor: pointer;
-    color: #fff;
-    border: 1px solid blue;
-    border-radius: 30px;
-    font-size: 10px;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: bold;
-    display: inline-block;
-    line-height: 0;
-    padding: 10px 5px;
-  }*/
-
   .precept_render {
     cursor: pointer;
     opacity: 0.5;
   }
-
   .selected_precept {
     opacity: 1;
   }
-
   .selected_class {
     opacity: 1;
   }
-
   #calendar .fc-today {
     background-color: white !important;
   }
-
   #calendar .fc-content {
     font-size: 12px;
     font-family: 'Open Sans', sans-serif;
   }
-
   #calendar .fc-event {
     /*box-shadow: 1px 1px 1px #706868;*/
   }
-
   #calendar .fc-agenda-axis, #calendar .fc-widget-header {
     font-weight: normal;
     padding: 3px;
     border-radius: 3px;
   }
-
   .fa-arrow-alt-circle-right {
     cursor: pointer;
     font-size:20px;
   }
-
   .schedule-name-input {
     border-radius: 25px;
     border: 1px solid ;
   }
-
   .save-schedule-panel {
     padding-bottom: 5px;
   }
-
   .btn:focus,.btn:active {
    outline: none !important;
    box-shadow: none;
 }
-
 /*overlay*/
 .container {
   position: relative;
   width: 100%;
 }
-
-
 .overlay {
   position: absolute;
   top:0;
@@ -230,14 +177,10 @@
   transition: .5s ease;
   border-radius: 5px;
 }
-
-
-
 .container:hover .overlay {
   width: 100%;
   left: 0;
 }
-
 .registrar {
    float: left;
    width: 33.33%; 
@@ -245,7 +188,6 @@
    background-color: #ffb84d;
    padding: 5% 0;
 }
-
 .reviews {
    float: left;
    width: 33.33%; 
@@ -253,29 +195,32 @@
    background-color: lightgrey;
    padding: 5% 0;
 }
-
 .deletebutton {
    float: left;
    width: 33.33%; 
    height:100%;
-   background-color: #FF333C;
+   background-color: #fc636b;
    padding: 5% 0;
 }
-
 .row1:before, 
 .row1:after {
     content:"";
     display: table ;
     clear:both;
 }
-
 .text {
   padding: 10% 0;
 }
-
 .fa, .fas {
   opacity:0.5;
 }
 
+.btn-primary {
+  background-color:#37c6e6;
+  border-color: #37c6e6;
+}
+.btn-primary:hover {
+  background-color:#1aafd0;
+  border-color: #1aafd0;
+}
 </style>
-
