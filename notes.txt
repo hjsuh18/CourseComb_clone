@@ -17,3 +17,5 @@ Course link to registrar and course evaluations
 Enrollment to pop up when hovering over a precept
 Have number of courses in coursequeue and possible combinations to be shown in brackets
 Omit canceled classes?
+
+navbar changes for about page

@@ -19,7 +19,7 @@ class Course(models.Model):
     deptnum = models.TextField()
 
     # general information easily gained from scraping
-    evals = ArrayField(models.TextField(), default=['', ''])
+    evals = models.TextField()
     #description = models.TextField()
     area = models.CharField(max_length=3)
     url = models.TextField()
