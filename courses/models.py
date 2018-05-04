@@ -19,7 +19,7 @@ class Course(models.Model):
     deptnum = models.TextField()
 
     # general information easily gained from scraping
-    evals = ArrayField(models.TextField(), default=['', ''])
+    evals = models.TextField()
     #description = models.TextField()
     area = models.CharField(max_length=3)
     url = models.TextField()
@@ -122,7 +122,7 @@ class Favorite(models.Model):
     name = models.TextField(null = True)
     user = models.ForeignKey(Profile, related_name='favorites')
     courses = models.TextField(null = True)
-    favorite_fields = ArrayField(models.TextField(), null = True, unique = True)
+    favorite_fields = ArrayField(models.TextField(), null = True)
 
 
 @receiver(post_save, sender=User)
