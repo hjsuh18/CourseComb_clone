@@ -419,16 +419,31 @@ def home(request):
 			calendar_data.append(json.dumps(i))
 
 		curr_favorites = curr_profile.favorites.all()
+		curr_favorite_fields = []
+		for i in curr_favorites:
+			curr_favorite_fields.append(i.favorite_fields)
+		
 		responseobject = {}
-		try:
+		if calendar_data in curr_favorite_fields:
+			responseobject = {'error': 'This schedule is already saved'}
+		else:
 			f = Favorite.objects.create(
 				user = curr_profile,
 				name = calendar_name,
 				courses = calendar_courses,
 				favorite_fields = calendar_data)
 			responseobject = {'message': 'Schedule successfully saved!'}
-		except:
-			responseobject = {'error': 'This schedule is already saved'}
+
+		# responseobject = {}
+		# try:
+		# 	f = Favorite.objects.create(
+		# 		user = curr_profile,
+		# 		name = calendar_name,
+		# 		courses = calendar_courses,
+		# 		favorite_fields = calendar_data)
+		# 	responseobject = {'message': 'Schedule successfully saved!'}
+		# except:
+		# 	responseobject = {'error': 'This schedule is already saved'}
 		# print responseobject
 		return JsonResponse(responseobject)
 	else:
