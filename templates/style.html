@@ -35,21 +35,12 @@
     margin-bottom: 15px;
     padding: 10px 10px 10px 10px;
   }
-  .aftersearch .course-results:hover {
-    background-color: #ffb84d;
-  }
   .coursequeue {
     max-height: 250px;
     overflow-y: auto;
     overflow-x: hidden;
   }
   .refreshed-courses {
-    /*border: 1px solid rgb(255, 184, 77);
-    border-radius: 5px;
-    font-size: 13px;
-    font-family: 'Open Sans', sans-serif;
-    background-color: rgb(255, 255, 255);
-    padding: 10px 10px 10px 0;*/
     cursor: pointer;
     border: 1px solid rgb(255, 184, 77);
     border-radius: 5px;
@@ -92,6 +83,7 @@
     background-color: rgb(255, 255, 255);
     padding: 10px 10px 10px 0;
     margin-bottom: 10px;
+    transition: 0.1s;
   }
   div#selected-coursecomb {
     position: relative;
@@ -101,7 +93,7 @@
     font-size: 12px;
     font-family: 'Open Sans', sans-serif;
     margin-bottom: 5px;
-    height:500px;
+    height: 500px;
   }
   .course-checkbox {
     display: none;
@@ -123,21 +115,6 @@
   .course-checkbox:checked + #precept-button {
     opacity: 1;
   }
- /* .deleteclass {
-    float: right;
-    margin-top: 0;
-    margin-right: -10px;
-    cursor: pointer;
-    color: #fff;
-    border: 1px solid blue;
-    border-radius: 30px;
-    font-size: 10px;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: bold;
-    display: inline-block;
-    line-height: 0;
-    padding: 10px 5px;
-  }*/
   .precept_render {
     cursor: pointer;
     opacity: 0.5;

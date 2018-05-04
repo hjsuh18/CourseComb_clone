@@ -204,10 +204,10 @@
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
     $.ajax({
-     type: "POST",
-     url: '/home/',
-     data: filter,
-     success: function(data) {
+      type: "POST",
+      url: '/home/',
+      data: filter,
+      success: function(data) {
       // load the saved course number
       var filter_coursenum = JSON.parse(data['filter_coursenum']);
       $("#coursenum").val(filter_coursenum);
@@ -263,8 +263,9 @@
       $("#must-have-departments").append(must_have_departments);
       $("#course-priority").empty();
       $("#course-priority").append(course_priority);
-    }
-  });
+      }
+    });
+
   });
   // FOR ACTUAL FILTERING
   $('#filter').on('submit', function(e){
@@ -366,6 +367,7 @@
       alert("some error");
     }
   });
+    $("#filter-modal").modal("hide");
   });
   // Delete a course
   $('body').on('click', '.deleteclass', function (e) {
