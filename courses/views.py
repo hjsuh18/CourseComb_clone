@@ -67,7 +67,11 @@ def home(request):
 			new_faves = curr_profile.faves + "," + registrar_id
 			curr_profile.faves = new_faves
 			curr_profile.save()
-			responseobject = {'newclass': class_name, 'newid': registrar_id}
+
+			evaluation = Course.objects.get(registrar_id=registrar_id).evals
+			url = Course.objects.get(registrar_id=registrar_id).url
+
+			responseobject = {'newclass': class_name, 'newid': registrar_id, 'eval': evaluation, 'url': url}
 		else:
 			responseobject = {}
 		return JsonResponse(responseobject)
@@ -447,16 +451,14 @@ def home(request):
 				course = Course.objects.get(registrar_id = i)
 				curr_faves.append("<div class = 'refreshed-courses container " + i + "'>" + course.deptnum + ": " + course.title + 
 					'<div class="overlay"> <span class = "row1"> \
-					<div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div> \
-        			<div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div> \
+					<a href="' + course.url + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
+        			<a href="' + course.evals + '"target="_blank"><div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div></a> \
         			<div class = "deletebutton deleteclass" id ="' + i + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
 			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + "</div>")
 
-		for i in curr_faves:
-			print i
 		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs})
 
 # get courses for autocomplete functionality
