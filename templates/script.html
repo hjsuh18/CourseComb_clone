@@ -7,7 +7,7 @@
 
   // Activate tooltip
   $('body').tooltip({
-      selector: '.schedule-name-input'
+    selector: '.schedule-name-input'
   });
 
   // Save schedule when pressed enter
@@ -21,7 +21,7 @@
   function saveSchedule () {
     calendar_data = []
     all_sources = $("#calendar").fullCalendar('getEventSources');
-   
+
     for (i = 0; i < all_sources.length; i++) { 
       for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
         calendar_data.push(all_sources[i]["rawEventDefs"][j]);
@@ -57,8 +57,8 @@
             $(".save-schedule-message").append(data["error"]);
             $(".save-schedule-message").css("color", "red");
           }      
-          }
-        });
+        }
+      });
     }
   }
 
@@ -74,50 +74,50 @@
 
   // Click on a combination
   $('body').on('click', '.coursecomb', function (e) {
-     e.preventDefault();
-    $(".save-schedule-message").empty();
-    comb_id = $(this).attr("class").split(" ")[1];
-    var coursecomb_data = {
-      comb_click:'comb_click',
-      comb_id: comb_id
-    };
-    var classes;
-    $.ajax({
-      type: "GET",
-      url: '/home/',
-      data: coursecomb_data,
-      success: function(data) {
-        $("#calendar").fullCalendar('removeEventSources');
-        all_courses = JSON.parse(JSON.parse(data["schedule"])["names"]);
-        for (k = 0; k < all_courses.length; k++) {
-          $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(data["schedule"])[all_courses[k]]));
-        }
-        
-        schedule_data = data;
-        
-        var selectedCourses = $(".coursecomb." + comb_id).text();
-        selectedCourses = selectedCourses.split(",");
-        $("div#selected-coursecomb").empty();
+   e.preventDefault();
+   $(".save-schedule-message").empty();
+   comb_id = $(this).attr("class").split(" ")[1];
+   var coursecomb_data = {
+    comb_click:'comb_click',
+    comb_id: comb_id
+  };
+  var classes;
+  $.ajax({
+    type: "GET",
+    url: '/home/',
+    data: coursecomb_data,
+    success: function(data) {
+      $("#calendar").fullCalendar('removeEventSources');
+      all_courses = JSON.parse(JSON.parse(data["schedule"])["names"]);
+      for (k = 0; k < all_courses.length; k++) {
+        $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(data["schedule"])[all_courses[k]]));
+      }
 
-        for (i = 0; i < selectedCourses.length; i++) {
-          var course = selectedCourses[i].trim();
-          if (data[course] != "{}") {
-            var temp = JSON.parse(data[course]);
-            var precepts;
-            $("div#selected-coursecomb").append(
-              $("<div/>", {"class": "col"}).append(
-                $("<input class = 'course-checkbox' type = 'checkbox' name = '" + course + "' id = '" + course + "'/>" + "<label class = 'col " + i + "' id = 'precept-button' for = '" +
+      schedule_data = data;
+
+      var selectedCourses = $(".coursecomb." + comb_id).text();
+      selectedCourses = selectedCourses.split(",");
+      $("div#selected-coursecomb").empty();
+
+      for (i = 0; i < selectedCourses.length; i++) {
+        var course = selectedCourses[i].trim();
+        if (data[course] != "{}") {
+          var temp = JSON.parse(data[course]);
+          var precepts;
+          $("div#selected-coursecomb").append(
+            $("<div/>", {"class": "col"}).append(
+              $("<input class = 'course-checkbox' type = 'checkbox' name = '" + course + "' id = '" + course + "'/>" + "<label class = 'col " + i + "' id = 'precept-button' for = '" +
                 course + "'>" + course + "</label>")
               )
             );
 
-            precepts = temp.hasOwnProperty("C") ? temp["C"] : temp["P"];
-            $(".col." + i).css("background-color", precepts[0].color);
-          }
+          precepts = temp.hasOwnProperty("C") ? temp["C"] : temp["P"];
+          $(".col." + i).css("background-color", precepts[0].color);
         }
       }
-    });
-    
+    }
+  });
+
     // second column highlighting
     if ($(this).css("background-color") == "rgb(255, 184, 77)") {
       $(this).css("background-color", "rgb(255, 255, 255)");
@@ -143,7 +143,7 @@
     var course_remove;
     var precept_remove;
     for (i = 0; i < all_sources.length; i++) { 
-      
+
       for (j = 0; j < section_types.length; j++){
         if (JSON.parse(schedule_data[title])[section_types[j]]) {
           if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title])[section_types[j]])) {
@@ -183,7 +183,7 @@
      type: "POST",
      url: '/home/',
      data: reset_filter,
-    success: function(data) {
+     success: function(data) {
       // reset all form entries to default
       $("#coursenum").val('1');
       $("#ha").prop('checked', false);
@@ -225,7 +225,7 @@
      type: "POST",
      url: '/home/',
      data: filter,
-    success: function(data) {
+     success: function(data) {
       // load the saved course number
       var filter_coursenum = JSON.parse(data['filter_coursenum']);
       $("#coursenum").val(filter_coursenum);
@@ -300,13 +300,13 @@
     // Must have courses
     var allCourses = [];
     $('.class-check:checked').each(function () {
-        allCourses.push($(this).val());
+      allCourses.push($(this).val());
     });
     
     // Must have departments
     var allDeps = [];
     $('.dep-check:checked').each(function () {
-        allDeps.push($(this).val());
+      allDeps.push($(this).val());
     });
     // distribution filter
     var distribution = [];
@@ -330,8 +330,8 @@
     // priority of each course
     var priority = [];
     $('.priority-select').each(function (){
-        priority.push($(this).attr('id'));
-        priority.push($(this).val());
+      priority.push($(this).attr('id'));
+      priority.push($(this).val());
     });
 
     // max departmentals filter
@@ -388,9 +388,9 @@
         $("#combqueue").append(data["filter_restrict"]);
       }
       else {
-      var courses_com = JSON.parse(data["courses_com"]);
-      $("#combqueue").append(courses_com);
-    }
+        var courses_com = JSON.parse(data["courses_com"]);
+        $("#combqueue").append(courses_com);
+      }
 
     },
     error: function(xhr, textStatus, errorThrown) {
@@ -402,19 +402,19 @@
   // Delete a course
   $('body').on('click', '.deleteclass', function (e) {
     e.preventDefault();
-    var parent = $(this).parent();
+    var parent = $(this).parent().parent().parent();
     var class_delete_data = {
       deleteclass: 'deleteclass',
       registrar_id: this.id,
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
+    // console.log(parent);
     $.ajax({
      type: "POST",
      url: '/home/',
      data: class_delete_data,
      success: function(data) {
       parent.remove();
-      /*remove events on calendar if same*/
     }
   });
   });
@@ -443,16 +443,17 @@
           url: '/home/',
           data: class_select_data,
           success: function(data) {
-          if (data != {}) {
-            var newclass = JSON.stringify(data["newclass"]);
-            var newid = JSON.stringify(data["newid"]);
-            $(".coursequeue").append(
-              $("<div class = 'refreshed-courses " + newid + "''>" + JSON.parse(newclass) + "</div>").append(
-                $("<button type = 'button' class = 'btn btn-xs deleteclass' id = " + newid + "> x </button>")
-              )
-            )
-            $(".course-results" + newid).css("background-color", lightpalette[newid%10]);
-          }
+            if (data != {}) {
+              var newclass = JSON.stringify(data["newclass"]);
+              var newid = JSON.stringify(data["newid"]);
+              $(".coursequeue").append(
+                "<div class = 'refreshed-courses container " + newid + "'>" + JSON.parse(newclass) + 
+                '<div class="overlay"> <span class = "row1"> \
+                <div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div> \
+                <div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div> \
+                <div class = "deletebutton deleteclass" id ="' + newid + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
+              $(".course-results" + newid).css("background-color", lightpalette[newid%10]);
+            }
           }
         });
       }
