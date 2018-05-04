@@ -5,13 +5,14 @@
     <input id="courses" placeholder="Search Course Here...">
   </div>
 
-  <div class = "aftersearch"></div>
-
+  
+  <span class = "aftersearch"></span>
   <div class = "coursequeue">
     {% for i in favorites%}
     {{ i | safe}} 
     {% endfor %}
   </div>
+
 
   <!-- FILTER --> 
   {% include 'filter_button.html' %}
