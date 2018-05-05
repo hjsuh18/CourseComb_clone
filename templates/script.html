@@ -86,6 +86,8 @@
       }
       schedule_data = data;
       var selectedCourses = $(".coursecomb." + comb_id).text();
+      // get rid of rank number at the front
+      selectedCourses = selectedCourses.split(". ")[1];
       selectedCourses = selectedCourses.split(",");
       $("div#selected-coursecomb").empty();
       for (i = 0; i < selectedCourses.length; i++) {
