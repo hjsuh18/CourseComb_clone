@@ -202,35 +202,59 @@ def home(request):
 		departments = []
 		response_dept = []
 		response_priority = []
+		responseobject = dict()
+
 		queue = curr_profile.faves.split(',')
 
+		# get the inputs from filter from before to upload saved fields
 		previous_must_courses = []
 		previous_course_priority = []
 		previous_must_dept = []
+
+		# if there is already a filter set, set filter values as previous saved values
 		if hasattr(curr_profile, 'filter'):
+			responseobject['filter_coursenum'] = curr_profile.filter.number_of_courses
+			responseobject['filter_maxdept'] = curr_profile.filter.max_dept
+			responseobject['filter_nofridayclass'] = curr_profile.filter.no_friday_class
+			responseobject['filter_noeveningclass'] = curr_profile.filter.no_evening_class
+			responseobject['filter_aftertenam'] = curr_profile.filter.after_ten_am
+			responseobject['filter_full'] = curr_profile.filter.full
+			responseobject['filter_pdf'] = curr_profile.filter.pdf
+
 			previous_must_courses = curr_profile.filter.must_courses
 			previous_course_priority = curr_profile.filter.priority
 			previous_must_dept = curr_profile.filter.must_dept
+		# Filter has never been set, so set fields as default values
+		else:
+			responseobject['filter_coursenum'] = 1
+			responseobject['filter_maxdept'] = 5
+			responseobject['filter_nofridayclass'] = False
+			responseobject['filter_noeveningclass'] = False
+			responseobject['filter_aftertenam'] = False
+			responseobject['filter_full'] = False
+			responseobject['filter_pdf'] = False
 
-
+		# go through queue and construct must have courses, must have departments, priority of course
 		for i in range(0, len(queue)):
 			if queue[i] is '':
 				continue
 			
+			# html element for each filter category
 			temp_course = ''
 			temp_dept = ''
 			temp_priority = ''
 
+			# only get the first listed coruse name
 			course = Course.objects.get(registrar_id=queue[i]).deptnum
 			course = course.split('/')[0]
 
-			# restore must course form value
+			# restore must course form value if it was saved from previous filter
 			if previous_must_courses != None and queue[i] in previous_must_courses:
 				temp_course = "<label class='form-check-label' for=" + course + "> <span class='filter_label'>" + course + "</span> <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + " checked></label>"
 			else:
 				temp_course = "<label class='form-check-label' for=" + course + "> <span class='filter_label'>" + course + "</span> <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
 
-			# restore course priority value
+			# restore course priority value if it was saved from previous filter
 			if previous_course_priority != None and queue[i] in previous_course_priority:
 				x = previous_course_priority.index(queue[i])
 				p = int(previous_course_priority[x + 1])
@@ -257,18 +281,11 @@ def home(request):
 			response_course.append(temp_course)
 			response_priority.append(temp_priority)
 
-		responseobject = dict()
+		
 		responseobject['must_have_courses'] = json.dumps(response_course)
 		responseobject['must_have_departments'] = json.dumps(response_dept)
 		responseobject['course_priority'] = json.dumps(response_priority)
-		responseobject['filter_coursenum'] = curr_profile.filter.number_of_courses
 		responseobject['filter_distribution'] = json.dumps(curr_profile.filter.distribution)
-		responseobject['filter_maxdept'] = curr_profile.filter.max_dept
-		responseobject['filter_nofridayclass'] = curr_profile.filter.no_friday_class
-		responseobject['filter_noeveningclass'] = curr_profile.filter.no_evening_class
-		responseobject['filter_aftertenam'] = curr_profile.filter.after_ten_am
-		responseobject['filter_full'] = curr_profile.filter.full
-		responseobject['filter_pdf'] = curr_profile.filter.pdf
 
 		return JsonResponse(responseobject)
 
@@ -281,10 +298,20 @@ def home(request):
 		response_priority = []
 		queue = curr_profile.faves.split(',')
 
+		# reset the saved filters
 		if hasattr(curr_profile, 'filter'):
+			curr_profile.filter.number_of_courses=1
 			curr_profile.filter.must_courses = []
-			curr_profile.filter.priority = []
 			curr_profile.filter.must_dept = []
+			curr_profile.filter.distribution = []
+			curr_profile.filter.priority = []
+			curr_profile.filter.max_dept = 5
+			curr_profile.filter.no_friday_class=False
+			curr_profile.filter.no_evening_class=False
+			curr_profile.filter.after_ten_am=False
+			curr_profile.filter.full=False
+			curr_profile.filter.pdf=False
+			
 			curr_profile.filter.save()
 
 
@@ -299,8 +326,6 @@ def home(request):
 			response_course.append(temp_course)
 
 			temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
-			if i == 3:
-				temp_priority = temp_priority + "<p></p>"
 			response_priority.append(temp_priority)
 
 			dept = course.split(' ')[0]
@@ -309,7 +334,6 @@ def home(request):
 				temp_dept = "<label class='form-check-label' for=" + dept + "> <span class='filter_label'>" + dept + " </span><input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
 				response_dept.append(temp_dept)
 
-		# NEED AN IF STATEMENT TO CHECK THAT FILTER ALREADY EXISTS
 		responseobject = dict()
 		responseobject['must_have_courses'] = json.dumps(response_course)
 		responseobject['must_have_departments'] = json.dumps(response_dept)
