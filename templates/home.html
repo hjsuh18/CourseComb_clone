@@ -34,6 +34,8 @@
 
   <!-- Google Font Open Sans -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,400,400i,600,800" rel="stylesheet">
+
 
   {% include 'calendar.html' %}
 
@@ -50,11 +52,11 @@
 
 
       <!-- SECOND COLUMN -->
-
       <div class = "col-xs-4 col-md-2 col-lg-2" id="search-results">
-        <label for="course-combinations-list">
-          <b>Possible Schedules: </b>
-        </label>
+<!--         <label class = "comb-list" for="course-combinations-list"> -->
+        <span class = "column-label">Possible Schedules:</span>
+        <br></br>
+<!--         </label> -->
         <div class = "combqueue" id="combqueue">
           {% for i in combinations%}
           {{ i | safe}}
@@ -66,9 +68,9 @@
       <!-- THIRD COLUMN -->
       <div class = "col-xs-6 col-md-8 col-lg-8 hidden">
         <div class = "save-schedule-panel">
-          <b>Selected Schedule</b> 
-          <button class = "btn btn-primary" id = "save-schedule" onclick="saveScheduleButton();"> Save Schedule </button>
-          <span class = "save-schedule-message"> </span>
+          <span class = "column-label">Selected Schedule:</span>
+          <span class="save-schedule-message"> </span>
+          <button class = "btn btn-primary btn-md" id="save-schedule" onclick="saveScheduleButton();">Favorite <i class="far fa-heart"></i></button>
         </div>
         <div id="calendar"> </div>
         <label for="precept-toggles">

@@ -22,7 +22,8 @@
           <form id="filter" method="post">
             {% csrf_token %}
 
-            <label for="number_of_courses">Number of Courses:
+            <label id="filter-label" for="number_of_courses">
+              <span class="filter_label">Number of Courses:</span>
             <select class="form-control-in-line" id="coursenum">
               <option value="1">1</option>
               <option value="2">2</option>
@@ -36,57 +37,67 @@
             </select>
             </label>
 
-            <label class="form-check-label" for="must-have-courses">Must have Courses: </label>
+            <br>
+
+            <label class="form-check-label" id="filter-label" for="must-have-courses">Must have Courses: </label>
             <div class="form-check form-check-inline" id="must-have-courses">
             </div>
             <br>
 
-            <label class="form-check-label" for="must-have-departments">Must have Departments: </label>
+            <label class="form-check-label" id="filter-label" for="must-have-departments">Must have Departments: </label>
             <div class="form-check form-check-inline" id="must-have-departments">
             </div>
             <br>
 
             <div id="distribution">
-              <label for="distribution">Must-have Distributions: </label>
+              <label id="filter-label" for="distribution">Must-have Distributions: </label>
 
               <div class="form-check form-check-inline">
                 <label class="form-check-label" for="ha">
-                  HA<input class="form-check-input" type="checkbox" id="ha">
+                  <span class="filter_label">HA</span>
+                  <input class="form-check-input" type="checkbox" id="ha">
                 </label>
-                
+
                 <label class="form-check-label" for="sa">
-                  SA<input class="form-check-input" type="checkbox" id="sa">
+                  <span class="filter_label">SA</span>
+                  <input class="form-check-input" type="checkbox" id="sa">
                 </label>
 
                 <label class="form-check-label" for="stl">
-                  STL<input class="form-check-input" type="checkbox" id="stl">
+                  <span class="filter_label">STL</span>
+                  <input class="form-check-input" type="checkbox" id="stl">
                 </label>
 
                 <label class="form-check-label" for="stn">
-                  STN<input class="form-check-input" type="checkbox" id="stn">
+                  <span class="filter_label">STN</span>
+                  <input class="form-check-input" type="checkbox" id="stn">
                 </label>
 
                 <label class="form-check-label" for="ec">
-                  EC<input class="form-check-input" type="checkbox" id="ec">
+                  <span class="filter_label">EC</span>
+                  <input class="form-check-input" type="checkbox" id="ec">
                 </label>
 
                 <label class="form-check-label" for="em">
-                  EM<input class="form-check-input" type="checkbox" id="em">
+                  <span class="filter_label">EM</span>
+                  <input class="form-check-input" type="checkbox" id="em">
                 </label>
 
                 <label class="form-check-label" for="la">
-                  LA<input class="form-check-input" type="checkbox" id="la">
+                  <span class="filter_label">LA</span>
+                  <input class="form-check-input" type="checkbox" id="la">
                 </label>
 
                 <label class="form-check-label" for="qr">
-                  QR<input class="form-check-input" type="checkbox" id="qr">
+                  <span class="filter_label">QR</span>
+                  <input class="form-check-input" type="checkbox" id="qr">
                 </label>
               </div>
             </div>
 
             <br>
 
-            <label class="form-check-label" for="course-priority">Priority of Each Course: </label>
+            <label class="form-check-label" id="filter-label" for="course-priority">Priority of Each Course: </label>
             <div id="course-priority">
             </div>
             <br>
@@ -94,7 +105,8 @@
 
 
             <div id="max_dept">
-              <label class="form-check-label" for="dept_max"> Maximum # of Courses in one department:
+              <label class="form-check-label" id="filter-label" for="dept_max"> 
+                <span class="filter_label">Maximum # of Courses in One Department:</span>
                 <select class="form-control-in-line" id="max-dept">
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -107,32 +119,40 @@
             <br>
 
             <div id="time">
-              <label class="form-check-label" for="no-friday-class">
-                No Friday Class:<input class="form-check-input" type="checkbox" id="no-friday-class">
-              </label>
+              <label id="filter-label" for="time">Time Preferences:</label>
+              <div class="form-check form-check-inline">
+                <label class="form-check-label" for="no-friday-class">
+                  <span class="filter_label">No Friday Class:</span>
+                  <input class="form-check-input" type="checkbox" id="no-friday-class">
+                </label>
 
-              <label class="form-check-label" for="no-evening-class">
-                No Evening Class:<input class="form-check-input" type="checkbox" id="no-evening-class">
-              </label>
+                <label class="form-check-label" for="no-evening-class">
+                  <span class="filter_label">No Evening Class:</span>
+                  <input class="form-check-input" type="checkbox" id="no-evening-class">
+                </label>
 
-              <label class="form-check-label" for="after-ten-am">
-                After 10am:<input class="form-check-input" type="checkbox" id="after-ten-am">
-              </label>
+                <label class="form-check-label" for="after-ten-am">
+                  <span class="filter_label">After 10am:</span>
+                  <input class="form-check-input" type="checkbox" id="after-ten-am">
+                </label>
+              </div>
             </div>
 
             <br>
 
             <div id="full_class">
-              <label class="form-check-label" for="full">
-                Exclude fully enrolled classes:<input class="form-check-input" type="checkbox" id="full"> 
+              <label class="form-check-label" id="filter-label" for="full">
+                <span class="filter_label">Exclude Fully Enrolled Classes:</span>
+                <input class="form-check-input" type="checkbox" id="full"> 
               </label>
             </div>
 
             <br>
 
             <div id="pdf_only">
-              <label class="form-check-label" for="pdf">
-                Include 1 PDF-only Class:<input class="form-check-input" type="checkbox" id="pdf">
+              <label class="form-check-label" id="filter-label" for="pdf">
+                <span class="filter_label">Include 1 PDF-only Class:</span>
+                <input class="form-check-input" type="checkbox" id="pdf">
               </label>
             </div>
 

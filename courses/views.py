@@ -226,31 +226,32 @@ def home(request):
 
 			# restore must course form value
 			if previous_must_courses != None and queue[i] in previous_must_courses:
-				temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + " checked></label>"
+				temp_course = "<label class='form-check-label' for=" + course + "> <span class='filter_label'>" + course + "</span> <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + " checked></label>"
 			else:
-				temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
+				temp_course = "<label class='form-check-label' for=" + course + "> <span class='filter_label'>" + course + "</span> <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
 
 			# restore course priority value
 			if previous_course_priority != None and queue[i] in previous_course_priority:
 				x = previous_course_priority.index(queue[i])
 				p = int(previous_course_priority[x + 1])
 				if p == 1:
-					temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option selected='selected' value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option selected='selected' value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
 				elif p == 2:
-					temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option selected='selected' value='2'>Medium</option><option value='3'>High</option></select>"
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option selected='selected' value='2'>Medium</option><option value='3'>High</option></select>"
 				else:
-					temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option selected='selected' value='3'>High</option></select>"
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option selected='selected' value='3'>High</option></select>"
 			else:
-				temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+				temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+
 
 			# restore must dept form value
 			dept = course.split(' ')[0]
 			if dept not in departments:
 				departments.append(dept)
 				if previous_must_dept != None and dept in previous_must_dept:
-					temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + " checked></label>"
+					temp_dept = "<label class='form-check-label' for=" + dept + "> <span class='filter_label'>" + dept + "</span> <input class='form-check-input dep-check' type='checkbox' value=" + dept + " checked></label>"
 				else:
-					temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
+					temp_dept = "<label class='form-check-label' for=" + dept + "> <span class='filter_label'>" + dept + "</span> <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
 				response_dept.append(temp_dept)
 			
 			response_course.append(temp_course)
@@ -294,16 +295,18 @@ def home(request):
 			course = Course.objects.get(registrar_id=queue[i]).deptnum
 			course = course.split('/')[0]
 
-			temp_course = "<label class='form-check-label' for=" + course + "> " + course + " <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
+			temp_course = "<label class='form-check-label' for=" + course + "> <span class='filter_label'>" + course + "</span> <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
 			response_course.append(temp_course)
 
-			temp_priority = "<label class='form-check-label' for=" + course + "-priority> " + course + "<select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+			temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+			if i == 3:
+				temp_priority = temp_priority + "<p></p>"
 			response_priority.append(temp_priority)
 
 			dept = course.split(' ')[0]
 			if dept not in departments:
 				departments.append(dept)
-				temp_dept = "<label class='form-check-label' for=" + dept + "> " + dept + " <input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
+				temp_dept = "<label class='form-check-label' for=" + dept + "> <span class='filter_label'>" + dept + " </span><input class='form-check-input dep-check' type='checkbox' value=" + dept + "></label>"
 				response_dept.append(temp_dept)
 
 		# NEED AN IF STATEMENT TO CHECK THAT FILTER ALREADY EXISTS
