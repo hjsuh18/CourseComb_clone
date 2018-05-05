@@ -192,11 +192,8 @@
       $("#after-ten-am").prop('checked', false);
       $("#full").prop('checked', false);
       $("#pdf").prop('checked', false);
-      var must_have_courses = JSON.parse(data["must_have_courses"]);
       var must_have_departments = JSON.parse(data["must_have_departments"]);
       var course_priority = JSON.parse(data["course_priority"]);
-      $("#must-have-courses").empty();
-      $("#must-have-courses").append(must_have_courses);
       $("#must-have-departments").empty();
       $("#must-have-departments").append(must_have_departments);
       $("#course-priority").empty();
@@ -262,11 +259,8 @@
       $("#full").prop('checked', filter_full);
       var filter_pdf = JSON.parse(data['filter_pdf']);
       $("#pdf").prop('checked', filter_pdf);
-      var must_have_courses = JSON.parse(data["must_have_courses"]);
       var must_have_departments = JSON.parse(data["must_have_departments"]);
       var course_priority = JSON.parse(data["course_priority"]);
-      $("#must-have-courses").empty();
-      $("#must-have-courses").append(must_have_courses);
       $("#must-have-departments").empty();
       $("#must-have-departments").append(must_have_departments);
       $("#course-priority").empty();
@@ -280,11 +274,6 @@
     e.preventDefault();
     // number of courses
     var x = $("#coursenum option:selected").text();
-    // Must have courses
-    var allCourses = [];
-    $('.class-check:checked').each(function () {
-      allCourses.push($(this).val());
-    });
     
     // Must have departments
     var allDeps = [];
@@ -339,7 +328,6 @@
     var createschedule_data = {
       searchresults: 'searchresults',
       number_of_courses: x,
-      courses: allCourses,
       depts: allDeps,
       distribution: distribution,
       priority: priority,

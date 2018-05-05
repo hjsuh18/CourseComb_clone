@@ -93,11 +93,20 @@ def home(request):
 	elif 'searchresults' in request.POST:
 		# update filter fields
 		d = dict(request.POST)
+
+		# make must_courses array from priority 
+		priority = d.get("priority[]")
+		must_courses = []
+		for i in range (0, len(priority)):
+			# 3 is must-have course
+			if priority[i] == '3':
+				must_courses.append(priority[i - 1])
+
 		f = Filter.objects.update_or_create(
 			user = curr_profile,
 			defaults={
 				'number_of_courses': int(d.get("number_of_courses")[0]),
-				'must_courses': d.get("courses[]"),
+				'must_courses': must_courses,
 				'must_dept': d.get("depts[]"),
 				'distribution': d.get("distribution[]"),
 				'priority': d.get("priority[]"),
@@ -187,7 +196,7 @@ def home(request):
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
-			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + "</div>")
+			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(i + 1) + ". " + str(combination[i]) + "</div>")
 
 		if not response:
 			responseobject = {'filter_restrict': 'Your preferences are too restrictive. There are no possible combinations for your preferences.'}
@@ -208,7 +217,6 @@ def home(request):
 		queue = curr_profile.faves.split(',')
 
 		# get the inputs from filter from before to upload saved fields
-		previous_must_courses = []
 		previous_course_priority = []
 		previous_must_dept = []
 
@@ -222,7 +230,6 @@ def home(request):
 			responseobject['filter_full'] = curr_profile.filter.full
 			responseobject['filter_pdf'] = curr_profile.filter.pdf
 
-			previous_must_courses = curr_profile.filter.must_courses
 			previous_course_priority = curr_profile.filter.priority
 			previous_must_dept = curr_profile.filter.must_dept
 		# Filter has never been set, so set fields as default values
@@ -249,24 +256,18 @@ def home(request):
 			course = Course.objects.get(registrar_id=queue[i]).deptnum
 			course = course.split('/')[0]
 
-			# restore must course form value if it was saved from previous filter
-			if previous_must_courses != None and queue[i] in previous_must_courses:
-				temp_course = "<label class='form-check-label' for=" + course + "> <span class='filter_label'>" + course + "</span> <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + " checked></label>"
-			else:
-				temp_course = "<label class='form-check-label' for=" + course + "> <span class='filter_label'>" + course + "</span> <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
-
 			# restore course priority value if it was saved from previous filter
 			if previous_course_priority != None and queue[i] in previous_course_priority:
 				x = previous_course_priority.index(queue[i])
 				p = int(previous_course_priority[x + 1])
 				if p == 1:
-					temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option selected='selected' value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option selected='selected' value='1'>Low</option><option value='2'>Medium</option><option value='3'>Must-have</option></select>"
 				elif p == 2:
-					temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option selected='selected' value='2'>Medium</option><option value='3'>High</option></select>"
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option selected='selected' value='2'>Medium</option><option value='3'>Must-have</option></select>"
 				else:
-					temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option selected='selected' value='3'>High</option></select>"
+					temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option selected='selected' value='3'>Must-have</option></select>"
 			else:
-				temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+				temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>Must-have</option></select>"
 
 
 			# restore must dept form value
@@ -283,7 +284,6 @@ def home(request):
 			response_priority.append(temp_priority)
 
 		
-		responseobject['must_have_courses'] = json.dumps(response_course)
 		responseobject['must_have_departments'] = json.dumps(response_dept)
 		responseobject['course_priority'] = json.dumps(response_priority)
 		responseobject['filter_distribution'] = json.dumps(curr_profile.filter.distribution)
@@ -293,7 +293,6 @@ def home(request):
 
 	# user clicks on the filter button on main page
 	elif 'reset_filter' in request.POST:
-		response_course = []
 		departments = []
 		response_dept = []
 		response_priority = []
@@ -323,10 +322,7 @@ def home(request):
 			course = Course.objects.get(registrar_id=queue[i]).deptnum
 			course = course.split('/')[0]
 
-			temp_course = "<label class='form-check-label' for=" + course + "> <span class='filter_label'>" + course + "</span> <input class='form-check-input class-check' type='checkbox' value=" + queue[i] + "></label>"
-			response_course.append(temp_course)
-
-			temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>High</option></select>"
+			temp_priority = "<label class='form-check-label' for=" + course + "-priority> <span class='filter_label_priority'>" + course + "</span><select class= 'form-control-in-line priority-select' id=" + queue[i] + ">" + course + "  <option value='1'>Low</option><option value='2'>Medium</option><option value='3'>Must-have</option></select>"
 			response_priority.append(temp_priority)
 
 			dept = course.split(' ')[0]
@@ -336,7 +332,6 @@ def home(request):
 				response_dept.append(temp_dept)
 
 		responseobject = dict()
-		responseobject['must_have_courses'] = json.dumps(response_course)
 		responseobject['must_have_departments'] = json.dumps(response_dept)
 		responseobject['course_priority'] = json.dumps(response_priority)
 
@@ -485,7 +480,7 @@ def home(request):
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
-			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + "</div>")
+			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(i + 1) + ". " + str(combination[i]) + "</div>")
 
 		# -1 because there is always an empty string
 		queue_length = len(favorites) - 1

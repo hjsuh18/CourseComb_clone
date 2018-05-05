@@ -23,7 +23,7 @@
             {% csrf_token %}
 
             <label id="filter-label" for="number_of_courses">
-              <span class="filter_label">Number of Courses in a Combination:</span>
+              <span class="filter_label">How many courses do you want to take?:</span>
               <select class="form-control-in-line" id="coursenum">
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -39,9 +39,10 @@
 
             <br>
 
-            <label class="form-check-label" id="filter-label" for="must-have-courses">Must have Courses: </label>
-            <div class="form-check form-check-inline" id="must-have-courses">
-            </div>
+              <label class="form-check-label" id="filter-label" for="course-priority">Priority of Each Course: </label>
+              <div id="course-priority">
+              </div>
+
             <br>
 
             <div id="distribution">
@@ -99,11 +100,6 @@
             </p>
 
             <div class="collapse" id="collapseAdvanced">
-
-              <label class="form-check-label" id="filter-label" for="course-priority">Priority of Each Course: </label>
-              <div id="course-priority">
-              </div>
-              <br>
 
               <label class="form-check-label" id="filter-label" for="must-have-departments">Must have Departments: </label>
               <div class="form-check form-check-inline" id="must-have-departments">
