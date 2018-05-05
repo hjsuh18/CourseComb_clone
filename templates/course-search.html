@@ -8,7 +8,8 @@
   
   <span class = "aftersearch"></span>
 
-  <div class = "coursequeue_label">Courses of Interest (<span class="queue_length">{{ queue_length }}</span>)</div>
+  <div class = "column-label">Course Queue (<span class="queue_length">{{ queue_length }}</span>)</div>
+
 
   <div class = "coursequeue">
     {% for i in favorites%}
@@ -16,7 +17,8 @@
     {% endfor %}
   </div>
 
-
+  <br>
+  
   <!-- FILTER --> 
   {% include 'filter_button.html' %}
 
