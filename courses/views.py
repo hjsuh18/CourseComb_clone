@@ -486,7 +486,11 @@ def home(request):
 				continue
 			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(combination[i]) + "</div>")
 
-		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs})
+		# -1 because there is always an empty string
+		queue_length = len(favorites) - 1
+		combination_length = len(curr_combs)
+
+		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs, "queue_length": queue_length, "combination_length": combination_length})
 
 # get courses for autocomplete functionality
 def get_courses(request):

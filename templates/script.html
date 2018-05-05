@@ -350,16 +350,25 @@
      success: function(data) {
       $("#combqueue").empty();
       if (data["course_number"]) {
+        $(".combination_length").empty();
+        $(".combination_length").append(0);
         $("#combqueue").append(data["course_number"]);
       }
       else if (data["no_combo"]) {
+        $(".combination_length").empty();
+        $(".combination_length").append(0);
         $("#combqueue").append(data["no_combo"]);
       }
       else if (data["filter_restrict"]) {
+        $(".combination_length").empty();
+        $(".combination_length").append(0);
         $("#combqueue").append(data["filter_restrict"]);
       }
       else {
         var courses_com = JSON.parse(data["courses_com"]);
+        var combination_length = courses_com.length;
+        $(".combination_length").empty();
+        $(".combination_length").append(combination_length);
         $("#combqueue").append(courses_com);
       }
     },
@@ -385,6 +394,8 @@
      data: class_delete_data,
      success: function(data) {
       parent.remove();
+      $(".queue_length").empty()
+      $(".queue_length").append($(".coursequeue > div").length);
     }
   });
   });
@@ -397,7 +408,7 @@
         noResults: '',
         results: function() {}
       },
-      appendTo: '.coursequeue',
+      appendTo: '.aftersearch',
       select: function (e, ui) {
         // console.log(ui.item.value)
         var class_select_data = {
@@ -423,6 +434,10 @@
                 <a href="' + url + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
                 <a href="' + eval + '" target="_blank"><div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div></a> \
                 <div class = "deletebutton deleteclass" id ="' + newid + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
+              // refresh the number of courses on coursequeue
+              $(".queue_length").empty()
+              $(".queue_length").append($(".coursequeue > div").length);
+
               // $(".course-results" + newid).css("background-color", lightpalette[newid%10]);
             }
           }

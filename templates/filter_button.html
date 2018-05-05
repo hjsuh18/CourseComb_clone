@@ -23,29 +23,24 @@
             {% csrf_token %}
 
             <label id="filter-label" for="number_of_courses">
-              <span class="filter_label">Number of Courses:</span>
-            <select class="form-control-in-line" id="coursenum">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-            </select>
+              <span class="filter_label">Number of Courses in a Combination:</span>
+              <select class="form-control-in-line" id="coursenum">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+              </select>
             </label>
 
             <br>
 
             <label class="form-check-label" id="filter-label" for="must-have-courses">Must have Courses: </label>
             <div class="form-check form-check-inline" id="must-have-courses">
-            </div>
-            <br>
-
-            <label class="form-check-label" id="filter-label" for="must-have-departments">Must have Departments: </label>
-            <div class="form-check form-check-inline" id="must-have-departments">
             </div>
             <br>
 
@@ -97,70 +92,85 @@
 
             <br>
 
-            <label class="form-check-label" id="filter-label" for="course-priority">Priority of Each Course: </label>
-            <div id="course-priority">
-            </div>
-            <br>
+            <p>
+              <a class="btn btn-light btn-sm" data-toggle="collapse" href="#collapseAdvanced" role="button" aria-expanded="false" aria-controls="collapseAdvanced">
+                Show/Hide Advanced Options
+              </a>
+            </p>
 
+            <div class="collapse" id="collapseAdvanced">
 
+              <label class="form-check-label" id="filter-label" for="course-priority">Priority of Each Course: </label>
+              <div id="course-priority">
+              </div>
+              <br>
 
-            <div id="max_dept">
-              <label class="form-check-label" id="filter-label" for="dept_max"> 
-                <span class="filter_label">Maximum # of Courses in One Department:</span>
-                <select class="form-control-in-line" id="max-dept">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
-              </label>
-            </div>
-            <br>
+              <label class="form-check-label" id="filter-label" for="must-have-departments">Must have Departments: </label>
+              <div class="form-check form-check-inline" id="must-have-departments">
+              </div>
 
-            <div id="time">
-              <label id="filter-label" for="time">Time Preferences:</label>
-              <div class="form-check form-check-inline">
-                <label class="form-check-label" for="no-friday-class">
-                  <span class="filter_label">No Friday Class:</span>
-                  <input class="form-check-input" type="checkbox" id="no-friday-class">
-                </label>
-
-                <label class="form-check-label" for="no-evening-class">
-                  <span class="filter_label">No Evening Class:</span>
-                  <input class="form-check-input" type="checkbox" id="no-evening-class">
-                </label>
-
-                <label class="form-check-label" for="after-ten-am">
-                  <span class="filter_label">After 10am:</span>
-                  <input class="form-check-input" type="checkbox" id="after-ten-am">
+              <br>
+              
+              <div id="max_dept">
+                <label class="form-check-label" id="filter-label" for="dept_max"> 
+                  <span class="filter_label">Maximum # of Courses in One Department:</span>
+                  <select class="form-control-in-line" id="max-dept">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
                 </label>
               </div>
+              <br>
+
+              <div id="time">
+                <label id="filter-label" for="time">Time Preferences:</label>
+                <div class="form-check form-check-inline">
+                  <label class="form-check-label" for="no-friday-class">
+                    <span class="filter_label">No Friday Class:</span>
+                    <input class="form-check-input" type="checkbox" id="no-friday-class">
+                  </label>
+
+                  <label class="form-check-label" for="no-evening-class">
+                    <span class="filter_label">No Evening Class:</span>
+                    <input class="form-check-input" type="checkbox" id="no-evening-class">
+                  </label>
+
+                  <label class="form-check-label" for="after-ten-am">
+                    <span class="filter_label">After 10am:</span>
+                    <input class="form-check-input" type="checkbox" id="after-ten-am">
+                  </label>
+                </div>
+              </div>
+
+              <br>
+
+              <div id="full_class">
+                <label class="form-check-label" id="filter-label" for="full">
+                  <span class="filter_label">Exclude Fully Enrolled Classes:</span>
+                  <input class="form-check-input" type="checkbox" id="full"> 
+                </label>
+              </div>
+
+              <br>
+
+              <div id="pdf_only">
+                <label class="form-check-label" id="filter-label" for="pdf">
+                  <span class="filter_label">Include 1 PDF-only Class:</span>
+                  <input class="form-check-input" type="checkbox" id="pdf">
+                </label>
+              </div>
+              <br>
             </div>
 
-            <br>
-
-            <div id="full_class">
-              <label class="form-check-label" id="filter-label" for="full">
-                <span class="filter_label">Exclude Fully Enrolled Classes:</span>
-                <input class="form-check-input" type="checkbox" id="full"> 
-              </label>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary reset_filter">Reset Filters</button>
+              <button type="submit" class="btn btn-primary show_combo">Show Combinations</button>
             </div>
-
-            <br>
-
-            <div id="pdf_only">
-              <label class="form-check-label" id="filter-label" for="pdf">
-                <span class="filter_label">Include 1 PDF-only Class:</span>
-                <input class="form-check-input" type="checkbox" id="pdf">
-              </label>
-            </div>
-
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary reset_filter">Reset Filters</button>
-            <button type="submit" class="btn btn-primary show_combo">Show Combinations</button>
-          </div>
+
         </form>
       </div>
     </div>

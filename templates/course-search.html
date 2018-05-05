@@ -7,6 +7,9 @@
 
   
   <span class = "aftersearch"></span>
+
+  <div class = "coursequeue_label">Courses of Interest (<span class="queue_length">{{ queue_length }}</span>)</div>
+
   <div class = "coursequeue">
     {% for i in favorites%}
     {{ i | safe}} 
