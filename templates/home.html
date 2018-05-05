@@ -53,47 +53,49 @@
 
       <!-- SECOND COLUMN -->
       <div class = "col-xs-4 col-md-2 col-lg-2" id="search-results">
-<!--         <label class = "comb-list" for="course-combinations-list"> -->
-        <span class = "column-label"> <span class="combination_length">{{ combination_length }}</span> Possible Schedules Ranked:</span>
-        <p></p>
-<!--         </label> -->
-        <div class = "combqueue" id="combqueue">
-          {% for i in combinations%}
-          {{ i | safe}}
-          {% endfor %}
+        <!--         <label class = "comb-list" for="course-combinations-list"> -->
+          <span class = "column-label"> <span class="combination_length">{{ combination_length }}</span> Possible Schedules Ranked:</span>
+          <p></p>
+          <!--         </label> -->
+          <div class = "combqueue" id="combqueue">
+            {% for i in combinations%}
+            {{ i | safe}}
+            {% endfor %}
+          </div>
+
         </div>
 
-      </div>
-
-      <!-- THIRD COLUMN -->
-      <div class = "col-xs-6 col-md-8 col-lg-8 hidden">
-        <div class = "calendar-holder">
-        <img src = "{% static 'img/tiger.png' %}">
-        <div class = "calendar-holder-text">
-        Welcome to CourseComb! 
-      </div>
-      </div>
-        <div class = "save-schedule-panel">
+        <!-- THIRD COLUMN -->
+        <div class = "col-xs-6 col-md-8 col-lg-8 hidden">
+          <div class = "calendar-holder">
+            <div class = "calendar-holder-content">
+              <img src = "{% static 'img/tiger.png' %}">
+              <div class = "calendar-holder-text">
+                Welcome to CourseComb! 
+              </div>
+            </div>
+          </div>
+          <div class = "save-schedule-panel">
+          </div>
+          <div id="calendar"> </div>
+          <label for="precept-toggles">
+            <span class="column-label precept-show"></span>
+          </label>
+          <div id="selected-coursecomb" class="row">
+          </div>
         </div>
-        <div id="calendar"> </div>
-        <label for="precept-toggles">
-          <span class="column-label precept-show"></span>
-        </label>
-        <div id="selected-coursecomb" class="row">
-        </div>
-      </div>
 
-    </div> 
-  </div>
+      </div> 
+    </div>
 
 
-  {% include 'style.html' %}
+    {% include 'style.html' %}
 
-  {% include 'helper.html' %}
+    {% include 'helper.html' %}
 
-  {% include 'script.html' %}
+    {% include 'script.html' %}
 
-  <!-- Bootstrap Javascript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
-</html>
+    <!-- Bootstrap Javascript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+  </html>
