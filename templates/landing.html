@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>CourseComb</title>
+  <title class="title">CourseComb</title>
 
   <!-- Custom Fonts -->
 <!--   <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
@@ -30,7 +30,7 @@
     }
 
     .btn-xl {
-      padding: 1.25rem 2.5rem;
+      padding: 1.25rem /*2.5rem*/;
     }
 
     h1,
@@ -55,17 +55,14 @@
       background-size: cover;
     }*/
 
+    .title {
+      color: #FEFFFF;
+    }
     .bg { 
-        /* The image used */
-        background-image: url("{% static 'img/nassau.jpg' %}");
-
+        background-color: #3AAFA9;
+/*        color: #17252A;*/
         /* Full height */
         height: 100%; 
-
-        /* Center and scale the image nicely */
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
     }
 
     .masthead h1 {
@@ -84,14 +81,14 @@
     }
 
     .btn-primary {
-      background-color: #1D809F !important;
-      border-color: #1D809F !important;
+      background-color: #17252A !important;
+      border-color: #17252A !important;
       color: #fff !important;
     }
 
     .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
-      background-color: #155d74 !important;
-      border-color: #155d74 !important;
+      background-color: #254E58 !important;
+      border-color: #17252A !important;
     }
 
     .btn {
@@ -106,7 +103,7 @@
     <div class="container text-center my-auto">
       <h1 class="mb-1">CourseComb</h1>
       <h3 class="mb-5">
-        <em>A Quick and Intuitive Way to Select Your Courses</em>
+        <em>A Fast Way to Narrow Down Your Course Selection</em>
       </h3>
       <a class="btn btn-primary btn-xl" href="/home/">Login</a>
     </div>
