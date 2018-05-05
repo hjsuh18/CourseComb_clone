@@ -66,6 +66,9 @@
   $('body').on('click', '.coursecomb', function (e) {
    e.preventDefault();
 
+   // empty holder image
+   $(".calendar-holder").empty();
+   
    // initilize calendar
    $("#calendar").fullCalendar({
     eventClick: function(calEvent, jsEvent, view) {
