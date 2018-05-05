@@ -181,9 +181,15 @@ $.ajax({
       selectedCourses = selectedCourses.split(". ")[1];
       selectedCourses = selectedCourses.split(",");
       $("div#selected-coursecomb").empty();
+      $(".precept-show").empty();
+      var precepts_exist = false;
       for (i = 0; i < selectedCourses.length; i++) {
         var course = selectedCourses[i].trim();
         if (data[course] != "{}") {
+          if (precepts_exist != true) {
+            precepts_exist = true;
+            $(".precept-show").append("Click to show precepts");
+          }
           var temp = JSON.parse(data[course]);
           var precepts;
           $("div#selected-coursecomb").append(
