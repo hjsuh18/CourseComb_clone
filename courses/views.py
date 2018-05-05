@@ -112,6 +112,9 @@ def home(request):
 
 		ids = curr_profile.faves.split(',')
 
+		# delete all saved combinations
+		curr_profile.combinations.all().delete()
+
 		priority = curr_profile.filter.priority
 
 		high_priority = []
@@ -131,7 +134,7 @@ def home(request):
 					high_priority.append(course)
 
 		course_list = high_priority + medium_priority + low_priority
-		
+
 		course_num = curr_profile.filter.number_of_courses
 		if course_num > len(course_list):
 			# need to show an error message
@@ -165,8 +168,6 @@ def home(request):
 			course_combo.append(s)
 
 		# create course combination object for each combination and link to user
-		curr_profile.combinations.all().delete()
-
 		for i in range(0, len(registrar_combo)):
 			# save course combination into database
 			c = Combination.objects.create(
