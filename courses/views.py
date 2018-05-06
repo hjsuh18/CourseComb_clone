@@ -205,7 +205,7 @@ def home(request):
 			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(count) + ". " + str(combination[i]) + "</div>")
 
 		if not response:
-			responseobject = {'filter_restrict': 'There are no possible combinations for your preferences. Please adjust your filters.'}
+			responseobject = {'filter_restrict': 'There are no possible combinations for your selected preferences. Please adjust your filters.'}
 			return JsonResponse(responseobject)
 
 		responseobject = {'courses_com': json.dumps(response)}
