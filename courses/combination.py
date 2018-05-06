@@ -1,15 +1,18 @@
 from .models import Course, Meeting
 from django.contrib.postgres.search import SearchVector
+from copy import deepcopy
 
 # for a certain course meeting anchor, remove all courses in course_list that conflict with anchor
 def exclude_conflicts(anchor, course_list):
-	courses = course_list[0]
-	course_meetings = course_list[1]
+
+	courses = deepcopy(course_list[0])
+	course_meetings = deepcopy(course_list[1])
 	c_length = len(courses)
 	# go through each course and get rid of meetings that conflict with anchor meeting
 	# if all meetings of course conflicts, delete entire course from course list
 	# iterate through every course
 	for i in range(c_length - 1, -1, -1):
+		# m is all the primary meetings of i'th course
 		m = course_meetings[i]
 		course_conflict = False
 		# go through every meeting of course and delete meetings that conflict
@@ -38,6 +41,7 @@ def append(prefix, l):
 
 # courses is a list of courses, k is the number courses being selected
 def course_combine(courses, k):
+
 	# error: k is greater than length of courses
 	if (k > len(courses[0])):
 		return None

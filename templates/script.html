@@ -357,6 +357,11 @@
         $(".combination_length").append(0);
         $("#combqueue").append(data["course_number"]);
       }
+      else if (data["no_courses"]) {
+        $(".combination_length").empty();
+        $(".combination_length").append(0);
+        $("#combqueue").append(data["no_courses"]);
+      }
       else if (data["no_combo"]) {
         $(".combination_length").empty();
         $(".combination_length").append(0);
