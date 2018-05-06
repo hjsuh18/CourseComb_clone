@@ -37,7 +37,7 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,400,400i,600,800" rel="stylesheet">
 
 
-  {% include 'calendar.html' %}
+  <!-- {% include 'calendar.html' %} -->
 
 </head>
 
@@ -53,38 +53,43 @@
 
       <!-- SECOND COLUMN -->
       <div class = "col-xs-4 col-md-2 col-lg-2" id="search-results">
-<!--         <label class = "comb-list" for="course-combinations-list"> -->
         <span class = "column-label"> <span class="combination_length">{{ combination_length }}</span> Possible Schedules Ranked by Preference:</span>
         <p></p>
-<!--         </label> -->
         <div class = "combqueue" id="combqueue">
           {% for i in combinations%}
           {{ i | safe}}
           {% endfor %}
         </div>
-
       </div>
 
       <!-- THIRD COLUMN -->
       <div class = "col-xs-6 col-md-8 col-lg-8 hidden">
-        <div class = "save-schedule-panel">
-          <span class = "column-label">Selected Schedule:</span>
-          <span class="save-schedule-message"> </span>
-          <button class = "btn btn-primary btn-md" id="save-schedule" onclick="saveScheduleButton();">Favorite <i class="far fa-heart"></i></button>
-        </div>
+
+        <div class = "save-schedule-panel"></div>
+
         <div id="calendar-container">
+<!--           <div class = "calendar-holder">
+            <div class = "calendar-holder-content">
+              <img src = "{% static 'img/tiger.png' %}">
+              <div class = "calendar-holder-text">
+                Welcome to CourseComb! 
+                (some instructions here about how to use the website - will write laterr)
+              </div>
+            </div>
+          </div> -->
           <div id="calendar"></div>
+
         </div>
         <label for="precept-toggles">
-          <span class="column-label">Click to show precepts</span>
+          <span class="column-label precept-show"></span>
         </label>
         <div id="selected-coursecomb" class="row">
         </div>
-      </div>
+        
 
-    </div> 
+      </div> 
+    </div>
   </div>
-
 
   {% include 'style.html' %}
 

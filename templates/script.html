@@ -9,11 +9,13 @@
     selector: '.schedule-name-input'
   });
   // Save schedule when pressed enter
-  $(".save-schedule-message").on('keyup', '#schedule_name', function (e) {
+  $(".save-schedule-panel").on('keyup', '#schedule_name', function (e) {
     if (e.which == 13) {
       saveSchedule();
     }
   });
+
+
   // Save schedule when clicking on arrow
   function saveSchedule () {
     calendar_data = []
@@ -41,8 +43,6 @@
         url: '/home/',
         data: saveschedule_data,
         success: function(data) {
-          console.log("Save");
-          console.log(data);
           $(".save-schedule-message").empty();
           if (data["message"]) {
             $(".save-schedule-message").append(data["message"]);
@@ -68,34 +68,139 @@
   // Click on a combination
   $('body').on('click', '.coursecomb', function (e) {
    e.preventDefault();
-   $(".save-schedule-message").empty();
-   comb_id = $(this).attr("class").split(" ")[1];
-   var coursecomb_data = {
-    comb_click:'comb_click',
-    comb_id: comb_id
-  };
-  var classes;
-  $.ajax({
-    type: "GET",
-    url: '/home/',
-    data: coursecomb_data,
-    success: function(data) {
-      $("#calendar").fullCalendar('removeEventSources');
-      all_courses = JSON.parse(JSON.parse(data["schedule"])["names"]);
-      for (k = 0; k < all_courses.length; k++) {
-        $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(data["schedule"])[all_courses[k]]));
-      }
-      schedule_data = data;
-      var selectedCourses = $(".coursecomb." + comb_id).text();
+
+   // empty holder image
+   $(".calendar-holder").empty();
+
+   // create save schedule anel
+  $(".save-schedule-panel").empty();
+  $(".save-schedule-panel").append('<span class = "column-label">Selected Schedule:</span> \
+          <span class="save-schedule-message"> </span> \
+          <button class = "btn btn-primary btn-md" id="save-schedule" onclick="saveScheduleButton();">Favorite <i class="far fa-heart"></i></button>')
+  $(".save-schedule-message").empty();
+
+   // initilize calendar
+   $("#calendar").fullCalendar({
+    eventClick: function(calEvent, jsEvent, view) {
+      if (calEvent["className"].indexOf("precept_render") != -1) {
+        $(".save-schedule-message").empty();
+                // for primary meeting
+                if (calEvent["className"].indexOf("primary") != -1) {
+                  title = calEvent["id"].split("-")[0];
+                  all_sources = $("#calendar").fullCalendar('getEventSources');
+                  precepts_display = false;
+
+                  for (i = 0; i < all_sources.length; i++) { 
+                    if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(JSON.parse(schedule_data["schedule"])[title]))) {
+                      precepts_display = true;
+                      var selected_precept;
+                      for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
+                        if (all_sources[i]["rawEventDefs"][j]["id"] == calEvent["id"]) {
+                          selected_precept = all_sources[i]["rawEventDefs"][j];
+                          temp = selected_precept["className"].split(" ");
+                          temp.push("selected_class");
+                          selected_precept["className"] = temp;
+                          selected_precept = [selected_precept];
+                        }
+                      }
+                      $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
+                      $("#calendar").fullCalendar('addEventSource', selected_precept);
+                    } 
+                  }
+                  if (precepts_display == false) {
+                    $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
+                    $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(schedule_data["schedule"])[title]));
+                  }
+                }
+                else {
+                  title = calEvent["id"].split("-")[0];
+                  section_type = calEvent["id"].split("-")[1][0];
+                  all_sources = $("#calendar").fullCalendar('getEventSources');
+                  precepts_display = false;
+                  for (i = 0; i < all_sources.length; i++) { 
+                    if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title])[section_type])) {
+                      precepts_display = true;
+                      var selected_precept;
+                      for (j = 0; j < all_sources[i]["rawEventDefs"].length; j++) {
+                        if (all_sources[i]["rawEventDefs"][j]["id"] == calEvent["id"]) {
+                          selected_precept = all_sources[i]["rawEventDefs"][j];
+                          temp = selected_precept["className"];
+                          selected_precept["className"] = [temp, "selected_precept"];
+                          selected_precept = [selected_precept];
+                        }
+                      }
+                      $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
+                      $("#calendar").fullCalendar('addEventSource', selected_precept);
+                    } 
+                  }
+                  if (precepts_display == false) {
+                    $("#calendar").fullCalendar('removeEventSource', calEvent["source"]["rawEventDefs"]);
+                    $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[title])[section_type]);
+                  }
+                }
+              }
+            },
+
+
+        // windowResize: function(view) {
+        //     // alert('The calendar has adjusted to a window resize');
+        //     var calHeight = $(window).height()*0.5;
+        //     $('#calendar').fullCalendar('option', 'height', calHeight);
+        // },
+
+
+        defaultView: 'agendaWeek',
+        header: false,
+        columnHeaderFormat: 'ddd',
+        minTime: '08:0:00',
+        maxTime: '23:00:00',
+        // slotDuration: '00:30:00',
+        allDaySlot: false,
+        weekends: false,
+        // contentHeight: 'auto',
+        height: 500,
+        contentHeight: 500,
+        eventOverlap: false,
+        aspectRatio: .5,
+        // slotMinutes: 30,
+        timeFromat: 'H:mm',
+        /*editable: true*/
+        handleWindowResize: true
+      })
+
+comb_id = $(this).attr("class").split(" ")[1];
+var coursecomb_data = {
+  comb_click:'comb_click',
+  comb_id: comb_id
+};
+var classes;
+$.ajax({
+  type: "GET",
+  url: '/home/',
+  data: coursecomb_data,
+  success: function(data) {
+    $("#calendar").fullCalendar('removeEventSources');
+    all_courses = JSON.parse(JSON.parse(data["schedule"])["names"]);
+    for (k = 0; k < all_courses.length; k++) {
+      $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(data["schedule"])[all_courses[k]]));
+    }
+    schedule_data = data;
+    var selectedCourses = $(".coursecomb." + comb_id).text();
       // get rid of rank number at the front
       selectedCourses = selectedCourses.split(". ")[1];
       selectedCourses = selectedCourses.split(",");
       $("div#selected-coursecomb").empty();
-      var no_precepts = true;
+
+      $(".precept-show").empty();
+      var precepts_exist = false;
       for (i = 0; i < selectedCourses.length; i++) {
         var course = selectedCourses[i].trim();
         if (data[course] != "{}") {
-          no_precepts = false;
+          if (precepts_exist != true) {
+            precepts_exist = true;
+            $(".precept-show").append("Click to show precepts");
+          }
+
           var temp = JSON.parse(data[course]);
           var precepts;
           $("div#selected-coursecomb").append(
@@ -120,13 +225,13 @@
           $(".col." + i).css("background-color", precepts[0].color);
         }
       }
-      if (no_precepts){
-        $("div#selected-coursecomb").append(
-          $("<div/>", {"class": "col"}).append(
-              $("<span style='color: rgb(43, 122, 120); font-size: 18px;'>There are no precepts to choose for your courses</span>")
-              )
-          );
-      }
+      // if (no_precepts){
+      //   $("div#selected-coursecomb").append(
+      //     $("<div/>", {"class": "col"}).append(
+      //         $("<span style='color: rgb(43, 122, 120); font-size: 18px;'>There are no precepts to choose for your courses</span>")
+      //         )
+      //     );
+      // }
     }
   });
     // second column highlighting
@@ -136,11 +241,13 @@
       //   $(this).css("background-color", "rgb(255, 255, 255)");
       if ($(this).css("background-color") == "rgb(43, 122, 120)") {
         $(this).css("background-color", "rgb(254, 255, 255)");
+        $(this).css("border-color", "rgb(23,37,42)");
         $(this).css("color", "rgb(23, 37, 42)");
       }
     });
     // $(this).css("background-color", "rgb(255, 184, 77)");
     $(this).css("background-color", "rgb(43, 122, 120)");
+    $(this).css("border-color", "rgb(43, 122, 120)");
     $(this).css("color", "rgb(254, 255, 255)");
 
     // if ($(this).css("background-color") == "rgb(255, 184, 77)") {
@@ -294,8 +401,8 @@
       $("#must-have-departments").append(must_have_departments);
       $("#course-priority").empty();
       $("#course-priority").append(course_priority);
-      }
-    });
+    }
+  });
 
   });
   // FOR ACTUAL FILTERING
