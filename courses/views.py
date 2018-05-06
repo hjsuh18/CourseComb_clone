@@ -197,10 +197,12 @@ def home(request):
 		combination = curr_profile.combinations.all()
 		response = []
 
+		count = 0
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
-			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(i + 1) + ". " + str(combination[i]) + "</div>")
+			count = count + 1
+			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(count) + ". " + str(combination[i]) + "</div>")
 
 		if not response:
 			responseobject = {'filter_restrict': 'There are no possible combinations for your preferences. Please adjust your filters.'}
@@ -481,10 +483,13 @@ def home(request):
 					<a href="' + course.url + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
         			<a href="' + course.evals + '"target="_blank"><div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div></a> \
         			<div class = "deletebutton deleteclass" id ="' + i + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
+
+		count = 0
 		for i in range (0, len(combination)):
 			if combination[i].filtered == True:
 				continue
-			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(i + 1) + ". " + str(combination[i]) + "</div>")
+			count = count + 1
+			curr_combs.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(count) + ". " + str(combination[i]) + "</div>")
 
 		# -1 because there is always an empty string
 		queue_length = len(favorites) - 1
