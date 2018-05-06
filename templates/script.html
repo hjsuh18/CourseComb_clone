@@ -73,11 +73,11 @@
    $(".calendar-holder").empty();
 
    // create save schedule anel
-  $(".save-schedule-panel").empty();
-  $(".save-schedule-panel").append('<span class = "column-label">Selected Schedule:</span> \
-          <span class="save-schedule-message"> </span> \
-          <button class = "btn btn-primary btn-md" id="save-schedule" onclick="saveScheduleButton();">Favorite <i class="far fa-heart"></i></button>')
-  $(".save-schedule-message").empty();
+   $(".save-schedule-panel").empty();
+   $(".save-schedule-panel").append('<span class = "column-label">Selected Schedule:</span> \
+    <span class="save-schedule-message"> </span> \
+    <button class = "btn btn-primary btn-md" id="save-schedule" onclick="saveScheduleButton();">Favorite <i class="far fa-heart"></i></button>')
+   $(".save-schedule-message").empty();
 
    // initilize calendar
    $("#calendar").fullCalendar({
@@ -141,51 +141,37 @@
               }
             },
 
+            defaultView: 'agendaWeek',
+            header: false,
+            columnHeaderFormat: 'ddd',
+            minTime: '08:0:00',
+            maxTime: '23:00:00',
+            slotDuration: '00:30:00',
+            allDaySlot: false,
+            weekends: false,
+            height: 'parent',
+            eventOverlap: false,
+            timeFromat: 'H:mm',
+          })
 
-        // windowResize: function(view) {
-        //     // alert('The calendar has adjusted to a window resize');
-        //     var calHeight = $(window).height()*0.5;
-        //     $('#calendar').fullCalendar('option', 'height', calHeight);
-        // },
-
-
-        defaultView: 'agendaWeek',
-        header: false,
-        columnHeaderFormat: 'ddd',
-        minTime: '08:0:00',
-        maxTime: '23:00:00',
-        // slotDuration: '00:30:00',
-        allDaySlot: false,
-        weekends: false,
-        // contentHeight: 'auto',
-        height: 500,
-        contentHeight: 500,
-        eventOverlap: false,
-        aspectRatio: .5,
-        // slotMinutes: 30,
-        timeFromat: 'H:mm',
-        /*editable: true*/
-        handleWindowResize: true
-      })
-
-comb_id = $(this).attr("class").split(" ")[1];
-var coursecomb_data = {
-  comb_click:'comb_click',
-  comb_id: comb_id
-};
-var classes;
-$.ajax({
-  type: "GET",
-  url: '/home/',
-  data: coursecomb_data,
-  success: function(data) {
-    $("#calendar").fullCalendar('removeEventSources');
-    all_courses = JSON.parse(JSON.parse(data["schedule"])["names"]);
-    for (k = 0; k < all_courses.length; k++) {
-      $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(data["schedule"])[all_courses[k]]));
-    }
-    schedule_data = data;
-    var selectedCourses = $(".coursecomb." + comb_id).text();
+   comb_id = $(this).attr("class").split(" ")[1];
+   var coursecomb_data = {
+    comb_click:'comb_click',
+    comb_id: comb_id
+  };
+  var classes;
+  $.ajax({
+    type: "GET",
+    url: '/home/',
+    data: coursecomb_data,
+    success: function(data) {
+      $("#calendar").fullCalendar('removeEventSources');
+      all_courses = JSON.parse(JSON.parse(data["schedule"])["names"]);
+      for (k = 0; k < all_courses.length; k++) {
+        $("#calendar").fullCalendar('addEventSource', JSON.parse(JSON.parse(data["schedule"])[all_courses[k]]));
+      }
+      schedule_data = data;
+      var selectedCourses = $(".coursecomb." + comb_id).text();
       // get rid of rank number at the front
       selectedCourses = selectedCourses.split(". ")[1];
       selectedCourses = selectedCourses.split(",");
