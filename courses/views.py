@@ -94,6 +94,15 @@ def home(request):
 		# update filter fields
 		d = dict(request.POST)
 
+		ids = curr_profile.faves.split(',')
+
+		# delete all saved combinations
+		curr_profile.combinations.all().delete()
+
+		if len(ids) < 2:
+			responseobject = {'no_courses': "Please add courses to your Courses of Interest"}
+			return JsonResponse(responseobject)
+
 		# make must_courses array from priority 
 		priority = d.get("priority[]")
 		must_courses = []
@@ -119,17 +128,8 @@ def home(request):
 			}
 			)
 
-		ids = curr_profile.faves.split(',')
-
-		# delete all saved combinations
-		curr_profile.combinations.all().delete()
-
-		if len(ids) < 2:
-			responseobject = {'no_courses': "Please add courses to your Courses of Interest"}
-			return JsonResponse(responseobject)
-
+		# order the courses in priority specified by user
 		priority = curr_profile.filter.priority
-
 		high_priority = []
 		medium_priority = []
 		low_priority = []
@@ -296,7 +296,6 @@ def home(request):
 
 		return JsonResponse(responseobject)
 
-
 	# user clicks on the filter button on main page
 	elif 'reset_filter' in request.POST:
 		departments = []
@@ -381,8 +380,10 @@ def home(request):
 							meeting.pop(i)
 							break
 			course_schedule_all = []
+			# this will never get rid of all meetings, since if all meetings do not meet conditions
+			# it would have been filtered out in course_filter
 			for m in meeting:
-				if full_filter and m.enroll > m.limit:
+				if full_filter and m.enroll >= m.limit:
 					continue
 				if no_friday_class and 'F' in m.days:
 					continue
@@ -412,6 +413,8 @@ def home(request):
 				course_classes[class_type] = []
 			for m in meetings:
 				if m.start_time != None:
+					# this will never get rid of all meetings, since if all meetings do not meet conditions
+					# it would have been filtered out in course_filter
 					if full_filter and m.enroll > m.limit:
 						continue
 					if no_friday_class and 'F' in m.days:

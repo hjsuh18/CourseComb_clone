@@ -64,6 +64,7 @@
     $(".save-schedule-message").append(new_element);
     $(".save-schedule-message").css("color", "black");
   }
+
   // Click on a combination
   $('body').on('click', '.coursecomb', function (e) {
    e.preventDefault();
@@ -90,9 +91,11 @@
       selectedCourses = selectedCourses.split(". ")[1];
       selectedCourses = selectedCourses.split(",");
       $("div#selected-coursecomb").empty();
+      var no_precepts = true;
       for (i = 0; i < selectedCourses.length; i++) {
         var course = selectedCourses[i].trim();
         if (data[course] != "{}") {
+          no_precepts = false;
           var temp = JSON.parse(data[course]);
           var precepts;
           $("div#selected-coursecomb").append(
@@ -101,9 +104,28 @@
                 course + "'>" + course + "</label>")
               )
             );
-          precepts = temp.hasOwnProperty("C") ? temp["C"] : temp["P"];
+          // get color of 'precept'
+          if (temp.hasOwnProperty("D"))
+            precepts=temp["D"];
+          else if (temp.hasOwnProperty("P"))
+            precepts=temp["P"];
+          else if (temp.hasOwnProperty("C"))
+            precepts=temp["C"];
+          else if (temp.hasOwnProperty("B"))
+            precepts=temp["B"];
+          else if (temp.hasOwnProperty("E"))
+            precepts=temp["E"];
+          else if (temp.hasOwnProperty("F"))
+            precepts=temp["F"];
           $(".col." + i).css("background-color", precepts[0].color);
         }
+      }
+      if (no_precepts){
+        $("div#selected-coursecomb").append(
+          $("<div/>", {"class": "col"}).append(
+              $("<span style='color: rgb(43, 122, 120); font-size: 18px;'>There are no precepts to choose for your courses</span>")
+              )
+          );
       }
     }
   });
@@ -442,8 +464,9 @@
                 <a href="' + url + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
                 <a href="' + eval + '" target="_blank"><div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div></a> \
                 <div class = "deletebutton deleteclass" id ="' + newid + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
+
               // refresh the number of courses on coursequeue
-              $(".queue_length").empty()
+              $(".queue_length").empty();
               $(".queue_length").append($(".coursequeue > div").length);
 
               // $(".course-results" + newid).css("background-color", lightpalette[newid%10]);

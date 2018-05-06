@@ -85,8 +85,6 @@
     font-size: 12px;
     font-family: 'Open Sans', sans-serif;
     max-height: 700px;
-    overflow-y: auto;
-    overflow-x: hidden;
     margin: 0;
   }
   .coursecomb {
@@ -106,16 +104,29 @@
     font-size: 16px;
     font-family: 'Open Sans', sans-serif;
     color: rgb(23,37,42);
+    height: calc(100vh - 150px);
+    /*match the height of calendar column */
+    max-height: 650px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   div#selected-coursecomb {
     position: relative;
     margin-bottom: 0;
   }
-  #calendar {
+/*  #calendar {
     font-size: 12px;
     font-family: 'Open Sans', sans-serif;
     margin-bottom: 5px;
-    height: 500px;
+    height: 300px;
+  }*/
+  #calendar-container{
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
+    margin-bottom: 5px;
+    height: calc(100vh - 185px);
+    /* Height just right to avoid calendar overflow*/
+    max-height: 608px; 
   }
   .course-checkbox {
     display: none;
