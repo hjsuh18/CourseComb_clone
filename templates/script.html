@@ -14,6 +14,8 @@
       saveSchedule();
     }
   });
+
+
   // Save schedule when clicking on arrow
   function saveSchedule () {
     calendar_data = []
@@ -68,7 +70,14 @@
 
    // empty holder image
    $(".calendar-holder").empty();
-   
+
+   // create save schedule anel
+  $(".save-schedule-panel").empty();
+  $(".save-schedule-panel").append('<span class = "column-label">Selected Schedule:</span> \
+          <span class="save-schedule-message"> </span> \
+          <button class = "btn btn-primary btn-md" id="save-schedule" onclick="saveScheduleButton();">Favorite <i class="far fa-heart"></i></button>')
+  $(".save-schedule-message").empty();
+
    // initilize calendar
    $("#calendar").fullCalendar({
     eventClick: function(calEvent, jsEvent, view) {
@@ -157,11 +166,7 @@
         /*editable: true*/
         handleWindowResize: true
       })
-$(".save-schedule-panel").empty();
-$(".save-schedule-panel").append('<span class = "column-label">Selected Schedule:</span> \
-          <span class="save-schedule-message"> </span> \
-          <button class = "btn btn-primary btn-md" id="save-schedule" onclick="saveScheduleButton();">Favorite <i class="far fa-heart"></i></button>')
-$(".save-schedule-message").empty();
+
 comb_id = $(this).attr("class").split(" ")[1];
 var coursecomb_data = {
   comb_click:'comb_click',
