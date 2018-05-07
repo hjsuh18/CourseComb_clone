@@ -99,7 +99,7 @@ class Filter(models.Model):
     must_dept = ArrayField(models.TextField(), null=True)
     distribution = ArrayField(models.TextField(), null=True)
     priority = ArrayField(models.TextField(), null=True)
-    max_dept = models.SmallIntegerField(default=-1)
+    max_dept = models.SmallIntegerField(default=5)
     no_friday_class = models.BooleanField(default=False)
     no_evening_class = models.BooleanField(default=False)
     after_ten_am = models.BooleanField(default=False)

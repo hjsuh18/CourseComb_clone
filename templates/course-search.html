@@ -1,44 +1,25 @@
 <div class = "col-sm-2 col-md-2 col-lg-2" id="course-search">
 
   <div class="ui-widget">
-    <label for="courses"> </label>
+    <label for="courses"></label>
     <input id="courses" placeholder="Search Course Here...">
   </div>
 
   
   <span class = "aftersearch"></span>
+
+  <div class = "column-label">Courses of Interest (<span class="queue_length">{{ queue_length }}</span>)</div>
+
+
   <div class = "coursequeue">
     {% for i in favorites%}
     {{ i | safe}} 
     {% endfor %}
   </div>
 
+  <br>
 
   <!-- FILTER --> 
   {% include 'filter_button.html' %}
-
- <!--  <div class="container refreshed-courses">
-    PHY 103: General Physics I
-    <div class="overlay">
-      <span class = "row1">
-        <div class = "registrar">
-          <span class = "text">
-            <i class="fa fa-info" aria-hidden="true"></i>
-          </span>
-        </div>
-        <div class = "reviews">
-          <span class = "text">
-            <i class="fas fa-chart-pie"></i>
-          </span>
-        </div>
-        <div class = "deletebutton deleteclass">
-          <span class = "text">
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </span>
-        </div>
-        </span>
-      </div>
-    
-  </div> -->
 
 </div>

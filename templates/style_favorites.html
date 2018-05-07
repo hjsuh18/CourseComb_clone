@@ -3,82 +3,29 @@
     body {
     margin: 0;
     text-align: center;
-    background-color: #FFFFFF;
+    /*background-color: #FFFFFF;*/
+    background-color: #FEFFFF;
   }
 
   .navbar {
-    background: #ffb84d;
+    /*background: #ffb84d;*/
+    background: #3AAFA9;
     font-weight: 500;
+  }
+
+  .navbar-brand {
+    color: white !important;
+  }
+
+  
+  .nav-link {
+    color:white !important;
   }
 
   .container-fluid {
     margin-top: 10px;
   }
 
-  #course-search {
-    position: relative;
-    font: 14px Arial;
-  }
-
-  .ui-widget {
-    position: relative;
-  }
-
-  .ui-widget input {
-    width: 100%;
-    height: 40px;
-    border: 1px solid #ffffff;
-    border-bottom: 1px solid black;
-    outline: none;
-    border-radius: 1px;
-    font: 18px Arial;
-    margin-bottom: 15px;
-    padding: 10px 10px 10px 10px;
-  }
-
-  .aftersearch .course-results:hover {
-    background-color: #ffb84d;
-  }
-
-  .coursequeue {
-    max-height: 250px;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  .refreshed-courses {
-    border: 1px solid rgb(255, 184, 77);
-    border-radius: 5px;
-    font: 13px Arial;
-    background-color: rgb(255, 255, 255);
-    padding: 10px 10px 10px 0;
-  }
-
-  .createschedule {
-    position: relative;
-  }
-
-  ul.ui-autocomplete {
-    position: relative;
-    display: inline-block;
-    height: 280px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    font: 12px Arial;
-    list-style: none;
-    padding-left: 0;
-  }
-
-  .filter_button {
-    background-color: #ffb84d;
-  }
-
-  #search-results {
-    font: 14px Arial;
-    max-height: 700px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    margin: 0;
-  }
 
 
   div#selected-coursecomb {
@@ -86,50 +33,22 @@
     margin-bottom: 0;
   }
 
-  #calendar {
-    font: 12px Arial;
-    margin-bottom: 5px;
-  }
-
-  .course-checkbox {
-    display: none;
-  }
-
-  #precept-button {
-    color: black;
+/*  #calendar {
     font-size: 12px;
-    opacity: 0.5;
-    transition: 0.8s;
-    cursor: pointer;
-    border-radius: 6px;
-    opacity: 0.5;
-    text-align: center;
-    vertical-align: middle;
-    margin: 0;
-    padding: 5px;
+    font-family: 'Open Sans', sans-serif;
+    margin-bottom: 5px;
+    height: 500px;
   }
-
-  .course-checkbox:checked + #precept-button {
-    opacity: 1;
+*/
+  #calendar-container{
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
+    margin-bottom: 5px;
+    height: calc(100vh - 110px);
+    /* Height just right to avoid calendar overflow*/
+    max-height: 608px; 
   }
-
-  .deleteclass {
-    float: right;
-    margin-top: 0;
-    margin-right: -10px;
-    cursor: pointer;
-    color: #fff;
-    border: 1px solid blue;
-    border-radius: 30px;
-    font: 10px Arial;
-    font-weight: bold;
-    display: inline-block;
-    line-height: 0;
-    padding: 10px 5px;
-  }
-
   .precept_render {
-    cursor: pointer;
     opacity: 0.5;
   }
 
@@ -146,7 +65,8 @@
   }
 
   #calendar .fc-content {
-    font: 12px Arial;
+    font: 12px;
+    font-family: 'Open Sans', sans-serif;
   }
 
   #calendar .fc-event {
@@ -190,9 +110,10 @@
 
 .coursecomb {
     cursor: pointer;
-    border: 1px solid rgb(255, 184, 77);
+    border: 1px solid rgb(23,37,42);
     border-radius: 5px;
-    font: 12px Arial;
+    font-size: 13px;
+    font-family: 'Open Sans', sans-serif;
     background-color: rgb(255, 255, 255);
     padding: 10px 10px 10px 0;
     margin-bottom: 10px;
@@ -203,6 +124,71 @@
     display:inline-block;
     overflow:hidden;
   }
+
+.container {
+  position: relative;
+  width: 100%;
+}
+.overlay {
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 100%;
+  right: 0;
+  width: 0;
+  height: 100%;
+  overflow: hidden;
+  transition: .5s ease;
+  border-radius: 5px;
+  /*padding: 5% 0;*/
+  /*background-color: #fc636b;*/
+}
+
+.container:hover .overlay {
+  width: 100%;
+  left: 0;
+}
+
+
+.registrar {
+   float: left;
+   width: 33.33%; 
+   height:100%;
+   /*background-color: #ffb84d;
+   padding: 5% 0;*/
+}
+.reviews {
+   float: left;
+   width: 33.33%; 
+   height:100%;
+   /*background-color: lightgrey;
+   padding: 5% 0;*/
+}
+.deletebutton {
+  color:white;
+   float: left;
+   width: 33.33%; 
+   height:100%;
+   background-color: #fc636b;
+   padding-top:3%;
+   /*padding: 5% 0;*/
+}
+
+.deletebutton:hover {
+  color: black;
+}
+.row1:before, 
+.row1:after {
+    content:"";
+    display: table ;
+    clear:both;
+}
+.text {
+  margin-top:50%;
+}
+.fa, .fas {
+  opacity:0.5;
+}
 
 </style>
 

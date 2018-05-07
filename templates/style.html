@@ -9,16 +9,60 @@
   }
   .navbar {
     background: #ffb84d;
+    background-color: #FEFFFF;
+    /*background-color: #FFFFFF;*/
+/*    overflow: hidden;*/
+  }
+  .navbar {
+    /*background: #ffb84d;*/
+    background: #3AAFA9;
     font-weight: 500;
   }
   .navbar-brand {
     color: white !important;
   }
 
+  .nav-link {
+    color:white !important;
+  }
+  
   .container-fluid {
     margin-top: 10px;
     overflow:hidden;
   }
+  .column-label {
+    font-size: 16.3px;
+    font-weight:600;
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(51,58,86);
+  }
+
+
+.calendar-holder {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  padding: 5% 0;
+  overflow-y: auto;
+}
+.message-content {
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+  #welcome_title {
+    font-size: 30px;
+    font-weight:600;
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(51,58,86);
+  }
+
+  #welcome_body {
+    font-size: 17.5px;
+    font-weight:600;
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(51,58,86);
+  }
+
   #course-search {
     position: relative;
     font-size: 14px;
@@ -30,7 +74,7 @@
   .ui-widget input {
     width: 100%;
     height: 40px;
-    border: 1px solid #ffffff;
+    border: 1px solid #FEFFFF;
     border-bottom: 1px solid black;
     outline: none;
     border-radius: 1px;
@@ -47,9 +91,12 @@
   }
   .refreshed-courses {
     cursor: pointer;
-    /*border: 1px solid rgb(255, 184, 77);*/
     border-radius: 0;
     font-family: 'Open Sans', sans-serif;
+    border: 1px solid rgb(23,37,42);
+    border-radius: 5px;
+    font-family: 'Open Sans', sans-serif;
+    background-color: rgb(254, 255, 255);
     padding: 10px 10px 10px 0;
     /*margin-bottom: 10px;*/
   }
@@ -68,37 +115,56 @@
     /*padding-left: 0;*/
     padding-top:20px;
   }
-  .filter_button {
+/*  .filter_button {
     background-color: #ffb84d;
-  }
+    background-color: #333A56
+  }*/
   #search-results {
     font-size: 12px;
     font-family: 'Open Sans', sans-serif;
     max-height: 700px;
-    overflow-y: auto;
-    overflow-x: hidden;
     margin: 0;
   }
   .coursecomb {
     cursor: pointer;
-    border: 1px solid rgb(255, 184, 77);
+    /*border: 1px solid rgb(255, 184, 77);*/
+    border: 1px solid rgb(23,37,42);
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 16.25px;
     font-family: 'Open Sans', sans-serif;
-    background-color: rgb(255, 255, 255);
+    color: black;
+    background-color: rgb(254, 255, 255);
     padding: 10px 10px 10px 0;
     margin-bottom: 10px;
     transition: 0.1s;
+  }
+  .combqueue {
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(23,37,42);
+    height: calc(100vh - 150px);
+    /*match the height of calendar column */
+    max-height: 650px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   div#selected-coursecomb {
     position: relative;
     margin-bottom: 0;
   }
-  #calendar {
+/*  #calendar {
     font-size: 12px;
     font-family: 'Open Sans', sans-serif;
     margin-bottom: 5px;
-    height: 500px;
+    height: 300px;
+  }*/
+  #calendar-container{
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
+    margin-bottom: 5px;
+    height: calc(100vh - 185px);
+    /* Height just right to avoid calendar overflow*/
+    max-height: 608px;
   }
   .course-checkbox {
     display: none;
@@ -154,12 +220,22 @@
     border: 1px solid ;
   }
   .save-schedule-panel {
-    padding-bottom: 5px;
+    padding-bottom: 15px;
   }
+  #save-schedule {
+    float: right;
+  }
+  .save-schedule-message {
+    position: absolute;
+    padding-top: 5px;
+    right: 130px;
+  }
+
   .btn:focus,.btn:active {
    outline: none !important;
    box-shadow: none;
-}
+ }
+
 /*overlay*/
 .container {
   position: relative;
@@ -182,25 +258,38 @@
   left: 0;
 }
 .registrar {
+  color:white;
    float: left;
    width: 33.33%; 
    height:100%;
-   background-color: #ffb84d;
+   background-color: #3AAFA9;
    padding: 5% 0;
 }
+
+.registrar:hover {
+  color: black;
+}
 .reviews {
+  color:white;
    float: left;
    width: 33.33%; 
    height:100%;
    background-color: lightgrey;
    padding: 5% 0;
 }
+.reviews:hover {
+  color: black;
+}
 .deletebutton {
+  color:white;
    float: left;
    width: 33.33%; 
    height:100%;
-   background-color: #fc636b;
+   background-color: #FF6686;
    padding: 5% 0;
+}
+.deletebutton:hover {
+  color: black;
 }
 .row1:before, 
 .row1:after {
@@ -216,11 +305,39 @@
 }
 
 .btn-primary {
-  background-color:#37c6e6;
-  border-color: #37c6e6;
+  /*background-color:#37c6e6;*/
+  /*border-color: #37c6e6;*/
+  border-color: #2B7A78;
+  background-color: #2B7A78;
 }
 .btn-primary:hover {
-  background-color:#1aafd0;
-  border-color: #1aafd0;
+/*  background-color:#1aafd0;
+  border-color: #1aafd0;*/
+  background-color: #3AAFA9;
+  border-color: #3AAFA9;
+}
+
+#filter-label {
+  font-weight: 600;
+}
+
+.form-check-label {
+  padding-right: 10px;
+}
+
+.filter_label {
+  padding-right: 3px;
+}
+
+.filter_label_priority {
+  padding-right: 20px;
+}
+
+.schedule-name-input {
+  border: 1px solid #FEFFFF;
+  border-bottom: 1px solid black;
+  outline: none;
+  border-radius: 1px;
+  font-family: 'Open Sans', sans-serif;
 }
 </style>

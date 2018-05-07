@@ -54,62 +54,75 @@ def filter_course(profile):
 
 	# go through each combination
 	for i in range (0, len(combination)):
+		already_filtered = False
 		# filter if does not contain must have courses
 		if must_courses != None:
 			for c in must_courses:
 				if c not in combination[i].registrar_combo:
 					combination[i].filtered = True
+					already_filtered = True
 					combination[i].save()
 
 		# filter if does not contain must have departments
-		if must_dept != None:
+		if not already_filtered and must_dept != None:
 			for dept in must_dept:
 				if dept not in combination[i].course_combo:
 					combination[i].filtered = True
+					already_filtered = True
 					combination[i].save()
 
 		# filter if does not contain course in each of required distirbution
-		for key in dist:
-			contains_dist = False
-			for course in dist[key]:
-				if course in combination[i].registrar_combo:
-					contains_dist = True
-					break
-			if not contains_dist:
-				combination[i].filtered = True
-				combination[i].save()
-
-		# max dept filter
-		for d in max_departments:
-			cnt = 0
-			for x in max_departments[d]:
-				if x in combination[i].registrar_combo:
-					cnt = cnt + 1
-			if cnt > max_dept:
-				combination[i].filtered = True
-				combination[i].save()
-
-		# time restraint filter
-		if time_avoid_course != None:
-			for c in time_avoid_course:
-				if c in combination[i].registrar_combo:
+		if not already_filtered:
+			for key in dist:
+				contains_dist = False
+				for course in dist[key]:
+					if course in combination[i].registrar_combo:
+						contains_dist = True
+						break
+				if not contains_dist:
 					combination[i].filtered = True
+					already_filtered = True
 					combination[i].save()
 
+		# max dept filter
+		if not already_filtered:
+			for d in max_departments:
+				cnt = 0
+				for x in max_departments[d]:
+					if x in combination[i].registrar_combo:
+						cnt = cnt + 1
+				if cnt > max_dept:
+					combination[i].filtered = True
+					already_filtered = True
+					combination[i].save()
+
+		# time restraint filter
+		if not already_filtered:
+			if time_avoid_course != None:
+				for c in time_avoid_course:
+					if c in combination[i].registrar_combo:
+						combination[i].filtered = True
+						already_filtered = True
+						combination[i].save()
+
 		# full classes filter
-		for c in full_classes:
-			if c in combination[i].registrar_combo:
+		if not already_filtered:
+			for c in full_classes:
+				if c in combination[i].registrar_combo:
+					combination[i].filtered = True
+					already_filtered = True
+					combination[i].save()
+
+		# pdf filter
+		if not already_filtered:
+			contains_pdf_only = False
+			for c in pdf_only_courses:
+				if c in combination[i].registrar_combo:
+					contains_pdf_only = True
+					break
+			if pdf and not contains_pdf_only:
 				combination[i].filtered = True
 				combination[i].save()
-		# pdf filter
-		contains_pdf_only = False
-		for c in pdf_only_courses:
-			if c in combination[i].registrar_combo:
-				contains_pdf_only = True
-				break
-		if pdf and not contains_pdf_only:
-			combination[i].filtered = True
-			combination[i].save()
 
 # returns a dictionary of must_distribution:courses relationship
 def get_dist(must_distribution, course_queue):

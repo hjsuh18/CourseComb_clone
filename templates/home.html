@@ -34,8 +34,10 @@
 
   <!-- Google Font Open Sans -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,400,400i,600,800" rel="stylesheet">
 
-  {% include 'calendar.html' %}
+
+  <!-- {% include 'calendar.html' %} -->
 
 </head>
 
@@ -50,38 +52,50 @@
 
 
       <!-- SECOND COLUMN -->
-
-      <div class = "col-xs-4 col-md-2 col-lg-2" id="search-results">
-        <label for="course-combinations-list">
-          <b>Possible Schedules: </b>
-        </label>
+      <div class = "col-sm-4 col-md-2 col-lg-2" id="search-results">
+        <span class = "column-label"> <span class="combination_length">{{ combination_length }}</span> Possible Schedules Ranked by Preference:</span>
+        <p></p>
         <div class = "combqueue" id="combqueue">
           {% for i in combinations%}
           {{ i | safe}}
           {% endfor %}
         </div>
-
       </div>
 
       <!-- THIRD COLUMN -->
-      <div class = "col-xs-6 col-md-8 col-lg-8 hidden">
+      <div class = "col-sm-6 col-md-8 col-lg-8 hidden">
+
         <div class = "save-schedule-panel">
-          <b>Selected Schedule</b> 
-          <button class = "btn btn-primary" id = "save-schedule" onclick="saveScheduleButton();"> Save Schedule </button>
-          <span class = "save-schedule-message"> </span>
+
+          <!-- Instructions before clicking on combination -->
+          <div class = "calendar-holder">
+            <h id="welcome_title">Welcome to CourseComb! </h>
+
+            <div><img src = "{% static 'img/tiger.png' %}"></div>
+            <div class="message-content">
+              <p id="welcome_body"> 1. Enter ALL the courses that you are interested in taking and click Create My Schedule! </p>
+              <p id="welcome_body"> 2. Set your preferences and we will show you all the possible combinations in ranked order based on your preferences. </p>
+              <p id="welcome_body"> 3. Click on a combination and select your precepts. </p>
+              <p id="welcome_body"> 4. You can favorite your schedule and see them on the Favorites page. </p>
+            </div>
         </div>
-        <div id="calendar"> </div>
+
+      </div>
+
+        <div id="calendar-container">
+          <div id="calendar"></div>
+        </div>
+
         <label for="precept-toggles">
-          <b> Click to show precepts </b>
+          <span class="column-label precept-show"></span>
         </label>
+
         <div id="selected-coursecomb" class="row">
         </div>
       </div>
 
-    </div> 
+    </div>
   </div>
-
-
   {% include 'style.html' %}
 
   {% include 'helper.html' %}
