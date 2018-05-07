@@ -69,15 +69,17 @@
   $('body').on('click', '.coursecomb', function (e) {
    e.preventDefault();
 
-   // empty holder image
-   $(".calendar-holder").empty();
+   
 
-   // create save schedule anel
+   // create save schedule panel
    $(".save-schedule-panel").empty();
    $(".save-schedule-panel").append('<span class = "column-label">Selected Schedule:</span> \
     <span class="save-schedule-message"> </span> \
     <button class = "btn btn-primary btn-md" id="save-schedule" onclick="saveScheduleButton();">Favorite <i class="far fa-heart"></i></button>')
    $(".save-schedule-message").empty();
+
+   // empty holder image
+   $(".calendar-holder").empty();
 
    // show click to show precept div
    $(".precept-show").empty();
