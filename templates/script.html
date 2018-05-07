@@ -239,7 +239,6 @@
         if (JSON.parse(schedule_data[title])[section_types[j]]) {
           if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title])[section_types[j]])) {
             course_display = true;
-            console.log("blah1");
             course_remove = all_sources[i]["rawEventDefs"];
             $("#calendar").fullCalendar('removeEventSource', course_remove);
           } 
@@ -259,7 +258,6 @@
     if (course_display == false) {
       for (k = 0; k < section_types.length; k++) {
         if (JSON.parse(schedule_data[title])[section_types[k]]) {
-          console.log("blah3");
           $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[title])[section_types[k]]);
         }
       }
