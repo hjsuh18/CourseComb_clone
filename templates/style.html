@@ -31,6 +31,32 @@
     color: rgb(51,58,86);
   }
 
+
+.calendar-holder {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  padding: 5% 0;
+  overflow-y: auto;
+}
+.message-content {
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+  #welcome_title {
+    font-size: 30px;
+    font-weight:600;
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(51,58,86);
+  }
+
+  #welcome_body {
+    font-size: 17.5px;
+    font-weight:600;
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(51,58,86);
+  }
+
   #course-search {
     position: relative;
     font-size: 14px;
@@ -130,7 +156,7 @@
     margin-bottom: 5px;
     height: calc(100vh - 185px);
     /* Height just right to avoid calendar overflow*/
-    max-height: 608px; 
+    max-height: 608px;
   }
   .course-checkbox {
     display: none;
@@ -297,18 +323,5 @@
 
 .filter_label_priority {
   padding-right: 20px;
-}
-
-
-.calendar-holder {
-  position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
-  padding: 5% 0;
-  
-}
-.calendar-holder-content {
-  padding: 10% 0;
-
-
 }
 </style>

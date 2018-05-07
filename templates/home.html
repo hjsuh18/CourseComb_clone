@@ -67,22 +67,26 @@
 
         <div class = "save-schedule-panel"></div>
 
-        <div id="calendar-container">
-          <div class = "calendar-holder">
-            <div class = "calendar-holder-content">
-              <img src = "{% static 'img/tiger.png' %}">
-              <div class = "calendar-holder-text">
-                Welcome to CourseComb! 
-                (some instructions here about how to use the website - will write laterr)
-              </div>
-            </div>
+        <div class = "calendar-holder">
+          <h id="welcome_title">Welcome to CourseComb! </h>
+
+          <div><img src = "{% static 'img/tiger.png' %}"></div>
+          <div class="message-content">
+            <p id="welcome_body"> 1. Enter ALL the courses that you are interested in taking and click Create My Schedule! </p>
+            <p id="welcome_body"> 2. Set your preferences and we will show you all the possible combinations in ranked order based on your preferences. </p>
+            <p id="welcome_body"> 3. Click on a combination and select your precepts. </p>
+            <p id="welcome_body"> 4. You can favorite your schedule and return to them on the Favorites page. </p>
           </div>
+        </div>
+
+        <div id="calendar-container">
           <div id="calendar"></div>
         </div>
 
         <label for="precept-toggles">
           <span class="column-label precept-show"></span>
         </label>
+
         <div id="selected-coursecomb" class="row">
         </div>
       </div>

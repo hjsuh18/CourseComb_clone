@@ -151,14 +151,14 @@ def home(request):
 		course_num = curr_profile.filter.number_of_courses
 		if course_num > len(course_list):
 			# need to show an error message
-			responseobject = {'course_number': "You don't have enough courses selected on your Courses of Interest"}
+			responseobject = {'course_number': "You don't have enough courses selected on your Courses of Interest."}
 			return JsonResponse(responseobject)
 
 		registrar_combo = combine(course_list, course_num)
 
 		# if registrar_combo is None, render a message saying no combinations
 		if not registrar_combo:
-			responseobject = {'no_combo': "There are no possible combinations of your selected courses"}
+			responseobject = {'no_combo': "There are no possible combinations for your selected courses due to time conflicts"}
 			return JsonResponse(responseobject)
 
 		# make course_combo array
@@ -205,7 +205,7 @@ def home(request):
 			response.append("<div class = 'coursecomb " + str(combination[i].comb_id) + "'>" + str(count) + ". " + str(combination[i]) + "</div>")
 
 		if not response:
-			responseobject = {'filter_restrict': 'There are no possible combinations for your selected preferences. Please adjust your filters.'}
+			responseobject = {'filter_restrict': 'There are no possible combinations that fit all your selected preferences.'}
 			return JsonResponse(responseobject)
 
 		responseobject = {'courses_com': json.dumps(response)}
