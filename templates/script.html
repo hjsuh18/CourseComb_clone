@@ -4,6 +4,7 @@
   var csrfmiddlewaretoken = '{{ csrf_token }}';
   var schedule_data;
   var section_types = ["L", "C", "S", "U", "B", "D", "E", "F", "P"]
+  
   // Activate tooltip
   $('body').tooltip({
     selector: '.schedule-name-input'
@@ -14,7 +15,6 @@
       saveSchedule();
     }
   });
-
 
   // Save schedule when clicking on arrow
   function saveSchedule () {
@@ -56,11 +56,12 @@
       });
     }
   }
+
   // Save schedule button is clicked
   function saveScheduleButton() {
     $(".save-schedule-message").empty();
     // new_element = '<button type="button" class="btn btn-secondary createdDiv" data-toggle="tooltip" data-placement="top" title="Tooltip on top"> Tooltip on top </button>'
-    new_element = "<input class = 'schedule-name-input' type='text' data-delay = '0' data-toggle='tooltip' data-placement='top' placeholder = ' Name Your Favorite' id ='schedule_name'> <i class='far fa-arrow-alt-circle-right' onclick = 'saveSchedule();'></i>"
+    new_element = "<input class = 'schedule-name-input' type='text' data-delay = '0' data-toggle='tooltip' data-placement='top' placeholder = 'Name Your Favorite' id ='schedule_name'> <i class='far fa-arrow-alt-circle-right' onclick = 'saveSchedule();'></i>"
     $(".save-schedule-message").append(new_element);
     $(".save-schedule-message").css("color", "black");
   }
@@ -68,23 +69,17 @@
   // Click on a combination
   $('body').on('click', '.coursecomb', function (e) {
    e.preventDefault();
-
-   
-
    // create save schedule panel
    $(".save-schedule-panel").empty();
    $(".save-schedule-panel").append('<span class = "column-label">Selected Schedule:</span> \
     <span class="save-schedule-message"> </span> \
     <button class = "btn btn-primary btn-md" id="save-schedule" onclick="saveScheduleButton();">Favorite <i class="far fa-heart"></i></button>')
    $(".save-schedule-message").empty();
-
    // empty holder image
    $(".calendar-holder").empty();
-
    // show click to show precept div
    $(".precept-show").empty();
     $(".precept-show").append("Click to show precepts");
-
    // initilize calendar
    $("#calendar").fullCalendar({
     eventClick: function(calEvent, jsEvent, view) {
@@ -95,7 +90,6 @@
                   title = calEvent["id"].split("-")[0];
                   all_sources = $("#calendar").fullCalendar('getEventSources');
                   precepts_display = false;
-
                   for (i = 0; i < all_sources.length; i++) { 
                     if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(JSON.parse(schedule_data["schedule"])[title]))) {
                       precepts_display = true;
@@ -146,7 +140,6 @@
                 }
               }
             },
-
             defaultView: 'agendaWeek',
             header: false,
             columnHeaderFormat: 'ddd',
@@ -159,7 +152,6 @@
             eventOverlap: false,
             timeFromat: 'H:mm',
           })
-
    comb_id = $(this).attr("class").split(" ")[1];
    var coursecomb_data = {
     comb_click:'comb_click',
@@ -182,12 +174,9 @@
       selectedCourses = selectedCourses.split(". ")[1];
       selectedCourses = selectedCourses.split(",");
       $("div#selected-coursecomb").empty();
-
       // $(".precept-show").empty();
       // var precepts_exist = false;
-
       var no_precepts = true;
-
       for (i = 0; i < selectedCourses.length; i++) {
         var course = selectedCourses[i].trim();
         if (data[course] != "{}") {
@@ -205,7 +194,6 @@
                 course + "'>" + course + "</label>")
               )
             );
-
           // get colour of precept
           for (j = 0; j < section_types.length; j++){
             if (temp.hasOwnProperty(section_types[j]))
@@ -237,6 +225,7 @@
     $(this).css("border-color", "rgb(43, 122, 120)");
     $(this).css("color", "rgb(254, 255, 255)");
   });
+
   // Click on precept/labs/etc.
   $('div#selected-coursecomb').on('click', 'input[type=checkbox]', function() {
     $(".save-schedule-message").empty();
@@ -250,6 +239,7 @@
         if (JSON.parse(schedule_data[title])[section_types[j]]) {
           if (isEqual(all_sources[i]["rawEventDefs"], JSON.parse(schedule_data[title])[section_types[j]])) {
             course_display = true;
+            console.log("blah1");
             course_remove = all_sources[i]["rawEventDefs"];
             $("#calendar").fullCalendar('removeEventSource', course_remove);
           } 
@@ -259,6 +249,7 @@
       if (all_sources[i]["rawEventDefs"][0]["className"]) {
         if (all_sources[i]["rawEventDefs"][0]["className"].indexOf("selected_precept") != -1) {
           if (all_sources[i]["rawEventDefs"][0]["id"].split("-")[0] == title) {
+            course_display = course_display == true ? false : true;
             precept_remove = all_sources[i]["rawEventDefs"];
             $("#calendar").fullCalendar('removeEventSource', precept_remove);
           }
@@ -268,11 +259,13 @@
     if (course_display == false) {
       for (k = 0; k < section_types.length; k++) {
         if (JSON.parse(schedule_data[title])[section_types[k]]) {
+          console.log("blah3");
           $("#calendar").fullCalendar('addEventSource', JSON.parse(schedule_data[title])[section_types[k]]);
         }
       }
     }
   });
+
   // Make filter options pop up, change entries depending on course queue content
   $('body').on('click', '.reset_filter', function(e) {
     e.preventDefault();
@@ -376,7 +369,6 @@
       $("#course-priority").append(course_priority);
     }
   });
-
   });
   // FOR ACTUAL FILTERING
   $('#filter').on('submit', function(e){
@@ -497,7 +489,6 @@
       registrar_id: this.id,
       csrfmiddlewaretoken: csrfmiddlewaretoken
     };
-    // console.log(parent);
     $.ajax({
      type: "POST",
      url: '/home/',
@@ -520,7 +511,6 @@
       },
       appendTo: '.aftersearch',
       select: function (e, ui) {
-        // console.log(ui.item.value)
         var class_select_data = {
           addclass: 'addclass',
           class: ui.item.label,
@@ -544,7 +534,6 @@
                 <a href="' + url + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
                 <a href="' + eval + '" target="_blank"><div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div></a> \
                 <div class = "deletebutton deleteclass" id ="' + newid + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
-
               // refresh the number of courses on coursequeue
               $(".queue_length").empty();
               $(".queue_length").append($(".coursequeue > div").length);
