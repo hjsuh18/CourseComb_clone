@@ -4,6 +4,7 @@
   var csrfmiddlewaretoken = '{{ csrf_token }}';
   var schedule_data;
   var section_types = ["L", "C", "S", "U", "B", "D", "E", "F", "P"]
+  
   // Activate tooltip
   $('body').tooltip({
     selector: '.schedule-name-input'
@@ -60,7 +61,7 @@
   function saveScheduleButton() {
     $(".save-schedule-message").empty();
     // new_element = '<button type="button" class="btn btn-secondary createdDiv" data-toggle="tooltip" data-placement="top" title="Tooltip on top"> Tooltip on top </button>'
-    new_element = "<input class = 'schedule-name-input' type='text' data-delay = '0' data-toggle='tooltip' data-placement='top' placeholder = ' Name Your Favorite' id ='schedule_name'> <i class='far fa-arrow-alt-circle-right' onclick = 'saveSchedule();'></i>"
+    new_element = "<input class = 'schedule-name-input' type='text' data-delay = '0' data-toggle='tooltip' data-placement='top' placeholder = 'Name Your Favorite' id ='schedule_name'> <i class='far fa-arrow-alt-circle-right' onclick = 'saveSchedule();'></i>"
     $(".save-schedule-message").append(new_element);
     $(".save-schedule-message").css("color", "black");
   }
@@ -68,8 +69,6 @@
   // Click on a combination
   $('body').on('click', '.coursecomb', function (e) {
    e.preventDefault();
-
-   
 
    // create save schedule panel
    $(".save-schedule-panel").empty();
