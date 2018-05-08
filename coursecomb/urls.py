@@ -22,7 +22,7 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = [
     url(r'^$', views.landing, name='landing'),
 	url(r'^home/$', login_required(views.home)),
-	url(r'^api/get_courses/', views.get_courses, name='get_courses'),
+	url(r'^api/get_courses/', login_required(views.get_courses), name='get_courses'),
     url(r'^favorites/', login_required(views.favorites), name='favorites'),
     url(r'^about/', login_required(views.about), name='about'),
     url(r'^feedback/', login_required(views.feedback), name='feedback'),
