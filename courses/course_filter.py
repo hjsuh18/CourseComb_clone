@@ -183,7 +183,7 @@ def get_full_classes(full_filter, course_queue):
 # returns an array of courses with bad times
 def get_bad_time_course(no_friday_class, no_evening_class, after_ten_am, course_queue):
 	time_avoid_course =[]
-	if not no_friday_class or not no_evening_class or not after_ten_am:
+	if no_friday_class or no_evening_class or after_ten_am:
 		for x in course_queue:
 			# initialize such that x is not a course to be avoided
 			not_avoid = False

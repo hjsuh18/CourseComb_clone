@@ -1,3 +1,4 @@
+{% load static %}
 <script type="text/javascript">
   var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
   var darkpalette  = ["#001f3f"];
@@ -371,6 +372,9 @@
   // FOR ACTUAL FILTERING
   $('#filter').on('submit', function(e){
     e.preventDefault();
+    $('.combqueue').empty();
+    $('.combqueue').append('<img class="loading" src="{% static "img/loading.gif" %}"></img>');
+
     // number of courses
     var x = $("#coursenum option:selected").text();
     

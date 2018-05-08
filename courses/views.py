@@ -89,7 +89,6 @@ def home(request):
 
 	# This should be triggered by pressing Search results button
 	# calculate combinations, display it and save it to database under user
-	# The courses in the search results are probably in reverse order
 	elif 'searchresults' in request.POST:
 		# update filter fields
 		d = dict(request.POST)
