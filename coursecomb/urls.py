@@ -22,10 +22,10 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = [
     url(r'^$', views.landing, name='landing'),
 	url(r'^home/$', login_required(views.home)),
-	url(r'^api/get_courses/', views.get_courses, name='get_courses'),
-    url(r'^favorites/', views.favorites, name='favorites'),
-    url(r'^about/', views.about, name='about'),
-    url(r'^feedback/', views.feedback, name='feedback'),
+	url(r'^api/get_courses/', login_required(views.get_courses), name='get_courses'),
+    url(r'^favorites/', login_required(views.favorites), name='favorites'),
+    url(r'^about/', login_required(views.about), name='about'),
+    url(r'^feedback/', login_required(views.feedback), name='feedback'),
     url(r'^admin/', admin.site.urls),
     url(r'accounts/login/$', django_cas_ng.views.login, name='cas_ng_login'),
     url(r'accounts/logout/$', django_cas_ng.views.logout, name='cas_ng_logout', )

@@ -59,6 +59,7 @@ def favorites(request):
 
 def home(request):
 	curr_profile = request.user.profile
+
 	# add course to faves by registrar_id
 	if 'addclass' in request.POST:
 		registrar_id = request.POST.get("registrar_id", "")
@@ -234,6 +235,7 @@ def home(request):
 			responseobject['filter_aftertenam'] = curr_profile.filter.after_ten_am
 			responseobject['filter_full'] = curr_profile.filter.full
 			responseobject['filter_pdf'] = curr_profile.filter.pdf
+			responseobject['filter_distribution'] = json.dumps(curr_profile.filter.distribution)
 
 			previous_course_priority = curr_profile.filter.priority
 			previous_must_dept = curr_profile.filter.must_dept
@@ -246,6 +248,7 @@ def home(request):
 			responseobject['filter_aftertenam'] = False
 			responseobject['filter_full'] = False
 			responseobject['filter_pdf'] = False
+			responseobject['filter_distribution'] = json.dumps([])
 
 		# go through queue and construct must have courses, must have departments, priority of course
 		for i in range(0, len(queue)):
@@ -291,7 +294,6 @@ def home(request):
 		
 		responseobject['must_have_departments'] = json.dumps(response_dept)
 		responseobject['course_priority'] = json.dumps(response_priority)
-		responseobject['filter_distribution'] = json.dumps(curr_profile.filter.distribution)
 
 		return JsonResponse(responseobject)
 
@@ -496,6 +498,10 @@ def home(request):
 		# -1 because there is always an empty string
 		queue_length = len(favorites) - 1
 		combination_length = len(curr_combs)
+
+		# Test complete new user by deleting user profile
+		# request.user.delete()
+		# print 'ACCOUNT DELETED'
 
 		return render(request, 'home.html', {"favorites": curr_faves, "combinations": curr_combs, "queue_length": queue_length, "combination_length": combination_length})
 
