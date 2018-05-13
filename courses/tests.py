@@ -9,10 +9,11 @@ from django.db.models import Max, Min
 from random import randint
 from courses.models import Course
 from courses.combination import combine
+from courses.time_compare import day_compare
 
 # Tests course conflict filter
+# Run by python manage.py shell < courses/tests.py
 class TestConflict(unittest.TestCase):
-	# only works when run with python manage.py shell --plain < courses/tests.py and with no new lines in between
 
 	# helper function for generating random Course objects
 	# taken from https://www.peterbe.com/plog/getting-random-rows-postgresql-django with some modifications
@@ -35,67 +36,73 @@ class TestConflict(unittest.TestCase):
 			except qs.model.DoesNotExist:
 				pass
 
+	# helper function to check for conflicts
+	# courses is an array of registrar_id's 
+	# conflicting_days is a string
+	# conflicting_times is an array of datetime objects
 	def check_conflict(self, courses, conflicting_days, conflicting_times):
-		# helper method to check for conflicts, best to use with just one class
+		
+		global day_compare
 		has_conflict = False
 		for c in courses:
 			# check that at least one of the primary meetings doesn't conflict
 			all_conflict = True
-			has_primary = False # to handle weird classes with no clear primary
-			for m in c['meetings']:
-				if m['is_primary'] == True:
-					has_primary = True
-					if not re.search(conflicting_days, m['days']):
-						all_conflict = False # non matching days
-						break
-					if m['start_time'] == 'TBA':
-						all_conflict = False # TBA class
-						break
-					m_start = datetime.datetime.strptime(m['start_time'], "%I:%M %p").time()
-					m_end = datetime.datetime.strptime(m['end_time'], "%I:%M %p").time()
-					if not any(((m_start <= end) and (start <= m_end)) for (start, end) in conflicting_times):
-						all_conflict = False #non matching times
-						break
-			if all_conflict and has_primary:
-				has_conflict = True
-				print c # print conflicting course
-				break
+			
+			c_meetings = Course.objects.get(registrar_id = c).meetings.filter(is_primary=True)
+			
+			if len(c_meetings) == 1:
+				c_meetings = c_meetings[0]
+				if not day_compare(c_meetings.days, conflicting_days):
+					all_conflict = False
+					continue
+				if c_meetings.start_time == None:
+					all_conflict = False
+					continue
+				m_start = c_meetings.start_time
+				m_end = c_meetings.end_time
+				if not any(((m_start <= end) and (start <= m_end)) for (start, end) in conflicting_times):
+					all_conflict = False
+
+				if all_conflict:
+					has_conflict = True
+					print c # print conflicting course
+					break
+
 		return has_conflict
-	
-	#-------------------------------------------------------------------------
-	# conflict with one class (has precepts, but one primary)
-	def test_oneclass(self):
+
+	# actual test function
+	def test_conflict(self):
 		global Client
 		global User
 		global Course
 		global combine
+
+		# Create test user
 		c = Client()
-		user = User.objects.create_user(username='tester15', password='test')
+		user = User.objects.create_user(username='tester21', password='test')
 		c.force_login(user=user)
+
+		has_conflict = False
+
+		# Generate 7 random courses and choose 4
 		random_7 = self.random_queryset_elements(Course.objects.all(), 7)
 		registrar_combo = combine(list(random_7), 4)
+
+		# Go through each combo to check if there are time conflicts
 		if registrar_combo is not None:
-			combo_0 = registrar_combo[0].split(",")
-			print combo_0[0]
-			course_0 = Course.objects.get(registrar_id = combo_0[0])
-			conflict = course_0.meetings.filter(is_primary=True)
-			if len(conflict) == 1:
-				conflict = conflict[0]
-				conflict_days = conflict.days
-				print conflict_days
-				print type(conflict_days)
-				print type(conflict.start_time)
-		# no_conflict = json.loads(c.get('/courses/filter/conflict_|COS 340').content)
-		# conflicting_days = 'M|W'
-		# conflicting_times = [(datetime.time(13, 30), datetime.time(14, 50))]
-		# has_conflict = self.check_conflict(no_conflict, conflicting_days, conflicting_times)
+			for com in registrar_combo:
+				combo = com.split(",")
+				course_0 = Course.objects.get(registrar_id = combo[0])
+				conflict = course_0.meetings.filter(is_primary=True)
+				if len(conflict) == 1:
+					conflict = conflict[0]
+					conflict_days = conflict.days
+					conflict_times = [(conflict.start_time, conflict.end_time)]
+					courses_array = combo[1:]
+					has_conflict = self.check_conflict(courses_array, conflict_days, conflict_times)
 
-		
 		user.delete()
-		self.assertFalse(False)
-		# self.assertFalse(has_conflict)
-	
-
+		self.assertFalse(has_conflict)
 
 # Running the tests
 test_classes_to_run = [TestConflict]
