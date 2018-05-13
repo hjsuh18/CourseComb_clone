@@ -512,6 +512,10 @@
         results: function() {}
       },
       appendTo: '.aftersearch',
+      focus: function(event, ui) { 
+       event.preventDefault();
+       $("#courses").val(ui.item.label);
+      },
       select: function (e, ui) {
         var class_select_data = {
           addclass: 'addclass',
@@ -520,6 +524,7 @@
           csrfmiddlewaretoken: csrfmiddlewaretoken
         };
         e.preventDefault();
+        $("#courses").val(ui.item.label);
         $.ajax({
           type: "POST",
           url: '/home/',
@@ -539,6 +544,7 @@
               // refresh the number of courses on coursequeue
               $(".queue_length").empty();
               $(".queue_length").append($(".coursequeue > div").length);
+              $("#courses").val("");
             }
           }
         });
