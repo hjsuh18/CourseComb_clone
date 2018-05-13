@@ -1,6 +1,4 @@
-<script type="text/javascript">
-	var csrfmiddlewaretoken = '{{ csrf_token }}';
-	var favorites = JSON.parse('{{ favorites | escapejs }}');
+
 	for (i = 0; i < favorites.length; i++) {
 		courses = JSON.parse(favorites[i][1]).join(", ");
 		string = '<div class="container coursecomb">' + favorites[i][0] + " (" + courses + ")" + '<div class="overlay"> \
@@ -51,4 +49,3 @@
 		});
 	});
 
-</script>

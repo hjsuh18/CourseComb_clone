@@ -1,15 +1,75 @@
-{% load static %}
-<script type="text/javascript">
+
   var lightpalette = ["#E0FFFF", "#D8BFD8", "#FFDEAD", "#DCDCDC", "#FFDAB9", "#BDB76B", "#E6E6FA", "#FFB6C1", "#2EC4B6", "#CD853F", "#B0C4DE"];
   var darkpalette  = ["#001f3f"];
-  var csrfmiddlewaretoken = '{{ csrf_token }}';
   var schedule_data;
   var section_types = ["L", "C", "S", "U", "B", "D", "E", "F", "P"]
   
+  // helper function 1
+  function contains(str1, str2) {
+    var i = 0;
+    while (i < str1.length && i < str2.length) {
+      if (str1.charAt(i) != str2.charAt(i)) {
+        return false;
+      }
+      i++;
+    }
+    return true;
+  }
+    
+  // helper function 2
+  var isEqual = function (value, other) {
+    // Get the value type
+    var type = Object.prototype.toString.call(value);
+    // If the two objects are not the same type, return false
+    if (type !== Object.prototype.toString.call(other)) return false;
+    // If items are not an object or array, return false
+    if (['[object Array]', '[object Object]'].indexOf(type) < 0) return false;
+    // Compare the length of the length of the two items
+    var valueLen = type === '[object Array]' ? value.length : Object.keys(value).length;
+    var otherLen = type === '[object Array]' ? other.length : Object.keys(other).length;
+    if (valueLen !== otherLen) return false;
+    // Compare two items
+    var compare = function (item1, item2) {
+      // Get the object type
+      var itemType = Object.prototype.toString.call(item1);
+      // If an object or array, compare recursively
+      if (['[object Array]', '[object Object]'].indexOf(itemType) >= 0) {
+        if (!isEqual(item1, item2)) return false;
+      }
+      // Otherwise, do a simple comparison
+      else {
+        // If the two items are not the same type, return false
+        if (itemType !== Object.prototype.toString.call(item2)) return false;
+        // Else if it's a function, convert to a string and compare
+        // Otherwise, just compare
+        if (itemType === '[object Function]') {
+          if (item1.toString() !== item2.toString()) return false;
+        } else {
+          if (item1 !== item2) return false;
+        }
+      }
+    };
+    // Compare properties
+    if (type === '[object Array]') {
+      for (var i = 0; i < valueLen; i++) {
+        if (compare(value[i], other[i]) === false) return false;
+      }
+    } else {
+      for (var key in value) {
+        if (value.hasOwnProperty(key)) {
+          if (compare(value[key], other[key]) === false) return false;
+        }
+      }
+    }
+    // If nothing failed, return true
+    return true;
+  };
+
   // Activate tooltip
   $('body').tooltip({
     selector: '.schedule-name-input'
   });
+
   // Save schedule when pressed enter
   $(".save-schedule-panel").on('keyup', '#schedule_name', function (e) {
     if (e.which == 13) {
@@ -80,7 +140,7 @@
    $(".calendar-holder").empty();
    // show click to show precept div
    $(".precept-show").empty();
-    $(".precept-show").append("Click to show precepts");
+   $(".precept-show").append("Click to show precepts");
    // initilize calendar
    $("#calendar").fullCalendar({
     eventClick: function(calEvent, jsEvent, view) {
@@ -206,8 +266,8 @@
       if (no_precepts){
         $("div#selected-coursecomb").append(
           $("<div/>", {"class": "col"}).append(
-              $("<span style='color: rgb(43, 122, 120); font-size: 18px;'>There are no precepts to choose for your courses</span>")
-              )
+            $("<span style='color: rgb(43, 122, 120); font-size: 18px;'>There are no precepts to choose for your courses</span>")
+            )
           );
       }
     }
@@ -373,7 +433,7 @@
   $('#filter').on('submit', function(e){
     e.preventDefault();
     $('.combqueue').empty();
-    $('.combqueue').append('<img class="loading" src="{% static "img/loading.gif" %}"></img>');
+    $('.combqueue').append(loading_img);
 
     // number of courses
     var x = $("#coursenum option:selected").text();
@@ -515,32 +575,32 @@
       focus: function(event, ui) { 
        event.preventDefault();
        $("#courses").val(ui.item.label);
-      },
-      select: function (e, ui) {
-        var class_select_data = {
-          addclass: 'addclass',
-          class: ui.item.label,
-          registrar_id: ui.item.value,
-          csrfmiddlewaretoken: csrfmiddlewaretoken
-        };
-        e.preventDefault();
-        $("#courses").val(ui.item.label);
-        $.ajax({
-          type: "POST",
-          url: '/home/',
-          data: class_select_data,
-          success: function(data) {
-            if (data != {}) {
-              var newclass = JSON.stringify(data["newclass"]);
-              var newid = data["newid"];
-              var eval = data["eval"];
-              var url = data["url"];
-              $(".coursequeue").append(
-                "<div class = 'refreshed-courses container " + newid + "'>" + JSON.parse(newclass) + 
-                '<div class="overlay"> <span class = "row1"> \
-                <a href="' + url + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
-                <a href="' + eval + '" target="_blank"><div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div></a> \
-                <div class = "deletebutton deleteclass" id ="' + newid + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
+     },
+     select: function (e, ui) {
+      var class_select_data = {
+        addclass: 'addclass',
+        class: ui.item.label,
+        registrar_id: ui.item.value,
+        csrfmiddlewaretoken: csrfmiddlewaretoken
+      };
+      e.preventDefault();
+      $("#courses").val(ui.item.label);
+      $.ajax({
+        type: "POST",
+        url: '/home/',
+        data: class_select_data,
+        success: function(data) {
+          if (data != {}) {
+            var newclass = JSON.stringify(data["newclass"]);
+            var newid = data["newid"];
+            var eval = data["eval"];
+            var url = data["url"];
+            $(".coursequeue").append(
+              "<div class = 'refreshed-courses container " + newid + "'>" + JSON.parse(newclass) + 
+              '<div class="overlay"> <span class = "row1"> \
+              <a href="' + url + '" target="_blank"><div class = "registrar"> <span class = "text"> <i class="fa fa-info" aria-hidden="true"></i> </span> </div></a> \
+              <a href="' + eval + '" target="_blank"><div class = "reviews"> <span class = "text"> <i class="fas fa-chart-pie"></i> </span> </div></a> \
+              <div class = "deletebutton deleteclass" id ="' + newid + '"> <span class = "text"> <i class="fa fa-times" aria-hidden="true"></i> </span> </div> </span> </div> </div>')
               // refresh the number of courses on coursequeue
               $(".queue_length").empty();
               $(".queue_length").append($(".coursequeue > div").length);
@@ -548,7 +608,6 @@
             }
           }
         });
-      }
-    });
+    }
   });
-</script>
+  });
